@@ -1,4 +1,4 @@
-function [traindat,testdat,names] = read_in_data(trainlen=600,testlen=250)
+function [traindat,testdat,names] = read_in_data(trainlen,testlen)
 % read in all stock data from DAX 40 courses (persisting in 2018-2021) 
 
 % names = stock names
@@ -19,9 +19,9 @@ testdat = zeros(n,testlen);
 for k=1:n
   name = nthargout(2,@fileparts,stocks(k).name);
   names(k) = name;
-  alldata = csvread(strcat(name,'.csv'),[1,5,1012,5])'; % adjusted closing prices
-  testdat(k,:) = alldata(end-testlen+1:end); % help structat end of input 
-  traindat(k,:) = alldata(end-testlen-trainlen+1:end-testlen);
+  alldat = csvread(strcat(name,'.csv'),[1,5,1012,5])'; % adjusted closing prices
+  testdat(k,:) = alldat(end-testlen+1:end); % data from end of input 
+  traindat(k,:) = alldat(end-testlen-trainlen+1:end-testlen); % and just before
 endfor
 
 cd('../lrnn'); % go back
