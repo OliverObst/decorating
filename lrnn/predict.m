@@ -109,7 +109,7 @@ if (theta > 0)
 #[Error,Ord] = sort(Error,"descend");
 #Lambda = Lambda(Ord);
 #Multi = Multi(Ord);
-[J,N,K] = jormat(Lambda,Multi);
+#[J,N,K] = jormat(Lambda,Multi);
 Cumul = cumsum(Multi);
 
 % omit components as long as error remains small enough
