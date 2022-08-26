@@ -58,7 +58,7 @@
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
-how linear, i.e., linearly activated recurrent neural networks (LRNNs) can
+how autoregressive linear, i.e., linearly activated recurrent neural networks (LRNNs) can
 approximate any time-dependent function $f(t)$ given by a number of function
 values. The approximation can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
@@ -571,11 +571,11 @@ as asymptotic behavior for large $t$.
 \end{proof}
 
 \begin{prop}\label{infty}
-Consider an RNN whose transition matrix $W$ is completely real-valued, has
-(according to \cref{eigen}) an eigendecomposition $W = V \cdot D \cdot
+Consider an RNN solely consisting of a pure random reservoir whose transition
+matrix $W^\mathrm{res}$ is completely real-valued, has (according to
+\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot
 V^{-1}$ with unit spectral radius (i.e., the largest absolute value of all
-eigenvalues is $1$), and all eigenvalues are distinct, e.g., a
-pure random reservoir. Then, almost all terms $x_k\,{\lambda_k}^t\,v_k$ in
+eigenvalues is $1$), and all eigenvalues are distinct. Then, almost all terms $x_k\,{\lambda_k}^t\,v_k$ in
 \cref{form} vanish for large $t$ because for all eigenvalues $\lambda_k$
 with $|\lambda_k| < 1$ we have $\lim\limits_{t \to \infty} {\lambda_k}^t = 0$.
 Although a general real matrix can have more than two complex eigenvalues which
@@ -591,7 +591,7 @@ following cases:
 	x_1\,(-1)^n\,v_1$. This means we have an \emph{oscillation} in this
 	case. The dynamic system alternates between the two points $\pm x_1\,v_1$.
   \item $\lambda_1$ and $\lambda_2$ are two (properly) complex eigenvalues with
-	absolute value $1$. Since $W$ is a real-valued matrix, the two
+	absolute value $1$. Since $W^\mathrm{res}$ is a real-valued matrix, the two
 	eigenvalues as well as the corresponding eigenvectors $v_1$ and $v_2$
 	are complex conjugate with respect to each other. Thus, for large $t$, we
 	have an \emph{ellipse} trajectory
@@ -613,7 +613,7 @@ $\overline{v} = v_2$. From all linear combinations of both eigenvectors $\ell(\k
 = \kappa v + \overline{\kappa}\,\overline{v}$ for $\kappa \in \mathbb{C}$ with $|\kappa| =
 1$, we can determine the vectors with extremal lengths. Since we only have two
 real-valued dimensions because clearly the activity induced by the real
-matrix $W$ remains in the real space, there are two such vectors.
+matrix $W^\mathrm{res}$ remains in the real space, there are two such vectors.
 Let now $\kappa = e^{\mathfrak{i} \varphi} = \cos(\varphi) + \mathfrak{i}
 \sin(\varphi)$ (Euler's formula) and $v_\Re$ and $v_\Im$ be the real and
 imaginary parts of $v$, respectively, i.e., $v = v_\Re+\mathfrak{i} v_\Im$ and
