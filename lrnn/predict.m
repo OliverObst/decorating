@@ -88,28 +88,28 @@ until (Err < abs(theta))
 
 if (theta > 0)
 
-#% compute error for each component
-#Error = zeros(K,1);
-#pos = 0; % position in Jordan matrix
-#for (k=1:K)
-#  m = Multi(k);
-#  Index = [1:pos pos+m+1:N];
-#  JJ = J(Index,Index);
-#  YY = compute(JJ,start(N-m),n);
-#  warning("off","Octave:singular-matrix");
-#  AA = (X/YY)(Range,:);
-#  #AA = A(Range,Index); % faster but worse
-#  warning("on","Octave:singular-matrix");
-#  Outx = AA*YY;
-#  Error(k) = rmse(In,Outx);
-#  pos += m;
-#endfor
+% compute error for each component
+Error = zeros(K,1);
+pos = 0; % position in Jordan matrix
+for (k=1:K)
+  m = Multi(k);
+  Index = [1:pos pos+m+1:N];
+  JJ = J(Index,Index);
+  YY = compute(JJ,start(N-m),n);
+  warning("off","Octave:singular-matrix");
+  AA = (X/YY)(Range,:);
+  #AA = A(Range,Index); % faster but worse
+  warning("on","Octave:singular-matrix");
+  Outx = AA*YY;
+  Error(k) = rmse(In,Outx);
+  pos += m;
+endfor
 
-#% re-order Jordan components
-#[Error,Ord] = sort(Error,"descend");
-#Lambda = Lambda(Ord);
-#Multi = Multi(Ord);
-#[J,N,K] = jormat(Lambda,Multi);
+% re-order Jordan components
+[Error,Ord] = sort(Error,"descend");
+Lambda = Lambda(Ord);
+Multi = Multi(Ord);
+[J,N,K] = jormat(Lambda,Multi);
 Cumul = cumsum(Multi);
 
 % omit components as long as error remains small enough
