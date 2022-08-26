@@ -322,11 +322,11 @@ Let us now define the \emph{network activity}: The initial
 configuration of the neural network is given by a column vector $s$ with $N$
 components, called \emph{start vector}. It represents the network state at the
 start time $t=t_0$. Because of the discrete time model, the activation
-of a (non-input) neuron $x$ at time $t+\tau$ (for some time step $\tau>0$) from
-the activation at time $t$ of the neurons $x_1,\dots,x_n$ that are connected to
-$x$ with the weights $w_1,\dots,w_n$ is computed as follows:
+of a (non-input) neuron $x_i$ at time $t+\tau$ (for some time step $\tau>0$) from
+the activation at time $t$ of the neurons $x_1,\dots,x_N$ that are connected to
+$x_i$ with the weights $w_{i1},\dots,w_{iN}$ is computed as follows:
 \begin{equation}\label{recur}
-	x(t+\tau) = g\big(w_1\,x_1(t) +\dots+ w_n\,x_n(t)\big)
+	x_i(t+\tau) = g\big(w_{i1}\,x_1(t) +\dots+ w_{iN}\,x_N(t)\big)
 \end{equation}
 This has to be done simultaneously for all neurons of the network. Here $g$ is a
 (real-valued) \emph{activation function}. Although we will not make use of it,
