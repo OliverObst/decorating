@@ -45,10 +45,10 @@ Index = d+(1:Nres);
 W(Index,1:d) = randn(Nres,d)/sqrt(d); % balanced input weights [Win]
 X = zeros(d+Nres,n+1); % input and reservoir state sequence
 W(Index,Index) = reservoir(Nres); % Wres
-X(Index,1) = start(Nres);
+s = [zeros(d,1); start(Nres)];
 
 % drive given input through reservoir (input receiving mode)
-X(:,1:n+1) = compute(W,X(:,1),0,S);
+X(:,1:n+1) = compute(W,s,0,S);
 
 % learn output weights
 Yout = S(:,2:n+1); % predicted sequence
