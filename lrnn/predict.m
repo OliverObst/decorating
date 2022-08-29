@@ -1,9 +1,9 @@
-function [Out,Err,A,J,Y,W,X,Lambda,Multi] = predict(S,M=0,N=-1,theta=-Inf,delta=0,Range=0)
+function [Out,Err,A,J,Y,W,X,Lambda,Multi] = predict(S,M=0,Nres=-1,theta=-Inf,delta=0,Range=0)
 % predict next values of a given input sequence
 
 % S : input sequence (time series)
 % M : prediction for M more steps
-% N : reservoir size (number of neurons) (-1 = same number of equations and unknowns)
+% Nres : reservoir size (number of neurons) (-1 = same number of equations and unknowns)
 % theta : threshold for error
 %   repeat network generation until RMSE < |theta|
 %   network size reduction if > 0
@@ -30,8 +30,8 @@ function [Out,Err,A,J,Y,W,X,Lambda,Multi] = predict(S,M=0,N=-1,theta=-Inf,delta=
 
 n = columns(S)-1; % sequence length
 d = rows(S); % number of inputs, often = 1
-if (N<0)
-  N = n-d;
+if (Nres<0)
+  Nres = n-d;
 endif
 
 
@@ -40,12 +40,12 @@ endif
 do % repeated reservoir generation
 
 % network initialization (randomly)
-W = zeros(d+N);
-Index = d+(1:N);
-W(Index,1:d) = randn(N,d)/sqrt(d); % balanced input weights [Win]
-X = zeros(d+N,n+1); % input and reservoir state sequence
-W(Index,Index) = reservoir(N); % Wres
-X(Index,1) = start(N);
+W = zeros(d+Nres);
+Index = d+(1:Nres);
+W(Index,1:d) = randn(Nres,d)/sqrt(d); % balanced input weights [Win]
+X = zeros(d+Nres,n+1); % input and reservoir state sequence
+W(Index,Index) = reservoir(Nres); % Wres
+X(Index,1) = start(Nres);
 
 % drive given input through reservoir (input receiving mode)
 X(:,1:n+1) = compute(W,X(:,1),0,S);
@@ -147,7 +147,7 @@ endif
 
 
 % PREDICTION
-
+# to be improved
 if (M>0)
   Out = [Out(:,1:end-1) A*compute(J,Y(:,end),M)];
 endif

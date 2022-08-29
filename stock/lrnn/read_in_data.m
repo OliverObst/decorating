@@ -1,4 +1,4 @@
-function [traindat,testdat,names] = read_in_data(trainlen,testlen)
+function [traindat,testdat,names] = read_in_data(trainlen=250,testlen=50)
 % read in all stock data from DAX 40 courses (persisting in 2018-2021) 
 
 % names = stock names
