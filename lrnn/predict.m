@@ -45,7 +45,7 @@ Index = d+(1:Nres);
 W(Index,1:d) = randn(Nres,d)/sqrt(d); % balanced input weights [Win]
 X = zeros(d+Nres,n+1); % input and reservoir state sequence
 W(Index,Index) = reservoir(Nres); % Wres
-s = [zeros(d,1); start(Nres)];
+s = [S(1:d,1); start(Nres)];
 
 % drive given input through reservoir (input receiving mode)
 X(:,1:n+1) = compute(W,s,0,S);
