@@ -73,12 +73,12 @@ Multi(find(imag(Lambda)>0)) *= 2; % count them twice
 [J,N,K] = jormat(Lambda,Multi);
 Y = compute(J,start(N),n); % output generating mode
 warning("off","Octave:singular-matrix");
-A = (X/Y)(Range,:);
+A = X/Y;
 warning("on","Octave:singular-matrix");
 
 % initialisation
 In = X(Range,:);
-Out = A*Y; % predicted sequence
+Out = A(Range,:)*Y; % predicted sequence
 Err = rmse(In,Out); % original error
 
 until (Err < abs(theta))
@@ -97,10 +97,9 @@ for (k=1:K)
   JJ = J(Index,Index);
   YY = compute(JJ,start(N-m),n);
   warning("off","Octave:singular-matrix");
-  AA = (X/YY)(Range,:);
-  #AA = A(Range,Index); % faster but worse
+  AA = X/YY;
   warning("on","Octave:singular-matrix");
-  Outx = AA*YY;
+  Outx = AA(Range,:)*YY;
   Error(k) = rmse(In,Outx);
   pos += m;
 endfor
@@ -122,9 +121,9 @@ while (k1<k2)
   JJ = J(1:NN,1:NN);
   YY = compute(JJ,start(NN),n);
   warning("off","Octave:singular-matrix");
-  AA = (X/YY)(Range,:);
+  AA = X/YY;
   warning("on","Octave:singular-matrix");
-  Outx = AA*YY;
+  Outx = AA(Range,:)*YY;
   Errx = rmse(In,Outx);
   if (Errx<theta)
     Out = Outx;
@@ -149,7 +148,7 @@ endif
 % PREDICTION
 # to be improved
 if (M>0)
-  Out = [Out(:,1:end-1) A*compute(J,Y(:,end),M)];
+  Out = [Out(:,1:end-1) A(Range,:)*compute(J,Y(:,end),M)];
 endif
 
 
