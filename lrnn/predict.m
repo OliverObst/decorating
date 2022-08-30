@@ -48,13 +48,11 @@ W(Index,Index) = reservoir(Nres); % Wres
 s = [S(1:d,1); start(Nres)];
 
 % drive given input through reservoir (input receiving mode)
-X(:,1:n+1) = compute(W,s,0,S);
+X = compute(W,s,0,S);
 
 % learn output weights
 Yout = S(:,2:n+1); % predicted sequence
-warning("off","Octave:singular-matrix");
 W(1:d,:) = Yout/X(:,1:n); % output weights
-warning("on","Octave:singular-matrix");
 
 
 % REAL JORDAN DECOMPOSITION
@@ -72,9 +70,7 @@ Multi(find(imag(Lambda)>0)) *= 2; % count them twice
 % construct real Jordan matrix and determine mapping matrix
 [J,N,K] = jormat(Lambda,Multi);
 Y = compute(J,start(N),n); % output generating mode
-warning("off","Octave:singular-matrix");
 A = X/Y;
-warning("on","Octave:singular-matrix");
 
 % initialisation
 In = X(Range,:);
@@ -96,9 +92,7 @@ for (k=1:K)
   Index = [1:pos pos+m+1:N];
   JJ = J(Index,Index);
   YY = compute(JJ,start(N-m),n);
-  warning("off","Octave:singular-matrix");
   AA = X/YY;
-  warning("on","Octave:singular-matrix");
   Outx = AA(Range,:)*YY;
   Error(k) = rmse(In,Outx);
   pos += m;
@@ -109,6 +103,10 @@ endfor
 Lambda = Lambda(Ord);
 Multi = Multi(Ord);
 [J,N,K] = jormat(Lambda,Multi);
+Y = compute(J,start(N),n);
+A = X/Y;
+Out = A(Range,:)*Y;
+Err = rmse(In,Out);
 Cumul = cumsum(Multi);
 
 % omit components as long as error remains small enough
@@ -120,9 +118,7 @@ while (k1<k2)
   NN = Cumul(k);
   JJ = J(1:NN,1:NN);
   YY = compute(JJ,start(NN),n);
-  warning("off","Octave:singular-matrix");
   AA = X/YY;
-  warning("on","Octave:singular-matrix");
   Outx = AA(Range,:)*YY;
   Errx = rmse(In,Outx);
   if (Errx<theta)
