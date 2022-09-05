@@ -76,7 +76,6 @@ A = X/Y;
 In = X(Range,:);
 Out = A(Range,:)*Y; % predicted sequence
 Err = rmse(In,Out); % original error
-
 until (Err < abs(theta))
 
 

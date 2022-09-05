@@ -1007,8 +1007,23 @@ holds). Only with nonlinear activation there is a learning effect. Nonetheless,
 $W^\mathrm{in}$ and $W^\mathrm{res}$ can be learned by the procedure sketched in
 the proof, if they are not given in advance, starting with a random
 reservoir state sequence. But our experiments indicate that this procedure is
-less numerically stable than the one with given, i.e., predefined input and reservoir weights
-and unit spectral radius for the reservoir (cf. \cref{output}).
+less numerically stable than the one with given, i.e., predefined input and
+reservoir weights and unit spectral radius for the reservoir (cf.
+\cref{output}). Depending on the relation between reservoir size
+$N^\mathrm{res}$ and the time series length $n$, we observe:
+\begin{enumerate}
+  \item \emph{stable} behavior for $N^\mathrm{res} < n$: The predicted value for
+	the next time step $t+1$ is nearly identical to the current value at
+	time $t$. In many cases, the predicted values lie on a straight line
+	approximately.
+  \item \emph{exploding} behavior for $N^\mathrm{res} \approx n$: The equation
+	system to be solved often leads to matrices singular to machine
+	precision and hence to bad transition matrices $W$.
+  \item \emph{random} behavior for $N^\mathrm{res} > n$: The accuracy on the
+	training data is almost perfect, whereas the prediction for the
+	subsequent time steps is more or less random, i.e., we have overfitting
+	to the training data.
+\end{enumerate}
 \end{remk}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
