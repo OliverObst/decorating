@@ -141,7 +141,7 @@ endif
 
 
 % PREDICTION
-# to be improved
+
 if (M>0)
   Out = [Out(:,1:end-1) A(Range,:)*compute(J,Y(:,end),M)];
 endif
