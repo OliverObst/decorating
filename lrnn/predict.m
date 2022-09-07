@@ -33,6 +33,9 @@ d = rows(S); % number of inputs, often = 1
 if (Nres<0)
   Nres = n-d;
 endif
+if (Range==0)
+  Range = 1:d;
+endif
 
 
 % LEARN OUTPUT WEIGHTS
@@ -53,14 +56,11 @@ X = compute(W,s,0,S);
 % learn output weights
 Yout = S(:,2:n+1); % predicted sequence
 W(1:d,:) = Yout/X(:,1:n); % output weights
-
+#W = X(:,2:n+1)/X(:,1:n);
 
 % REAL JORDAN DECOMPOSITION
 
 % preparation
-if (Range==0)
-  Range = 1:d;
-endif
 [Lambda,Multi] = cluster(eig(W),delta); % cluster eigenvalues
 Index = find(imag(Lambda)>=0); % only complex numbers with non-negative imaginery part
 Lambda = Lambda(Index);
@@ -76,6 +76,7 @@ A = X/Y;
 In = X(Range,:);
 Out = A(Range,:)*Y; % predicted sequence
 Err = rmse(In,Out); % original error
+
 until (Err < abs(theta))
 
 
