@@ -41,6 +41,7 @@ endif
 % LEARN OUTPUT WEIGHTS
 
 do % repeated reservoir generation
+# Nres>0
 
 % network initialization (randomly)
 W = zeros(d+Nres);
