@@ -41,13 +41,13 @@ endif
 % LEARN OUTPUT WEIGHTS
 
 do % repeated reservoir generation
-# Nres>0
 
 % network initialization (randomly)
-W = zeros(d+Nres);
+N = d+Nres;
+W = zeros(N);
 Index = d+(1:Nres);
 W(Index,1:d) = randn(Nres,d)/sqrt(d); % balanced input weights [Win]
-X = zeros(d+Nres,n+1); % input and reservoir state sequence
+X = zeros(N,n+1); % input and reservoir state sequence
 W(Index,Index) = reservoir(Nres); % Wres
 s = [S(1:d,1); start(Nres)];
 
