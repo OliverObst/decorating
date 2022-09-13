@@ -5,32 +5,30 @@ addpath('../../lrnn/');
 trainlen = 250;
 evallen = 50;
 testlen = 50;
-trials = 500;
+trials = 1000;
 
 % read in stock data
 n = 37; % number of stocks
 [traindat,restdat,names] = read_in_data(trainlen,evallen+testlen);
 
 % parameter setting
-p = 0.1; % relative error
-Nres = 20; % reservoir size
-Next = 0; % extra random dimensions
+p = 0.2; % relative error
+Nres = 10; % reservoir size
 result = zeros(37,5);
 
 % prediction of single stock from single/all stocks
 for k=1:n#4=BASF
   k##
   In = traindat(k,:);
+  Range = 1; Seq = In; % training sequence - single stock
+  #Range = k; Seq = traindat(:,:); % training sequence - all stocks
   Eval = restdat(k,1:evallen); % validation data;
   Test = restdat(k,evallen+1:end); % test data
   #hold off; 
   #plot([In Eval Test],'k'); hold on; % real data sequence
-  
+
   evalerr = +Inf; % best validation error so far
   for t=1:trials
-    R = randn(Next,trainlen);
-    #Range = k; Seq = [traindat(:,:); R]; % training sequence - all stocks
-    Range = 1; Seq = [In; R]; % training sequence - single stock
     [Outx,Err,Ax,Jx,Yx,Wx,Xx] = predict(Seq,evallen+testlen,Nres,p*mean(In),delta=0,Range);
     offset = Outx(trainlen+1)-Eval(1);
     evalerrx = rmse(Eval,Outx(trainlen+1:trainlen+evallen)-offset)/mean(In); % actual validation error
@@ -44,12 +42,16 @@ for k=1:n#4=BASF
       X = Xx;
     endif 
   endfor
-  
+
   tra = result(k,1) = rmse(In,Out(1:trainlen))/mean(In) % relative training error
   Raw = compute(W,X(:,1),evallen+testlen,Seq);
   raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/mean(In) % relative testing error
   #plot(Raw(Range,:),'b'); % without network size reduction
-  Dim = Out;
+  X = [X(:,1:trainlen-1) compute(W,X(:,trainlen),0,[In(end) Eval])];
+  Y = [Y(:,1:trainlen-1) compute(J,Y(:,trainlen),evallen+testlen)]; % output generating mode
+  A = X/Y(:,1:trainlen+evallen);
+  Dim = A(Range,:)*Y;
+  #Dim = Out;
   offset = Dim(end-testlen+1)-Test(1);
   dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end)-offset)/mean(In) % relative testing error
   #plot(Dim,'r'); % with network size reduction
