@@ -5,27 +5,27 @@ addpath('../../lrnn/');
 evallen = 50;
 trainlen = 250;
 testlen = 50;
-trials = 1000;
+trials = 100##0;
 
 % read in stock data
 n = 37; % number of stocks
 [learndat,testdat,names] = read_in_data(evallen+trainlen,testlen);
 
 % parameter setting
-p = 0.1; % relative error
-Nres = 20; % reservoir size
+p = 0.05; % relative error
+Nres = 10; % reservoir size
 result = zeros(37,5);
 
 % prediction of single stock from single/all stocks
-for k=1:n#4=BASF
+for k=1##1:n#4=BASF
   k##
   Eval = learndat(k,1:evallen); % validation data;
   In = learndat(k,evallen+1:end); % training data - single stock
   Range = 1; Seq = In; % training sequence - single stock
   #Range = k; In = traindat(:,evallen+1:end) % training sequence - all stocks
   Test = testdat(k,:); % test data
-  #hold off;
-  #plot([Eval In Test],'k'); hold on; % real data sequence
+  hold off;
+  plot([Eval In Test],'k'); hold on; % real data sequence
   
   evalerr = +Inf; % best validation error so far
   for t=1:trials
@@ -47,10 +47,10 @@ for k=1:n#4=BASF
   tra = result(k,1) = rmse(In,Out(1:trainlen))/mean(In) % relative training error
   Raw = compute(W,X(:,1),testlen,Seq);
   raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/mean(In) % relative testing error
-  #plot([Eval Raw(Range,:)],'b'); % without network size reduction
+  plot([Eval Raw(Range,:)],'b'); % without network size reduction
   Dim = [Back Out];
   dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end))/mean(In) % relative testing error
-  #plot(Dim,'r'); % with network size reduction
+  plot(Dim,'r'); % with network size reduction
   num = result(k,4) = columns(A) % size of reduced network
   eva = result(k,5) = evalerr
   #legend('real price','predicted price','reduced dimensions');
