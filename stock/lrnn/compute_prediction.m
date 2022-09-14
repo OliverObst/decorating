@@ -5,7 +5,7 @@ addpath('../../lrnn/');
 trainlen = 200;
 evallen = 50;
 testlen = 50;
-trials = 1000;
+trials = 100;
 
 % read in stock data
 n = 37; % number of stocks
