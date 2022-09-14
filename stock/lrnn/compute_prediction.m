@@ -2,7 +2,7 @@
 
 % prerequisites
 addpath('../../lrnn/');
-trainlen = 250;
+trainlen = 200;
 evallen = 50;
 testlen = 50;
 trials = 1000;
@@ -12,7 +12,7 @@ n = 37; % number of stocks
 [traindat,restdat,names] = read_in_data(trainlen,evallen+testlen);
 
 % parameter setting
-p = 0.2; % relative error
+p = 0.1; % relative error
 Nres = 10; % reservoir size
 result = zeros(37,5);
 
@@ -47,23 +47,23 @@ for k=1:n#4=BASF
   Raw = compute(W,X(:,1),evallen+testlen,Seq);
   raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/mean(In) % relative testing error
   #plot(Raw(Range,:),'b'); % without network size reduction
-  X = [X(:,1:trainlen-1) compute(W,X(:,trainlen),0,[In(end) Eval])];
-  Y = [Y(:,1:trainlen-1) compute(J,Y(:,trainlen),evallen+testlen)]; % output generating mode
-  A = X/Y(:,1:trainlen+evallen);
-  Dim = A(Range,:)*Y;
-  #Dim = Out;
+  #X = [X(:,1:trainlen-1) compute(W,X(:,trainlen),0,[In(end) Eval])];
+  #Y = [Y(:,1:trainlen-1) compute(J,Y(:,trainlen),evallen+testlen)]; % output generating mode
+  #A = X/Y(:,1:trainlen+evallen);
+  #Dim = A(Range,:)*Y;
+  Dim = Out;
   offset = Dim(end-testlen+1)-Test(1);
   dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end)-offset)/mean(In) % relative testing error
   #plot(Dim,'r'); % with network size reduction
   num = result(k,4) = columns(A) % size of reduced network
   eva = result(k,5) = evalerr
-  #eva2 = result(k,5) = rmse(Eval,Dim(trainlen+1:trainlen+evallen))/mean(In) % relative validation error 
   #legend('real price','predicted price','reduced dimensions');
   #xlabel('day (from 2020-10-27 to 2021-12-30)');
   #ylabel('adjusted ending price in € of BAS.DE (BASF)');
 endfor
 
+tra_avg = mean(result(:,1)) % mean training error
 raw_avg = mean(result(:,2)) % mean testing error on raw prediction
 dim_avg = mean(result(:,3)) % mean testing error with size reduction
-num_avg = mean(result(:,4)) % mean evaluation error for best nets
+num_avg = mean(result(:,4)) % mean net size
 eva_avg = mean(result(:,5)) % mean evaluation error for best nets
