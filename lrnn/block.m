@@ -10,7 +10,7 @@ J = real(lambda)*eye(typ*m); % main diagonal
 if (typ==2) % eigenvalue is complex
   D = diag(repmat([imag(lambda) 0],1,m)(1:end-1));
   J(1:end-1,2:end) += D; % upper diagonal
-  J(2:end,1:end-1) += -D; % lower diagonal
+  J(2:end,1:end-1) -= D; % lower diagonal
 endif
 
 if (m>1) % multiplicity > 1
