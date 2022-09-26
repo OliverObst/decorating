@@ -8,7 +8,7 @@ testlen = 50;
 trials = 100;
 
 % read in stock data
-n = 37; % number of stocks
+n = 39; % number of stocks
 [traindat,restdat,names] = read_in_data(trainlen,evallen+testlen);
 
 % parameter setting
@@ -56,14 +56,14 @@ for k=1:n#4=BASF
   dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end)-offset)/mean(In) % relative testing error
   #plot(Dim,'r'); % with network size reduction
   num = result(k,4) = columns(A) % size of reduced network
-  eva = result(k,5) = evalerr
-  #legend('real price','predicted price','reduced dimensions');
+  #eva = result(k,5) = evalerr
+  bal = result(k,5) = rmse(Test,Eval(end)*ones(1,testlen))/mean(In) % relative baseline error#legend('real price','predicted price','reduced dimensions');
   #xlabel('day (from 2020-10-27 to 2021-12-30)');
   #ylabel('adjusted ending price in € of BAS.DE (BASF)');
 endfor
 
-tra_avg = mean(result(:,1)) % mean training error
-raw_avg = mean(result(:,2)) % mean testing error on raw prediction
-dim_avg = mean(result(:,3)) % mean testing error with size reduction
-num_avg = mean(result(:,4)) % mean net size
-eva_avg = mean(result(:,5)) % mean evaluation error for best nets
+#tra_avg = mean(result(:,1)) % mean training error
+#raw_avg = mean(result(:,2)) % mean testing error on raw prediction
+#dim_avg = mean(result(:,3)) % mean testing error with size reduction
+#num_avg = mean(result(:,4)) % mean net size
+#eva_avg = mean(result(:,5)) % mean evaluation error for best nets

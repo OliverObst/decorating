@@ -1,0 +1,44 @@
+ADS = Adidas
+AIR = Airbus
+ALV = Allianz
+BAS = BASF
+BAYN = Bayer
++BEI = Beiersdorf [not in DAX40]
+BMW = BMW St
+BNR = Brenntag
+CON = Continental
+COV1 = Covestro
+DB1 = Deutsche Börse
+DBK = Deutsche Bank
+DHER = Delivery Hero
+DPW = Deutsche Post
+DTE = Deutsche Telekom
+*DTG = Daimler Truck [start = 2021-12-10, formerly = Daimler]
+DWNI = Deutsche Wohnen SE
+ENR = Siemens Energy [start = 2020-09-29]
+EOAN = E.ON
+FME = Fresenius Medical Care
+FRE = Fresenius
+HEI = HeidelbergCement
+HEN3 = Henkel Vz
+HFG = HelloFresh
++HNR3 = Hannover Rück [not in DAX40]
+IFX = Infineon
++LEG = LEG Immobilien SE [not in DAX40]
+LIN = Linde PLC
+MRK = Merck KGaA
+MTX = MTU Aero Engines
+MUV2 = Münchener Rück
+PAH3 = Porsche Vz
+PUM = Puma
+QIA = Qiagen
+RWE = RWE
+SAP = SAP
+SHL = Siemens Healthineers [start = 2018-12-04]
+SIE = Siemens
+SRT3 = Sartorius Vz
+SY1 = Symrise
+VNA = Vonovia
+VOW3 = Volkswagen Vz
+ZAL = Zalando
+
