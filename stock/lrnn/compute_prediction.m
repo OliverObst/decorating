@@ -43,9 +43,10 @@ for k=1:n#4=BASF
     endif 
   endfor
 
-  tra = result(k,1) = rmse(In,Out(1:trainlen))/mean(In) % relative training error
+  meanin = mean([In Eval]); % mean of input including validation phase
+  tra = result(k,1) = rmse(In,Out(1:trainlen))/meanin % relative training error
   Raw = compute(W,X(:,1),evallen+testlen,Seq);
-  raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/mean(In) % relative testing error
+  raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/meanin % relative testing error
   #plot(Raw(Range,:),'b'); % without network size reduction
   #X = [X(:,1:trainlen-1) compute(W,X(:,trainlen),0,[In(end) Eval])];
   #Y = [Y(:,1:trainlen-1) compute(J,Y(:,trainlen),evallen+testlen)]; % output generating mode
@@ -53,11 +54,12 @@ for k=1:n#4=BASF
   #Dim = A(Range,:)*Y;
   Dim = Out;
   offset = Dim(end-testlen+1)-Test(1);
-  dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end)-offset)/mean(In) % relative testing error
+  dim = result(k,3) = rmse(Test,Dim(end-testlen+1:end)-offset)/meanin % relative testing error
   #plot(Dim,'r'); % with network size reduction
   num = result(k,4) = columns(A) % size of reduced network
   #eva = result(k,5) = evalerr
-  bal = result(k,5) = rmse(Test,Eval(end)*ones(1,testlen))/mean(In) % relative baseline error#legend('real price','predicted price','reduced dimensions');
+  bal = result(k,5) = rmse(Test,Eval(end)*ones(1,testlen))/meanin % relative baseline error
+  #legend('real price','predicted price','reduced dimensions');
   #xlabel('day (from 2020-10-27 to 2021-12-30)');
   #ylabel('adjusted ending price in € of BAS.DE (BASF)');
 endfor
