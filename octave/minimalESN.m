@@ -4,20 +4,27 @@
 % (c) 2012-2020 Mantas Lukosevicius
 % Distributed under MIT license https://opensource.org/licenses/MIT
 
+# 2022 adapted by Frieder Stolzenburg
+addpath('../lrnn/');
+
 % load the data
-trainLen = 2000;
-testLen = 2000;
-initLen = 100;
-data = load('MackeyGlass_t17.txt');
+initLen = 50;
+trainLen = 200;
+testLen = 50;
+
+n = 39; % number of stocks
+[restdat,testdat,names] = read_in_data(initLen+trainLen,testLen);
+stock = [restdat testdat];
+data = stock(4,:)'; % BASF
 
 % plot some of it
 figure(10);
-plot(data(1:1000));
+plot(data);
 title('A sample of data');
 
 % generate the ESN reservoir
 inSize = 1; outSize = 1;
-resSize = 1000;
+resSize = 10;
 a = 0.3; % leaking rate
 rand( 'seed', 42 );
 Win = (rand(resSize,1+inSize)-0.5) .* 1;
@@ -73,7 +80,7 @@ for t = 1:testLen
 end
 
 % compute MSE for the first errorLen time steps
-errorLen = 500;
+errorLen = testLen;
 mse = sum((data(trainLen+2:trainLen+errorLen+1)'-Y(1,1:errorLen)).^2)./errorLen;
 disp( ['MSE = ', num2str( mse )] );
 
@@ -88,7 +95,7 @@ title('Target and generated signals y(n) starting at n=0');
 legend('Target signal', 'Free-running predicted signal');
 
 figure(2);
-plot( X(1:20,1:200)' );
+plot( X' );
 title('Some reservoir activations x(n)');
 
 figure(3);

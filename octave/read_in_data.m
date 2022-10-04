@@ -6,7 +6,7 @@ function [traindat,testdat,names] = read_in_data(trainlen=250,testlen=50)
 % traindat,testdat : training and testing data sequences 
 
 % definitions
-cd('../data/'); % data directory
+cd('../stock/data/'); % data directory
 stocks = dir('*.csv'); % read all file names
 n = numel(stocks); % number of stocks
 
@@ -24,5 +24,5 @@ for k=1:n
   traindat(k,:) = alldat(end-testlen-trainlen+1:end-testlen); % and just before
 endfor
 
-cd('../lrnn'); % go back
+cd('../../octave/'); % go back
 endfunction
