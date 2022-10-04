@@ -14,7 +14,7 @@ n = 39; % number of stocks
 % parameter setting
 p = 0.1; % relative error
 Nres = 10; % reservoir size
-result = zeros(37,5);
+result = zeros(n,5);
 
 % prediction of single stock from single/all stocks
 for k=1:n#4=BASF

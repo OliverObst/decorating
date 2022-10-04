@@ -15,18 +15,25 @@ testLen = 50;
 n = 39; % number of stocks
 [restdat,testdat,names] = read_in_data(initLen+trainLen,testLen);
 stock = [restdat testdat];
-data = stock(4,:)'; % BASF
 
-% plot some of it
-figure(10);
-plot(data);
-title('A sample of data');
+result = zeros(1,n);
 
 % generate the ESN reservoir
 inSize = 1; outSize = 1;
 resSize = 10;
 a = 0.3; % leaking rate
-rand( 'seed', 42 );
+#rand( 'seed', 42 );
+
+for k=1:n#4=BASF
+
+k##
+data = stock(k,:)';
+
+#% plot some of it
+#figure(10);
+#plot(data);
+#title('A sample of data');
+
 Win = (rand(resSize,1+inSize)-0.5) .* 1;
 % dense W:
 W = rand(resSize,resSize)-0.5;
@@ -80,24 +87,28 @@ for t = 1:testLen
 end
 
 % compute MSE for the first errorLen time steps
-errorLen = testLen;
-mse = sum((data(trainLen+2:trainLen+errorLen+1)'-Y(1,1:errorLen)).^2)./errorLen;
-disp( ['MSE = ', num2str( mse )] );
+#errorLen = testLen;
+#mse = sum((data(trainLen+2:trainLen+errorLen+1)'-Y(1,1:errorLen)).^2)./errorLen;
+#disp( ['MSE = ', num2str( mse )] );
+meanin = mean(data(initLen+trainLen)); % mean of input including initialization phase
+test_rmse = result(k) = rmse(data(end-testlen+1:end),Y(1,1:testLen))/meanin % relative testing error
 
-% plot some signals
-figure(1);
-plot( data(trainLen+2:trainLen+testLen+1), 'color', [0,0.75,0] );
-hold on;
-plot( Y', 'b' );
-hold off;
-axis tight;
-title('Target and generated signals y(n) starting at n=0');
-legend('Target signal', 'Free-running predicted signal');
+endfor
 
-figure(2);
-plot( X' );
-title('Some reservoir activations x(n)');
-
-figure(3);
-bar( Wout' )
-title('Output weights W^{out}');
+#% plot some signals
+#figure(1);
+#plot( data(trainLen+2:trainLen+testLen+1), 'color', [0,0.75,0] );
+#hold on;
+#plot( Y', 'b' );
+#hold off;
+#axis tight;
+#title('Target and generated signals y(n) starting at n=0');
+#legend('Target signal', 'Free-running predicted signal');
+#
+#figure(2);
+#plot( X' );
+#title('Some reservoir activations x(n)');
+#
+#figure(3);
+#bar( Wout' )
+#title('Output weights W^{out}');
