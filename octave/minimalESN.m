@@ -43,10 +43,11 @@ W = rand(resSize,resSize)-0.5;
 % W(W_mask) = (W(W_mask)-0.5);
 
 % normalizing and setting spectral radius
-disp 'Computing spectral radius...';
-opt.disp = 0;
-rhoW = abs(eigs(W,1,'LM',opt));
-disp 'done.'
+#disp 'Computing spectral radius...';
+#opt.disp = 0;
+#rhoW = abs(eigs(W,1,'LM',opt))
+rhoW = abs(max(eig(W)))
+#disp 'done.'
 W = W .* (1.25 / rhoW);
 
 % allocated memory for the design (collected states) matrix
@@ -91,7 +92,7 @@ end
 #mse = sum((data(trainLen+2:trainLen+errorLen+1)'-Y(1,1:errorLen)).^2)./errorLen;
 #disp( ['MSE = ', num2str( mse )] );
 meanin = mean(data(initLen+trainLen)); % mean of input including initialization phase
-test_rmse = result(k) = rmse(data(end-testlen+1:end),Y(1,1:testLen))/meanin % relative testing error
+test_rmse = result(k) = rmse(data(end-testLen+1:end),Y(1,1:testLen))/meanin % relative testing error
 
 endfor
 
