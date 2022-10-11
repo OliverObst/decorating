@@ -9,14 +9,14 @@ addpath('../lrnn/');
 
 % load the data
 initLen = 50;
-trainLen = 200;
+trainLen = 250;
 testLen = 50;
 
 n = 39; % number of stocks
-[restdat,testdat,names] = read_in_data(initLen+trainLen,testLen);
+[restdat,testdat,names] = read_in_data(trainLen,testLen);
 stock = [restdat testdat];
 
-result = zeros(1,n);
+result = zeros(2,n);
 
 % generate the ESN reservoir
 inSize = 1; outSize = 1;
@@ -28,10 +28,12 @@ for k=1:n#4=BASF
 
 k##
 data = stock(k,:)';
+#range = 0:0.01:2.99;
+#data = sin(pi*range)';
 
-#% plot some of it
+% plot some of it
 #figure(10);
-#plot(data);
+##plot(data); hold on;
 #title('A sample of data');
 
 Win = (rand(resSize,1+inSize)-0.5) .* 1;
@@ -45,8 +47,8 @@ W = rand(resSize,resSize)-0.5;
 % normalizing and setting spectral radius
 #disp 'Computing spectral radius...';
 #opt.disp = 0;
-#rhoW = abs(eigs(W,1,'LM',opt))
-rhoW = abs(max(eig(W)))
+#rhoW = abs(eigs(W,1,'LM',opt));
+rhoW = abs(max(eig(W)));
 #disp 'done.'
 W = W .* (1.25 / rhoW);
 
@@ -64,6 +66,7 @@ for t = 1:trainLen
 		X(:,t-initLen) = [1;u;x];
 	end
 end
+% dim 1 = 1 (bias); dim 2 = u (input)
 
 % train the output by ridge regression
 reg = 1e-8;  % regularization coefficient
@@ -72,6 +75,18 @@ reg = 1e-8;  % regularization coefficient
 %Wout = Yt*X_T * inv(X*X_T + reg*eye(1+inSize+resSize));
 % using Matlab mldivide solver:
 Wout = ((X*X' + reg*eye(1+inSize+resSize)) \ (X*Yt'))'; 
+
+% run in generative mode, skip initialization phase 
+Z = zeros(outSize,trainLen-initLen);
+u = data(initLen+1);
+for t = 1:trainLen-initLen
+	x = (1-a)*x + a*tanh( Win*[1;u] + W*x );
+	y = Wout*[1;u;x];
+	Z(:,t) = y;
+	% generative mode:
+	u = y;
+end
+##plot(initLen+1:trainLen,Z);
 
 % run the trained ESN in a generative mode. no need to initialize here, 
 % because x is initialized with training data and we continue from there.
@@ -86,13 +101,15 @@ for t = 1:testLen
 	% this would be a predictive mode:
 	%u = data(trainLen+t+1);
 end
+##plot(trainLen+(1:testLen),Y); hold off;
 
 % compute MSE for the first errorLen time steps
 #errorLen = testLen;
 #mse = sum((data(trainLen+2:trainLen+errorLen+1)'-Y(1,1:errorLen)).^2)./errorLen;
 #disp( ['MSE = ', num2str( mse )] );
-meanin = mean(data(initLen+trainLen)); % mean of input including initialization phase
-test_rmse = result(k) = rmse(data(end-testLen+1:end),Y(1,1:testLen))/meanin % relative testing error
+meanin = mean(data(1:trainLen)) % mean of input including initialization phase
+train_rmse = result(1,k) = rmse(X(2,:),Z)/meanin % relative training error (without initialization)
+test_rmse = result(2,k) = rmse(data(end-testLen+1:end)',Y)/meanin % relative testing error
 
 endfor
 

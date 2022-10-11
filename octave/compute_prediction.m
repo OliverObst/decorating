@@ -43,7 +43,7 @@ for k=1:n#4=BASF
     endif 
   endfor
 
-  meanin = mean([In Eval]); % mean of input including validation phase
+  meanin = mean([In Eval]) % mean of input including validation phase
   tra = result(k,1) = rmse(In,Out(1:trainlen))/meanin % relative training error
   Raw = compute(W,X(:,1),evallen+testlen,Seq);
   raw = result(k,2) = rmse(Test,Raw(Range,end-testlen+1:end))/meanin % relative testing error
