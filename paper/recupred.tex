@@ -351,7 +351,7 @@ following properties:
 	normal distribution, i.e., the Gaussian distribution with mean $\mu = 0$
 	and standard deviation $\sigma = 1$, whereas the output weights
 	$W^\mathrm{out}$ are learned (cf. \cref{output}).
-  \item There is no clear distinction between input and output but only one joint
+  \item There is no distinction between input and output but only one (joint)
 	group of $d$ input/output neurons. They may be arbitrarily connected
 	like the reservoir neurons. We thus can imagine the whole network as a
 	big reservoir because the input/output neurons are not particularly
@@ -459,14 +459,14 @@ An LRNN runs through network states $f(t)$ for $t
 \ge 0$. It holds (in output generating mode)
 \[ f(t) = \left\{ \begin{array}{ll}
 	s, & t=0\\
-	W \cdot f(t-1), & \textrm{otherwise}
+	W \cdot f(t-\tau), & \textrm{otherwise}
 \end{array} \right. \]
-and hence simply $f(t) = W^t \cdot s$.
+and hence simply $f(t) = W^t \cdot s$. Note that we have $\tau = 1$ here.
 
 \begin{prop}\label{jordan}
 Let $W = V \cdot J \cdot V^{-1}$ be the Jordan decomposition of the transition
-matrix $W$ where $J$ is the direct sum, i.e., a block diagonal matrix, of one or
-more Jordan blocks \citep[Sect.~3.1]{HJ13}
+matrix $W$ where $J$ is the direct sum of one or more Jordan blocks, i.e., a
+block diagonal matrix formed of Jordan blocks
 \[ J_m(\lambda) = \left[ \begin{array}{*{5}{c}}
   \lambda & 1 & 0 & \cdots & 0\\
   0 & \lambda & 1 & \ddots & \vdots\\
@@ -474,7 +474,8 @@ more Jordan blocks \citep[Sect.~3.1]{HJ13}
   \vdots & & \ddots & \lambda & 1\\
   0 & \cdots & \cdots & 0 & \lambda
 \end{array} \right] \]
-in general with different sizes $m \times m$ and different eigenvalues $\lambda$.
+in general with different sizes $m \times m$ and different eigenvalues $\lambda$,
+and $V$ is a matrix consisting of the corresponding eigen- and principal column vectors.
 Then we have: \[ f(t) = W^t \cdot s = V \cdot J^t \cdot V^{-1} \cdot s \]
 
 If we decompose $V$ into matrices $v$ of size $N \times m$ and the column vector
@@ -843,7 +844,7 @@ follows:
 \begin{itemize}
   \item In the presence of linear activation, the spectral radius of the
 	reservoir weights matrix $W^\mathrm{res}$ is set to $1$.
-	Otherwise, with increasing $t$, the values of $W^t$ explode if the
+	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$ explode if the
 	spectral radius is greater or vanish if the spectral radius is smaller
 	than $1$ (cf. \cref{ellipse}).
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
@@ -1106,12 +1107,11 @@ omitted are considered \emph{relevant}. Thus, from $A$, $J$, and
 $y$ (according to \cref{chad}), we successively derive reduced matrices
 $A'$ and $J'$ and the vector $y'$ as follows:
 \begin{itemize}
-  \item From $A$, take the rows corresponding to the input/output components and
+  \item Reduce $A$ to the rows corresponding to the input/output components and
 	the columns corresponding to the relevant network components.
-  \item From $J$, take the rows and columns corresponding to the relevant
+  \item Reduce $J$ to the rows and columns corresponding to the relevant
 	network components.
-  \item From $y$, take the rows corresponding to the relevant network
-	components.
+  \item Reduce $y$ to the rows corresponding to the relevant network components.
 \end{itemize}
 \end{prop}
 
