@@ -1,7 +1,7 @@
 % predict stock prices and evaluate
 
 % prerequisites
-addpath('../lrnn/');
+addpath('../../lrnn/');
 trainlen = 200;
 evallen = 50;
 testlen = 50;
