@@ -1,6 +1,8 @@
 % !TeX spellcheck = en_US
 
 \documentclass[twoside,11pt]{article}
+% mathematics
+\usepackage{amsmath,amssymb,amsthm}
 \usepackage[abbrvbib,preprint]{jmlr2e}
 
 % options: short,long
@@ -13,8 +15,6 @@
   \hypersetup{hidelinks}
 \pdfminorversion=7
 
-% mathematics
-\usepackage{amsmath,amssymb,amsthm}
 \usepackage[capitalize,noabbrev]{cleveref}
   \creflabelformat{equation}{#2#1#3}
 \theoremstyle{definition}
@@ -1434,7 +1434,7 @@ mode.
   \label{robocup}
 \end{table}
 
-For LRNN learning, we use only every $10$-th time step of each game with $d =
+For LRNN learning, we use only every $10^\text{th}$ time step of each 6000 step game with $d =
 2+2 \cdot 22 = 46$ input dimensions and start with a reservoir consisting of
 $N^\mathrm{res} = 500$ neurons. We repeat the learning procedure until the RMSE
 is smaller than $1$; on average, already two attempts suffice for this. This
@@ -1531,7 +1531,7 @@ than the RMSE of the ARIMA model with $E_\mathrm{test}=9.05${\,\euro}.
 
 \begin{figure}
 \begin{minipage}[t]{0.48\textwidth}
-  \includegraphics[width=\textwidth]{fig/Airbus_ARIMA.pdf} % ,height=5.5cm
+ % \includegraphics[width=\textwidth]{fig/Airbus_ARIMA.pdf} % ,height=5.5cm
   \caption{Example stock price (solid/blue) prediction for AIR.DE (Airbus), using an ARIMA(2,1,2)
 	model with drift over the first 610 data points predicting the
 	subsequent 152 data points (dashed/red).}
@@ -1539,7 +1539,7 @@ than the RMSE of the ARIMA model with $E_\mathrm{test}=9.05${\,\euro}.
 \end{minipage}
   \hfill%
 \begin{minipage}[t]{0.48\textwidth}
-  \includegraphics[width=\textwidth]{fig/Airbus_LRNN.pdf} % ,height=5cm
+ % \includegraphics[width=\textwidth]{fig/Airbus_LRNN.pdf} % ,height=5cm
   \caption{Stock price (solid/blue) prediction for AIR.DE (Airbus) with LRNNs and $N=600$ neurons (dashed/red).
 	While residuals during training (the first 610 steps) appear larger than
 	for the ARIMA model, the error on the test set is smaller for LRNNs.}
