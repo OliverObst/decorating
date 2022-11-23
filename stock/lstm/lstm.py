@@ -3,11 +3,9 @@
 """
 Created on Tue Aug 23 11:39:54 2022
 
-@author: 30045063
+@author: Oliver Obst
 """
 
-import sys
-sys.path.insert(1, '../../python')
 from timeseriesloader import TimeSeriesLoader
 
 import numpy as np
@@ -79,7 +77,7 @@ def prediction(filename, steps = 5, hidden = 150, epochs = 200, validation = Fal
     d.load_data(filename)
 
     # for univariate input, use a single index. For multivariate, use an index list
-    X,y = create_samples(d.training(), steps, index=4)
+    X,y = create_samples(d.training(), steps)
     tme = d.training(time=True)[:-steps]
     # univariate input
     features = 1
@@ -95,20 +93,20 @@ def prediction(filename, steps = 5, hidden = 150, epochs = 200, validation = Fal
 
     # predict on training data
     yhat = model.predict(X, verbose=0)
-    rmse = d.rmse(y, yhat, mode=-1)
+    rmse = d.rmse(y, yhat)
     
     # predict on validation / test data
     if validation:
-        X1, y1 = create_samples(d.validation(), steps, index=4)
+        X1, y1 = create_samples(d.validation(), steps)
         tme1 = d.validation(time=True)[:-steps]
     else:
-        X1, y1 = create_samples(d.testing(), steps, index=4)
+        X1, y1 = create_samples(d.testing(), steps)
         tme1 = d.testing(time=True)[:-steps]
         
     X1 = X1.reshape((X1.shape[0], X1.shape[1], features))
     y1hat = model.predict(X1, verbose=0)
     
-    rmse1 = d.rmse(y1, y1hat, mode=-1)
+    rmse1 = d.rmse(y1, y1hat)
 
     return y1, y1hat, tme1, rmse1, y, yhat, tme, rmse
 
@@ -146,28 +144,38 @@ with open(datadir + '/files.txt', 'r') as f:
         
         for k0,steps in enumerate(hyper_steps):
             for k1,hidden in enumerate(hyper_units):
-                _,_,_,rmse1, _,_,_,_ = prediction(file)
-                print(f"RMSE for {steps} steps and {hidden} units: {rmse1}")
-                results[i,k0,k1] = rmse1
+                _,_,_,rmse1, _,_,_,_ = prediction(file, 
+                                                  steps = hyper_steps[k0],
+                                                  hidden = hyper_units[k1],
+                                                  validation = True)
+                print(f"RMSE for {steps} steps and {hidden} units: {rmse1[0,0]}")
+                results[i,k0,k1] = rmse1[0,0]
         
                 k0, k1 = np.unravel_index(np.argmin(results[i,:,:]), results[i,:,:].shape)
         hyperparms.append((hyper_steps[k0], hyper_units[k1])) 
         
         y1, y1hat, d1, rmse1, _, _, _, _ = prediction(datadir + '/' + filename,
                                                       steps = hyper_steps[k0],
-                                                      hidden = hyper_units[k1])
+                                                      hidden = hyper_units[k1],
+                                                      validation = False)
 
         y1 = y1.reshape(-1,1)
         y = np.concatenate((y1, y1hat), axis=1)
         
-        output = { 'RMSE' : rmse1[0], 
+        output = { 'RMSE' : rmse1[0,0], 
                   'steps' : hyper_steps[k0], 
                   'units' : hyper_units[k1],
                   'RMSE.val' : results[i,k0,k1]}
         
         with open(paramfile, 'w') as f:
-            f.write(json.dumps(output))
+            try:
+                f.write(json.dumps(output))
+            except TypeError:
+                print('Trying to save:')
+                print(output)
+                raise
+                
         np.savetxt(predfile, y)
         p = plot_predicted_actual(y1, y1hat, d1, name=acronyms[name], filename=plotfile)
         p.close()
-        print(f"Test NRMSE ({hyper_steps[k0]}, {hyper_units[k1]}): {rmse1[0]}")
+        print(f"Test NRMSE ({hyper_steps[k0]}, {hyper_units[k1]}): {rmse1[0,0]}")
