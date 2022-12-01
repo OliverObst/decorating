@@ -2,13 +2,14 @@
 
 % prerequisites
 addpath('../../lrnn/');
-trainlen = 250;
+trainlen = 200;
+evallen = 50;
 testlen = 50;
 trials = 100;
 
 % read in stock data
 n = 20; % number of files
-[traindat,testdat,alpha] = read_in_data(trainlen,testlen);
+[traindat,restdat,alpha] = read_in_data(trainlen,evallen+testlen);
 
 % parameters
 Nres = 70;
@@ -19,9 +20,13 @@ result = zeros(n,2);
 for k=1:n
   k#
   In = traindat(k,:);
-  Err = +Inf; % best training error so far
+  Eval = restdat(k,1:evallen); % validation data;
+  Test = restdat(k,evallen+1:end); % test data
+
+  Err = +Inf; % best validation error so far
   for t=1:trials
-    [Outx,Errx,Ax,Jx,Yx,Wx,Xx,Lambdax,Multix] = predict(In,0,Nres,theta);
+    [Outx,Erry,Ax,Jx,Yx,Wx,Xx,Lambdax,Multix] = predict(In,evallen+testlen,Nres,theta);
+    Errx = rmse(Eval,Outx(trainlen+(1:evallen))); % actual validation error
     if Errx<Err
       Err = Errx;
       Out = Outx;
@@ -35,7 +40,7 @@ for k=1:n
     endif 
   endfor
 
-  trainerr = result(k,1) = Err % training error
-  testerr = result(k,2) = rmse(testdat(k,:),(A(Range,:)*compute(J,Y(:,end),testlen))(2:end)) % test error
+  evalerr = result(k,1) = Err % validation error
+  testerr = result(k,2) = rmse(Test,Out(end-testlen+1:end)) % test error
   length(J)
 endfor
