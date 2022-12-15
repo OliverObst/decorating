@@ -13,7 +13,7 @@ from darts.metrics.metrics import mse
 import matplotlib.pyplot as plt
 
 N = 20
-results = np.zeros((N,2))
+results = np.zeros((N,3))
 
 for n in range(N):
     filename = f"../data/signal{n+1:02d}.csv"
@@ -34,7 +34,8 @@ for n in range(N):
     #prediction_arima.plot(label='forecast', lw=3)
     #plt.legend()
     results[n,0] = n+1
-    results[n,1] = np.sqrt(mse(series, prediction_arima, intersect = True))
+    results[n,1] = series.mean(axis=0).values(0)[0][0]
+    results[n,2] = np.sqrt(mse(series, prediction_arima, intersect = True))
 
 np.savetxt('results.csv', results, delimiter=',')
 
