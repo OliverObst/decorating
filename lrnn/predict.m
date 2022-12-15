@@ -148,27 +148,4 @@ if (M>0)
   Out = [Out(:,1:end-1) A(Range,:)*compute(J,Y(:,end),M)];
 endif
 
-
-# FREQUENCY ANALYSIS
-
-#K = length(Lambda); % number of real Jordan blocks
-#L = rows(A); % number of input/output components
-
-#Omega = angle(Lambda); % angular frequencies for time step tau=1
-#%Frequency = Omega/(2*pi*tau); % real frequencies in Hz
-#Amplitude = zeros(K,L);
-#Phase = zeros(K,L);
-
-#pos = 0; % column position in matrix A
-#for (k=1:K)
-#  m = Multi(k);
-#  Index = pos+(1:m);
-#  v = A(:,Index); % matrix segment
-#  w = Y(Index,1); % vector segment
-#  a = norm(w)*norm(v,2,"rows")'; % amplitude
-#  Amplitude(k,:) = a;
-#  Phase(k,:) = acos((v*w)'./a);
-#  pos += m;
-#endfor
-
 endfunction
