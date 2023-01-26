@@ -14,7 +14,7 @@ n = 20; % number of files
 % parameters
 Nres = -1;
 theta = 0.5;
-result = zeros(n,4);
+result = zeros(n,5);
 
 % prediction
 for k=1:n
@@ -44,6 +44,7 @@ for k=1:n
   evalerr = result(k,2) = Err % validation error
   testerr = result(k,3) = rmse(Test,Out(end-testlen+1:end)) % test error
   netsize = result(k,4) = length(J) % reduced net size
+  baseline = result(k,5) = rmse(Test,mean([In Eval])) % baseline = guess average
 
 # FREQUENCY ANALYSIS
 
