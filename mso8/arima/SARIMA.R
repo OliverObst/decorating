@@ -7,7 +7,7 @@ library('zoo')
 #library('TSA') 
 
 #read in data (mso8 examples)
-  sdata=read.csv(file='../data/signal07.csv',header=FALSE,sep=",",stringsAsFactors=FALSE)  
+  sdata=read.csv(file='../data/signal03.csv',header=FALSE,sep=",",stringsAsFactors=FALSE)  
   sdata=t(sdata)
 
 #separate data into training and test data
@@ -26,15 +26,16 @@ library('zoo')
   
 #Seasonal ARIMA model
   K=100
-  training_data$timeseries=ts(training_data$timeseries,frequency=250)
-  sarima_model=auto.arima(ts(training_data$timeseries,frequency=250),trace=TRUE,seasonal=TRUE) #develop sarima_model according to timeseries
+  N=250
+  training_data$timeseries=ts(training_data$timeseries,frequency=N)
+  sarima_model=auto.arima(ts(training_data$timeseries,frequency=N),trace=TRUE,seasonal=TRUE) #develop sarima_model according to timeseries
 # sarima_model=auto.arima(ts(training_data$timeseries),xreg=fourier(training_data$timeseries,K))
   tsdisplay(residuals(sarima_model),lag.max=15)                    #analyse residuals
   training_data$fit=sarima_model$fitted
-  training_data$fit=ts(training_data$fit,frequency=254)
+  training_data$fit=ts(training_data$fit,frequency=N)
 #predict testing data
- # predicted=forecast(sarima_model,h=nrow(testing_data))
-  predicted=forecast(sarima_model, xreg=fourier(training_data$timeseries,K, h=nrow(testing_data)))
+  predicted=forecast(sarima_model)
+# predicted=forecast(sarima_model, xreg=fourier(training_data$timeseries,K, h=nrow(testing_data)))
   predicted_tmp=as.numeric(predicted$mean)
   testing_data$Prediction=predicted_tmp
   
