@@ -213,19 +213,7 @@ the final loss and iteratively removes those with smaller scores. In contrast to
 this, for LRNNs, the network architecture and hence its size is reduced in one
 step by analyzing the network transition matrix (cf. \cref{reduce}).
 
-\subsection{\opt{long}{Reinforcement Learning and }Autoregression}\label{regress}
-
-\opt{long}{In \emph{reinforcement learning}~\citep{SB18}, which is concerned
-with how software agents ought to take actions in an environment so as to
-maximize some notion of cumulative reward, several opportunities to use RNNs
-exist: In model-based reinforcement learning, RNNs can be used to learn a model
-of the environment. Alternatively, a value function can also be learned directly
-from current observations and the state of the RNN as a representation of the
-recent history of observations. A consequence of an action in reinforcement
-learning may follow the action with a significant delay. This is also called the
-temporal credit assignment problem. RNN used for value functions in
-reinforcement learning are commonly trained using truncated backpropagation
-through time which can be problematic for credit assignment~\citep{PGL17}.}
+\subsection{Autoregression}\label{regress}
 
 An \emph{autoregressive model} is a representation of a type of random process
 \citep{Aka69}. It specifies that the output variable or a vector thereof depends
@@ -262,7 +250,6 @@ show that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citet{Spe06} gives an
 exact closed-form solution for the weights of the linear autoencoder, which is
 related to the approximation theorem for LRNNs (cf. \cref{approx}).
-
 
 \section{Linear Recurrent Neural Networks}\label{define}
 
@@ -1333,8 +1320,8 @@ For a more systematic evaluation, we generalize the MSO benchmark (\cref{exmp})
 by considering $20$ times $K=8$ random frequencies $\alpha_1,\dots,\alpha_8$
 uniformly distributed on the interval $[0,1]$. We take the first $250$ time
 steps, i.e., $t=1,\dots,250$, as training data and the subsequent $50$ time
-steps as test data and compare the performance of LRNNs with other approaches
-(cf. \cref{related}) with respect to their RSME on the test data, partially
+steps as testing data and compare the performance of LRNNs with other approaches
+(cf. \cref{related}) with respect to their RSME on the testing data, partially
 using the Python library Darts (see \url{http://unit8co.github.io/darts/}) for
 time series:
 
@@ -1363,11 +1350,11 @@ other (cf. example~\#1) or are rather small (cf. example~\#12), then LRNNs do
 not perform quite so well. 
 	
 \begin{sidewaystable}
-  \small
+  \centering\small
   \begin{tabular}{c*{8}{p{8mm}}cccc@{\,+\,}cccc}
      \toprule
 	\# & \multicolumn{8}{l}{frequencies} & Baseline & ARIMA & ESN & \multicolumn{3}{c}{LSTM} & \multicolumn{2}{c}{LRNN}\\
-	& $\alpha_1$ & $\alpha_2$ & $\alpha_3$ & $\alpha_4$ & $\alpha_5$ & $\alpha_6$ & $\alpha_7$ & $\alpha_8$ & RMSE & RMSE & RMSE & \multicolumn{2}{c}{units} & RMSE & $N $ & RMSE\\ \midrule
+	& $\alpha_1$ & $\alpha_2$ & $\alpha_3$ & $\alpha_4$ & $\alpha_5$ & $\alpha_6$ & $\alpha_7$ & $\alpha_8$ & RMSE & RMSE & RMSE & \multicolumn{2}{c}{units} & RMSE & $N$ & RMSE\\ \midrule
 	1 & 0.334 & 0.336 & 0.399 & 0.403 & 0.412 & 0.438 & 0.442 & 0.724 & 2.05613 & 2.07496 & 0.23208 & 5 & 32 & 0.16038 & 10 & \textbf{0.04761}\\
 	2 & 0.049 & 0.091 & 0.161 & 0.292 & 0.472 & 0.715 & 0.832 & 0.997 & 2.25490 & 3.06428 & 0.19716 & 10 & 2 & 0.19218 & 16 & \textbf{0.00051}\\
 	3 & 0.308 & 0.521 & 0.597 & 0.607 & 0.736 & 0.766 & 0.924 & 0.957 & 1.34810 & 1.46533 & 0.13680 & 5 & 8 & 0.11722 & 16 & \textbf{0.00060}\\
@@ -1579,21 +1566,17 @@ Stock price prediction is a topic that receives a considerable amount of
 attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
-We analyze 30 different stocks using the closing stock prices 2016--2019 from
-\url{http://de.finance.yahoo.com/} and compare their ARIMA prediction with
-LRNNs \citep[cf.][]{Lit20}.
-
-In our case, we predict each stock using an ARIMA model, implemented with the
-\texttt{auto.arima} package from \citet{HK08}, with seasonal patterns modeled
-using Fourier terms \citep[p.\,321]{HA13}. To fit the model, we split stock
-prices into training and test sets, with the first 80\% of each series
-for training and the final 20\% used for evaluation. \cref{arima} shows predictions
-of the ARIMA model for Airbus (AIR.DE). We use the first 610 points from this series
-to build an ARIMA(2,1,2) model with drift and the subsequent 152 data points
-to evaluate our prediction using the RMSE as metric. \cref{LRNN} shows the
-prediction using an LRNN for the same task.
-In this example, the RMSE for LRNNs is $E_\mathrm{test}=8.07${\,\euro} and better
-than the RMSE of the ARIMA model with $E_\mathrm{test}=9.05${\,\euro}.
+\citet{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs, using the
+closing stock prices 2016--2019. The stock price time series are split into
+training and testing data, with the first 80\% of each series for training and the
+final 20\% for evaluation. For a representative comparison, the RMSE of the
+predictions on every stock in the set has been calculated. The average RMSE
+using LRNNs is $E_\mathrm{test}=18.40${\,\euro}, lower than the average RMSE
+using ARIMA models with $E_\mathrm{test}=24.23${\,\euro}. For shorter term
+predictions of 60 steps, it is possible to slightly reduce the RMSE further to
+E$_\mathrm{test}=17.46${\,\euro} by using smaller LRNNs of 200 neurons with a
+smaller training set of 240 points. With an average stock price of
+$286.71${\,\euro} of all stocks in the set, the average deviation is only~6.1\%.
 
 \begin{figure}
 \begin{minipage}[t]{0.48\textwidth}
@@ -1608,48 +1591,51 @@ than the RMSE of the ARIMA model with $E_\mathrm{test}=9.05${\,\euro}.
  % \includegraphics[width=\textwidth]{fig/Airbus_LRNN.pdf} % ,height=5cm
   \caption{Stock price (solid/blue) prediction for AIR.DE (Airbus) with LRNNs and $N=600$ neurons (dashed/red).
 	While residuals during training (the first 610 steps) appear larger than
-	for the ARIMA model, the error on the test set is smaller for LRNNs.}
+	for the ARIMA model, the error on the testing set is smaller for LRNNs.}
   \label{LRNN}
 \end{minipage}
 \end{figure}
 
-For a representative comparison, we calculate the RMSE of predictions on every stock in the set.
-The average RMSE using LRNNs is $E_\mathrm{test}=18.40${\,\euro}, lower than the  average
-RMSE using ARIMA models with $E_\mathrm{test}=24.23${\,\euro}.
-For shorter term predictions of 60 steps, we were able to slightly reduce the
-RMSE further to E$_\mathrm{test}=17.46${\,\euro}, by using smaller LRNNs of 200
-neurons with a smaller training set of 240 points \citep{Lit20}. With an average
-stock price of $286.71${\,\euro} of all stocks in the set, the average deviation
-is only 6.1\%.
-
-Apart from the good prediction results, LRNNs have the advantage that they
-allow the prediction of multiple stocks at the same time. An LRNN can read in 30
+Apart from the good prediction results, LRNNs have the advantage that they allow
+the prediction of multiple stocks at the same time. An LRNN can read in 30
 stocks and predict each of them concurrently. For a concurrent forecast for 60
 steps, LRNNs using 600 neurons achieved an average RMSE of
-$E_\mathrm{test}=30.02${\,\euro} with 240 training steps.
-Compared to ARIMA, LRNNs have also an advantage when it comes to the number of
-hyper-parameters that have to be tuned. The LRNN model is robust when it comes
-to choosing the number of neurons, whereas the ARIMA model requires the
-adjustment of many parameters (e.g., for seasonal patterns). With an increase in
-number of hyper-parameters the compute time for ARIMA also increases. In our
-example, LRNNs are computed about 15 times faster than the ARIMA models with the
-selected number of Fourier terms.
+$E_\mathrm{test}=30.02${\,\euro} with 240 training steps. Compared to ARIMA,
+LRNNs have also an advantage when it comes to the number of hyperparameters that
+have to be tuned. The LRNN model is robust when it comes to choosing the number
+of neurons, whereas the ARIMA model requires the adjustment of many parameters
+(e.g., for seasonal patterns). The compute time for ARIMA increases
+significantly with the number of hyperparameters. In our example, LRNNs are
+computed about 15 times faster than the ARIMA models with the selected number of
+Fourier terms.
 
-The review by \citet{SIZ19} shows that predicting stock prices remains a
-challenging problem, especially for a longer timeframe, which we have investigated
+For a more systematic evaluation, we take the stocks of the German stock market
+index DAX (again from \url{http://de.finance.yahoo.com/}) and consider the last
+$250+50$ data points until the end of 2021 as training and testing data,
+respectively, for each stock in the DAX existing at least $300$ trading days
+until that time. We apply the same approaches as in \cref{mso} and compute their
+RMSE with respect to the testing data, each normalized (i.e., divided) by the
+arithmetic mean of the corresponding training data. As baseline we just
+constantly predict the stock price of the last trading day of the training data.
+
+As one can see in \cref{dax}, LRNNs outperform the other approaches in the
+majority of all cases, namely for 19~of~39 stocks, where the resulting network
+size $N$ after size reduction often is rather small. However, the overall
+performance for all approaches often is not much better than the baseline. In
+line with that, the review by \citet{SIZ19} shows that predicting stock prices
+remains a challenging problem, especially for a longer timeframe, which we
+investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
 \citep{NPO17,RPV17} to attention-based models that use further information about
 the events that drive the stock prices, e.g., news texts from social media
 \citep{LL+19}. These models and also LRNNs yield accurate results, but mainly
 only in the short run.
 
-%%% more systematic evaluation; methods and tools used; interpretation
-
 \begin{table}
 \small
 \begin{tabular}{l@{ }crcccccc}
 \toprule
-\multicolumn{2}{c}{company} & \head{mean} & Baseline & ARIMA & ESN & LSTM & \multicolumn{2}{l}{LRNN}\\
+\multicolumn{2}{c}{DAX member} & \head{mean} & Baseline & ARIMA & ESN & LSTM & \multicolumn{2}{l}{LRNN}\\
 name & stock & \head{training} & RMSE & RMSE & RMSE & RMSE & $N$ & RMSE\\ \midrule
 Adidas & ADS.DE & 280.8500 & \textbf{0.0554} & 0.0554 & 0.0784 & 0.1162 & 2 & 0.0569\\
 Airbus & AIR.DE & 99.6260 & 0.0618 & 0.1070 & 0.0583 & 0.2293 & 2 & \textbf{0.0500}\\
@@ -1692,7 +1678,11 @@ Volkswagen Vz & VOW3.DE & 177.7200 & \textbf{0.0615} & 0.0615 & 0.1207 & 0.1521 
 Zalando & ZAL.DE & 89.9610 & 0.0656 & 0.0656 & 0.1139 & 0.2111 & 2 & \textbf{0.0600}\\
 \bottomrule
 \end{tabular}
-\caption{}
+\caption{Evaluation results for all stocks in the DAX existing at least 300
+existing at least $300$ trading days until the end of 2021. The best performing
+approach is highlighted by bold face. For LRNNs, the network size $N$ after size
+reduction is shown.}
+\label{dax}
 \end{table}
 
 \section{Conclusions}\label{conclude}
