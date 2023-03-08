@@ -6,7 +6,7 @@ With this project, we provide the software for LRNNs (linear recurrent
 neural networks). The software has been implemented by the authors in 
 Python and the scientific programming language Octave (see [octave.org](http://www.octave.org), 
 version 5.2.0). It has been tested under Linux. The main routines can 
-be found in "lrnn" implemented in Octave. For further details of LRNNs 
+be found in "`lrnn`" implemented in Octave. For further details of LRNNs 
 and their properties, the interested reader is referred to the 
 following paper.
 
