@@ -32,5 +32,5 @@ Mining (Decorating).
 ## Licenses
 
 The code that we make available with the Decorating project is released under 
-[GNU General Public License, version 2](https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html): https://www.gnu.org/licenses/old-licenses/gpl-2.0.en.html
+[BSD-3-Clause License](https://opensource.org/license/bsd-3-clause/): https://opensource.org/license/bsd-3-clause/
 
