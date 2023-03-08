@@ -1,0 +1,11 @@
+Prediction of the last 50 values of a 300 steps MSO8 time series.
+
+The first 250 values are used to train an ARIMA model, and the model
+is then used to predict the next 50 values.
+The results file has 5 columns:
+
+1. index (1-20)
+2. the mean of the first 250 actual values of the series
+3. the mean of the last 50 actual values of the series
+4. MSE(y, yhat): mean (y[i] - yhat[i])^2
+5. RMSE(y, yhat): sqrt ( mean ( y[i] - yhat[i])^2)
