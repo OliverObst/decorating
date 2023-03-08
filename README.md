@@ -3,12 +3,10 @@
 ## Deep Conceptors for Temporal Data Mining
 
 With this project, we provide the software for LRNNs (linear recurrent neural
-networks). The software has been implemented by the authors in the scientific
-programming language Octave (see <http://www.octave.org>) and tested with version
-5.2.0 under Linux. The main routines can be found in "lrnn". For further details
-of LRNNs and their properties, the interested reader is referrred to the
-following paper.
-
+networks). The software has been implemented by the authors in Python and the scientific
+programming language Octave (see <http://www.octave.org>, version 5.2.0). It has been 
+tested under Linux. The main routines can be found in "lrnn". For further details of 
+LRNNs and their properties, the interested reader is referrred to the following paper.
 
 ## Attributions
 
