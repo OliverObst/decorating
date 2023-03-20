@@ -63,9 +63,10 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks (L
 approximate any time-dependent function $f(t)$ given by a number of function
 values. The approximation can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-the size of an LRNN can be reduced significantly in one step, after inspecting
-the eigenvalues of the network transition matrix, by taking only the most
-relevant components. Therefore, in contrast to others, we do not only
+and this is probably another main contribution of this article, the size of an
+LRNN can be reduced significantly in one step after inspecting the eigenvalues
+of the network transition matrix by taking only the most
+relevant components. Therefore, in contrast to other approaches, we do not only
 learn network weights but also the network architecture. LRNNs have interesting
 properties: They end up in ellipse trajectories in the long run and allow the
 prediction of further values and compact representations of functions. We
@@ -120,6 +121,18 @@ LRNNs is explained (\cref{learn}). It is a relatively straightforward procedure
 which allows network size reduction; no backpropagation or gradient-descent
 method is needed. We then discuss results and experiments (\cref{result}),
 before we end up with conclusions (\cref{conclude}).
+
+Interestingly, several results for LRNNs we present here can be achieved by
+applying linear algebra and matrix analysis. Nonetheless, to the best of our
+knowledge, the main contributions of this article have not been presented
+before, namely that LRNNs can effectively be learned by a simple procedure and,
+even more, their size can be reduced significantly in one step (cf.
+\cref{learn}). In addition, the empirical evaluations of, in particular, the MSO
+benchmark and stock price prediction (cf. \cref{mso,stock}) with LRNNs and other
+approaches, e.g., LSTM networks, demonstrate the usefulness of our approach. We
+therefore hope that several interested communities can profit from this work,
+such as the neural engineering community, the time series prediction community,
+and the ESN community.
 
 \section{Related Works}\label{related}
 
@@ -354,6 +367,10 @@ following properties:
 	normal distribution, i.e., the Gaussian distribution with mean $\mu = 0$
 	and standard deviation $\sigma = 1$, whereas the output weights
 	$W^\mathrm{out}$ are learned (cf. \cref{output}).
+  \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
+	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
+	value of all its eigenvalues. Note that the spectral radius of the
+	overall transition matrix $W$ may still be greater than $1$.
   \item There is no distinction between input and output but only one (joint)
 	group of $d$ input/output neurons. They may be arbitrarily connected
 	like the reservoir neurons. We thus can imagine the whole network as a
@@ -431,7 +448,7 @@ matrix:
 \end{array} \right] \]
 \end{remk}
 
-\begin{exmp}
+\begin{exmp}\label{exp}
 The exponential function $\exp(t) = e^t$ can be defined by the differential
 equation $\dot{x}(t) = x(t)$, i.e., we have $c_0 = 1$ and $c_1 = -1$ in
 \cref{diff}. In consequence, according to \cref{rem} and because $\exp(0)=1$,
@@ -542,15 +559,6 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 	x_1\,{\lambda_1}^t\,v_1 + \dots + x_N\,{\lambda_N}^t\,v_N
 \end{equation}
 \end{prop}
-
-\opt{long}{\begin{remk}
-For $N \to \infty$, the formula $f(t) = x_1\,{\lambda_1}^t\,v_1 + \dots +
-x_N\,{\lambda_N}^t\,v_N$ restricted to one of the output dimensions can be seen
-as an approximation of a \emph{general Dirichlet series}. Note that, according
-to \cref{general}, the parameter $t$ may be real and even complex as in general
-Dirichlet series. This point of view allows us yet another characterization of
-the functions computed by RNNs.
-\end{remk}}
 
 \subsection{Long-Term Behavior}\label{ellipse}
 
@@ -845,11 +853,17 @@ values that are not changed (cf. \cref{thedef}). Nevertheless, in order to
 obtain better numerical stability during the computation, they are adjusted as
 follows:
 \begin{itemize}
-  \item In the presence of linear activation, the spectral radius of the
-	reservoir weights matrix $W^\mathrm{res}$ is set to $1$.
-	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$ explode if the
-	spectral radius is greater or vanish if the spectral radius is smaller
-	than $1$ (cf. \cref{ellipse}).
+  \item Because of the linear activation, the spectral radius of the reservoir
+	weights matrix $W^\mathrm{res}$ is set to $1$ (cf. \cref{thedef}).
+	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
+	explode if the spectral radius is greater or vanish if the spectral
+	radius is smaller than $1$ (cf. \cref{ellipse}). Note that the spectral
+	radius of the resulting overall matrix $W$ (according to \cref{matrix})
+	may be greater than $1$, if necessary but only then, in particular, if
+	the function $f(t)$ to be modeled by the LRNN is exponentially
+	increasing (e.g., \cref{exp}). The spectral radius of the reservoir
+	weights matrix $W^\mathrm{res}$ remains $1$ all the time because only
+	the output weights are learned.
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
         be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
         neurons such that the reservoir start vector $r_0$ (with $N^\mathrm{res}$
@@ -1339,8 +1353,9 @@ time series:
 
 \cref{sideways} shows the evaluation results. As one can see, LRNNs outperform
 all other approaches on this benchmark by far. The reason for this is certainly
-the network size reduction procedure (cf. \cref{reduce}), because it exactly
-selects the relevant components of the network: Each complex conjugate
+the network size reduction procedure (cf. \cref{reduce}),unique in our approach,
+because it exactly selects the relevant components of the network: Each complex
+conjugate
 eigenvalue pair corresponds to one of the frequencies $\alpha_1,\dots,\alpha_8$.
 In general, an LRNN with $2K$ neurons suffices to represent a signal, which
 might be a musical harmony \citep{Sto17b}, consisting of $K$ sinusoids (cf.
@@ -1679,7 +1694,7 @@ Zalando & ZAL.DE & 89.9610 & 0.0656 & 0.0656 & 0.1139 & 0.2111 & 2 & \textbf{0.0
 \bottomrule
 \end{tabular}
 \caption{Evaluation results for all stocks in the DAX existing at least 300
-existing at least $300$ trading days until the end of 2021. The best performing
+trading days until the end of 2021. The best performing
 approach is highlighted by bold face. For LRNNs, the network size $N$ after size
 reduction is shown.}
 \label{dax}
