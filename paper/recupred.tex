@@ -255,7 +255,7 @@ derivatives of the series, with the order of this process given by the parameter
 $d$.
 
 Autoregressive frameworks are common in current machine-learning applications
-like language modeling, e.g., in the generative pre-trained transformer GPT-3,
+like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
 by next word prediction \citep{BM+20}. The model applied in this context,
 however, is very complex (175 billion parameters) and non-linear.
 Related to autoregression is autoencoding of sequences. For this, \citet{PS14}
@@ -316,22 +316,11 @@ containing the following weight matrices:
 \end{defn}
 
 \begin{figure}
-\centering
-  \begin{minipage}[t]{0.48\textwidth}
-    \includegraphics[width=1.15\textwidth]{fig/net.pdf}
-    \caption{General recurrent neural network.
-    In ESNs, only output weights are trained and the hidden layer is also called reservoir.}
-    \label{net}
-  \end{minipage}%
-  \hfill%
-  \begin{minipage}[t]{0.5\textwidth}
-    \hspace*{\fill}\includegraphics[width=0.7\textwidth]{fig/example.pdf}
-    \caption{LRNN for $f(t) = t^2$ with time step $\tau=1$. The
-	input/output neuron $x_1$ is marked by a thick border. The initial
-	values of the neurons at time $t_0=0$ are written in the nodes. The
-	weights are annotated at the edges.}
-	\label{square}
-  \end{minipage}
+  \centering
+  \includegraphics[width=0.7\textwidth]{fig/net.pdf}
+  \caption{General recurrent neural network. In ESNs, only output weights are
+	trained and the hidden layer is also called reservoir.}
+  \label{net}
 \end{figure}
 
 Let us now define the \emph{network activity}: The initial
@@ -390,14 +379,14 @@ $S$.
 
 \begin{exmp}\label{parabola}
 The function $f(t) = t^2$ can be realized by an LRNN (in output generating mode)
-with three neurons (cf. \cref{square}). The respective transition matrix
+with three neurons (cf. \cref{examples}\,a). The respective transition matrix
 $W$ and start vector $s$ are:
 \[ W = \left[ \begin{array}{ccc}
 	1 & 2 & 1\\
 	0 & 1 & 1\\
 	0 & 0 & 1
    \end{array} \right]
-   \textrm{~and~} s = \left[ \begin{array}{c}
+   \text{~and~} s = \left[ \begin{array}{c}
 	0\\
 	0\\
 	1
@@ -415,6 +404,49 @@ Thus, in the neuron $x_1$, the function $f(t)$ is computed. This is the only
 input/output neuron.
 \end{exmp}
 
+\begin{exmp}\label{fibonacci}
+The Fibonacci series ($0,1,1,2,3,5,8,\dots$) can be defined as follows:
+\[ f(t) = \left\{ \begin{array}{ll}
+	t, & t=0,1\\
+	f(t-1)+f(t-2), & \text{otherwise}
+\end{array} \right. \]
+It can be realized by an LRNN (in output generating mode) with just two neurons
+(cf. \cref{examples}\,b). The respective transition matrix $W$ and start vector
+$s$ can be directly derived from the recursive definition of $f$:
+\[ W = \left[ \begin{array}{cc}
+	0 & 1\\
+	1 & 1
+   \end{array} \right]
+   \text{~and~} s = \left[ \begin{array}{c}
+	0\\
+	1
+   \end{array} \right]
+\]
+Again, the function $f(t)$ is computed in the only input/output neuron $x_1$. In
+the other neuron $x_2$, $f(t+1)$ is generated. There is a closed-form expression
+for the Fibonacci series, revealing its exponential growth, known as
+\emph{Binet's formula}:
+\begin{equation}\label{binet}
+   f(t) = \frac{{\lambda_1}^t-{\lambda_2}^t}{\sqrt{5}}
+	\text{~with~} \lambda_1 = \displaystyle\frac{1+\sqrt{5}}{2} \approx 1.6803
+	\text{~(golden ratio) and~} \lambda_2 = 1-\lambda_1
+\end{equation}
+Interestingly, $\lambda_1$ and $\lambda_2$ are the eigenvalues of the transition
+matrix $W$. We will come back to this later (in \cref{continued}).
+\end{exmp}
+
+\begin{figure}
+  (a) \raisebox{-6cm}{\includegraphics[width=0.4\textwidth]{fig/example.pdf}}
+	\hfill
+  (b) \raisebox{-4cm}{\includegraphics[width=0.4\textwidth]{fig/fibonacci.pdf}}
+  \caption{LRNNs for (a) $f(t) = t^2$ and (b) the Fibonacci series
+	($0,1,1,2,3,5,8,\dots$) with time step $\tau=1$. The input/output neuron
+	$x_1$ is marked by a thick border. The initial values of the neurons at
+	time $t_0=0$ are written in the nodes. The weights are annotated at the
+	edges.}
+  \label{examples}
+\end{figure}
+
 \begin{remk}\label{rem}
 LRNNs are well suited to represent differential equations and to solve them
 numerically. To see this, consider the homogeneous linear differential equation
@@ -426,7 +458,7 @@ derivative of the function $x$ with respect to time $t$, and $n>0$. For a
 function $x$ and its derivative $\dot{x}$, we have
 \begin{equation}
   \dot{x}(t) = \lim\limits_{\tau \to 0} \frac{x(t+\tau)-x(t)}{\tau}
-	\quad\textrm{and hence}\quad
+	\quad\text{and hence}\quad
   x(t+\tau) \approx x(t) + \tau\,\dot{x}(t) \label{limit}
 \end{equation}
 for small time steps $\tau$. If we consider the difference of \cref{diff}
@@ -457,7 +489,7 @@ the transition matrix $W$ and start vector $s$ of the corresponding LRNN are:
 	1 & \tau\\
 	0 & 1\!+\!\tau
    \end{array} \right]
-   \textrm{~and~} s = \left[ \begin{array}{c}
+   \text{~and~} s = \left[ \begin{array}{c}
 	1\\
 	1
    \end{array} \right]
@@ -479,7 +511,7 @@ An LRNN runs through network states $f(t)$ for $t
 \ge 0$. It holds (in output generating mode)
 \[ f(t) = \left\{ \begin{array}{ll}
 	s, & t=0\\
-	W \cdot f(t-\tau), & \textrm{otherwise}
+	W \cdot f(t-\tau), & \text{otherwise}
 \end{array} \right. \]
 and hence simply $f(t) = W^t \cdot s$. Note that we have $\tau = 1$ here.
 
@@ -506,7 +538,7 @@ triangular Toeplitz matrices, i.e., in which each descending diagonal from left
 to right is constant, with:
 \begin{equation}\label{power}
   \Big( J_m(\lambda)^t \Big)_{ij} = \binom{t}{j-i}\,\lambda^{t-(j-i)}
-	\quad\textrm{\citep[Sect.~3.2.5]{HJ13}}
+	\quad\text{\citep[Sect.~3.2.5]{HJ13}}
 \end{equation}
 \end{prop}
 
@@ -753,17 +785,17 @@ transformed as follows:
 		\vdots & & \ddots & M & I\\
 		O & \cdots & \cdots & O & M
 	  \end{array} \right]
-	  \textrm{~with~}
+	  \text{~with~}
 	  M = \left[ \begin{array}{cc}
 		\lambda_\Re & \lambda_\Im\\
 		-\lambda_\Im & \lambda_\Re
 	  \end{array} \right]
-	  \!\textrm{, }
+	  \!\text{, }
 	  I = \left[ \begin{array}{cc}
 		1 & 0\\
 		0 & 1
 	  \end{array} \right]
-	  \textrm{ and }
+	  \text{ and }
 	  O = \left[ \begin{array}{cc}
 		0 & 0\\
 		0 & 0
@@ -822,10 +854,10 @@ Since the main diagonal of the left matrix contains no $0$s because $y_N \neq 0$
 by precondition, there always exists a solution for $b$ \cite[Sect.~0.9.3]{HJ13}.
 Then $A = V \cdot B$ does the job:
 \[ f(t) = W^t \cdot s
-	\overset{\textrm{\cref{jordan}}}{=} V \cdot J^t \cdot V^{-1} \cdot s
+	\overset{\text{\cref{jordan}}}{=} V \cdot J^t \cdot V^{-1} \cdot s
 	= V \cdot J^t \cdot x
-	\overset{\textrm{(b)}}{=} V \cdot J^t \cdot B \cdot y
-	\overset{\textrm{(a)}}{=} V \cdot B \cdot J^t \cdot y
+	\overset{\text{(b)}}{=} V \cdot J^t \cdot B \cdot y
+	\overset{\text{(a)}}{=} V \cdot B \cdot J^t \cdot y
 	= A \cdot J^t \cdot y
 \]
 
@@ -861,9 +893,9 @@ follows:
 	radius of the resulting overall matrix $W$ (according to \cref{matrix})
 	may be greater than $1$, if necessary but only then, in particular, if
 	the function $f(t)$ to be modeled by the LRNN is exponentially
-	increasing (e.g., \cref{exp}). The spectral radius of the reservoir
-	weights matrix $W^\mathrm{res}$ remains $1$ all the time because only
-	the output weights are learned.
+	increasing (e.g., \cref{fibonacci}). Nonetheless, the spectral radius of
+	the reservoir weights matrix $W^\mathrm{res}$ remains $1$ all the time
+	because only the output weights are learned.
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
         be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
         neurons such that the reservoir start vector $r_0$ (with $N^\mathrm{res}$
@@ -892,7 +924,7 @@ corresponding reservoir states $R(0),\dots,R(n)$ where the reservoir start
 vector $r_0$ in principle can be chosen arbitrarily but with all non-zero
 entries (cf. \cref{chad}):
 \begin{equation}\label{Res}
-	R(t_0) = r_0 \textrm{~and~} R(t+\tau) =
+	R(t_0) = r_0 \text{~and~} R(t+\tau) =
 	\left[ W^\mathrm{in} ~~ W^\mathrm{res} \right] \cdot
 	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
 \end{equation}
@@ -926,7 +958,7 @@ is now possible (in output generating mode) as follows:
 \begin{equation}\label{predict}
 	\left[ \begin{array}{c} S(t+\tau) \\ R(t+\tau) \end{array} \right]
 	= W \cdot \left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
-	\textrm{~with~} W \textrm{~as in \cref{matrix}}
+	\text{~with~} W \text{~as in \cref{matrix}}
 \end{equation}
 
 \begin{prop}[treatment of multiple sequences]\label{multi}
@@ -1190,6 +1222,30 @@ the relevant network components with smallest errors. For this, the network
 components are sorted by their error $E$.}
 \label{proc}
 \end{figure}
+
+\begin{exmp}\label{continued}
+Let us illustrate the LRNN learning procedure with the Fibonacci series example
+(\cref{fibonacci}). We start with the first values of the Fibonacci series
+$f(0),\dots,f(n)$ as input $S$ and generate a random reservoir of size
+$N^\mathrm{res}$, e.g., $N^\mathrm{res}=n=30$. After learning the output
+weights, we obtain a transition matrix $W$ of size $n+1$. Network size reduction
+then often yields minimal networks representing
+\[
+    f(t) = A \cdot J^t \cdot y \text{~with~}
+	A \approx \left[ \frac{1}{\sqrt{5}} ~~ \frac{1}{\sqrt{5}} \right] \text{~and~}
+	J \approx \left[ \begin{array}{cc}
+		\lambda_1 & 0\\
+		0 & \lambda_2
+   	\end{array} \right] \text{~for~}
+	y = \left[ \begin{array}{c}
+	1\\
+	1
+   \end{array} \right]
+\]
+where the eigenvalues $\lambda_1$ and $\lambda_2$ are as in Binet's formula
+(\cref{binet}), which hence is derived numerically by the LRNN learning
+procedure with network size reduction.
+\end{exmp}
 
 \subsection{Complexity and Generalization of the Procedure}
 
