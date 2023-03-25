@@ -237,7 +237,8 @@ activated, but its output does not only depend on its own previous values and
 possibly white noise but on the complete state of the possibly big reservoir
 whose dynamics is explicitly dealt with. In addition, the size of the network
 might be reduced in the subsequent process. We will continue the comparison
-between autoregression and LRNNs later (see \cref{output}).
+between autoregression and LRNNs later (see \cref{output}) and mainly consider
+autoregressive tasks in the following.
 
 A popular choice in this context is the autoregressive integrated moving average
 (ARIMA) model \citep{HK08,HA13}. A standard ARIMA($p,d,q$) model consists of
@@ -899,13 +900,7 @@ follows:
 	weights matrix $W^\mathrm{res}$ is set to $1$ (cf. \cref{thedef}).
 	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
 	explode if the spectral radius is greater or vanish if the spectral
-	radius is smaller than $1$ (cf. \cref{ellipse}). Note that the spectral
-	radius of the resulting overall matrix $W$ (according to \cref{matrix})
-	may be greater than $1$, if necessary but only then, in particular, if
-	the function $f(t)$ to be modeled by the LRNN is exponentially
-	increasing (e.g., \cref{fibonacci}). Nonetheless, the spectral radius of
-	the reservoir weights matrix $W^\mathrm{res}$ remains $1$ all the time
-	because only the output weights are learned.
+	radius is smaller than $1$ (cf. \cref{ellipse}).
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
         be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
         neurons such that the reservoir start vector $r_0$ (with $N^\mathrm{res}$
@@ -1237,9 +1232,13 @@ components are sorted by their error $E$.}
 Let us illustrate the LRNN learning procedure with the Fibonacci series example
 (\cref{fibonacci}). We start with the first values of the Fibonacci series
 $f(0),\dots,f(n)$ as input $S$ and generate a random reservoir of size
-$N^\mathrm{res}$, e.g., $N^\mathrm{res}=n=30$. After learning the output
-weights, we obtain a transition matrix $W$ of size $n+1$. Network size reduction
-then often yields minimal networks representing
+$N^\mathrm{res}$, e.g., $N^\mathrm{res}=n=30$. Note that always the spectral
+radius of the reservoir weights matrix $W^\mathrm{res}$ remains $1$ all the
+time. Only the spectral radius of the overall transition matrix $W$ (according
+to \cref{matrix}) of size $n+1$ $W^\mathrm{out}$ may be greater than $1$ after
+learning the output weights. This is the case for the Fibonacci series because
+it is exponentially increasing. The network size reduction procedure often
+yields minimal networks representing
 \[
     f(t) = A \cdot J^t \cdot y \text{~with~}
 	A \approx \left[ \frac{1}{\sqrt{5}} ~~ -\!\frac{1}{\sqrt{5}} \right] \text{~and~}
