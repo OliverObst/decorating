@@ -27,7 +27,7 @@
 %\usepackage[official]{eurosym}
   \newcommand{\euro}{Euro}
 \usepackage{csquotes,natbib,url}
-\usepackage{booktabs,graphicx,siunitx}
+\usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
 
 % to format tab head differently from numeric body columns
@@ -432,16 +432,26 @@ for the Fibonacci series, revealing its exponential growth, known as
 	\text{~(golden ratio) and~} \lambda_2 = 1-\lambda_1
 \end{equation}
 Interestingly, $\lambda_1$ and $\lambda_2$ are the eigenvalues of the transition
-matrix $W$. We will come back to this later (in \cref{continued}).
+matrix $W$. Furthermore, Binet's formula can be used to create another LRNN to
+calculate the Fibonacci series (cf. \cref{examples}\,c). We will come back to
+this later (in \cref{continued}).
 \end{exmp}
 
 \begin{figure}
-  (a) \raisebox{-6cm}{\includegraphics[width=0.4\textwidth]{fig/example.pdf}}
+  \begin{minipage}[t]{0.3\textwidth}
+	(a) \input{fig/example.tikz}
+  \end{minipage}
 	\hfill
-  (b) \raisebox{-4cm}{\includegraphics[width=0.4\textwidth]{fig/fibonacci.pdf}}
-  \caption{LRNNs for (a) $f(t) = t^2$ and (b) the Fibonacci series
-	($0,1,1,2,3,5,8,\dots$) with time step $\tau=1$. The input/output neuron
-	$x_1$ is marked by a thick border. The initial values of the neurons at
+  \begin{minipage}[t]{0.3\textwidth}
+	(b) \input{fig/fibonacci.tikz}
+  \end{minipage}
+	\hfill
+  \begin{minipage}[t]{0.34\textwidth}
+	(c) \input{fig/reduced.tikz}
+  \end{minipage}
+  \caption{LRNNs for (a) $f(t) = t^2$ and (b\,+\,c) the Fibonacci series
+	($0,1,1,2,3,5,8,\dots$) with time step $\tau=1$. In each case, the input/output neuron
+	$x_1$ is marked by a double circle. The initial values of the neurons at
 	time $t_0=0$ are written in the nodes. The weights are annotated at the
 	edges.}
   \label{examples}
@@ -1232,7 +1242,7 @@ weights, we obtain a transition matrix $W$ of size $n+1$. Network size reduction
 then often yields minimal networks representing
 \[
     f(t) = A \cdot J^t \cdot y \text{~with~}
-	A \approx \left[ \frac{1}{\sqrt{5}} ~~ \frac{1}{\sqrt{5}} \right] \text{~and~}
+	A \approx \left[ \frac{1}{\sqrt{5}} ~~ -\!\frac{1}{\sqrt{5}} \right] \text{~and~}
 	J \approx \left[ \begin{array}{cc}
 		\lambda_1 & 0\\
 		0 & \lambda_2
@@ -1243,8 +1253,8 @@ then often yields minimal networks representing
    \end{array} \right]
 \]
 where the eigenvalues $\lambda_1$ and $\lambda_2$ are as in Binet's formula
-(\cref{binet}), which hence is derived numerically by the LRNN learning
-procedure with network size reduction.
+(\cref{binet}). Hence, the LRNN in \cref{examples}\,c actually can be derived
+numerically by the LRNN learning procedure with network size reduction.
 \end{exmp}
 
 \subsection{Complexity and Generalization of the Procedure}

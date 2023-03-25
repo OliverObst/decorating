@@ -1,0 +1,32 @@
+\begin{tikzpicture}[scale=0.15]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [blue] (5,-25) node {$x_1$};
+\draw [red] (20,-21) node {$x_2$};
+\draw [red] (20,-37) node {$x_3$};
+\draw [black] (4.6,-29.6) circle (3);
+\draw (4.6,-29.6) node {$0$};
+\draw [black] (4.6,-29.6) circle (2.4);
+\draw [black] (24.9,-21.9) circle (3);
+\draw (24.9,-21.9) node {$0$};
+\draw [black] (24.9,-36.3) circle (3);
+\draw (24.9,-36.3) node {$1$};
+\draw [black] (24.9,-33.3) -- (24.9,-24.9);
+\fill [black] (24.9,-24.9) -- (24.4,-25.7) -- (25.4,-25.7);
+\draw (25.4,-29.1) node [right] {$1$};
+\draw [black] (27.58,-20.577) arc (144:-144:2.25);
+\draw (32.15,-21.9) node [right] {$1$};
+\fill [black] (27.58,-23.22) -- (27.93,-24.1) -- (28.52,-23.29);
+\draw [black] (27.58,-34.977) arc (144:-144:2.25);
+\draw (32.15,-36.3) node [right] {$1$};
+\fill [black] (27.58,-37.62) -- (27.93,-38.5) -- (28.52,-37.69);
+\draw [black] (22.1,-22.96) -- (7.4,-28.54);
+\fill [black] (7.4,-28.54) -- (8.33,-28.72) -- (7.98,-27.78);
+\draw (13.68,-25.22) node [above] {$2$};
+\draw [black] (22.05,-35.36) -- (7.45,-30.54);
+\fill [black] (7.45,-30.54) -- (8.05,-31.27) -- (8.37,-30.32);
+\draw (15.76,-32.41) node [above] {$1$};
+\draw [black] (5.923,-32.28) arc (54:-234:2.25);
+\draw (4.6,-36.85) node [below] {$1$};
+\fill [black] (3.28,-32.28) -- (2.4,-32.63) -- (3.21,-33.22);
+\end{tikzpicture}
+

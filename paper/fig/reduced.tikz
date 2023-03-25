@@ -1,0 +1,26 @@
+\begin{tikzpicture}[scale=0.15]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [blue] (5,-7) node {$x_1$};
+\draw [red] (28,-8) node {$x_2$};
+\draw [red] (28,-12) node {$x_3$};
+\draw [black] (6,-11.4) circle (3);
+\draw (6,-11.4) node {$0$};
+\draw [black] (6,-11.4) circle (2.4);
+\draw [black] (27.9,-3.3) circle (3);
+\draw (27.9,-3.3) node {$\lambda_1$};
+\draw [black] (27.6,-16.6) circle (3);
+\draw (27.6,-16.6) node {$\lambda_2$};
+\draw [black] (25.09,-4.34) -- (8.81,-10.36);
+\fill [black] (8.81,-10.36) -- (9.74,-10.55) -- (9.39,-9.61);
+\draw (18.47,-6.00) node [above] {$\frac{1}{\sqrt{5}}$};
+\draw [black] (30.808,-2.614) arc (131.00538:-156.99462:2.25);
+\draw (35.23,-5.22) node [right] {$\lambda_1$};
+\fill [black] (30.21,-5.19) -- (30.36,-6.12) -- (31.12,-5.47);
+\draw [black] (29.982,-14.795) arc (154.88553:-133.11447:2.25);
+\draw (34.96,-15.03) node [right] {$\lambda_2$};
+\fill [black] (30.48,-17.39) -- (30.99,-18.18) -- (31.42,-17.28);
+\draw [black] (24.68,-15.9) -- (8.92,-12.1);
+\fill [black] (8.92,-12.1) -- (9.58,-12.78) -- (9.81,-11.8);
+\draw (18.47,-13.32) node [above] {$-\frac{1}{\sqrt{5}}$};
+\end{tikzpicture}
+

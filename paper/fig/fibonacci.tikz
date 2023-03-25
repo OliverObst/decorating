@@ -1,0 +1,21 @@
+\begin{tikzpicture}[scale=0.15]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw (4,-19) node {};
+\draw [blue] (5,-25) node {$x_1$};
+\draw [red] (26,-25) node {$x_2$};
+\draw [black] (5.4,-29.5) circle (3);
+\draw (5.4,-29.5) node {$0$};
+\draw [black] (5.4,-29.5) circle (2.4);
+\draw [black] (26.1,-29.5) circle (3);
+\draw (26.1,-29.5) node {$1$};
+\draw [black] (23.294,-30.557) arc (-72.74231:-107.25769:25.429);
+\fill [black] (23.29,-30.56) -- (22.38,-30.32) -- (22.68,-31.27);
+\draw (15.75,-32.2) node [below] {$1$};
+\draw [black] (8.189,-28.399) arc (108.02845:71.97155:24.432);
+\fill [black] (8.19,-28.4) -- (9.1,-28.63) -- (8.79,-27.68);
+\draw (15.75,-26.7) node [above] {$1$};
+\draw [black] (28.78,-28.177) arc (144:-144:2.25);
+\draw (33.35,-29.5) node [right] {$1$};
+\fill [black] (28.78,-30.82) -- (29.13,-31.7) -- (29.72,-30.89);
+\end{tikzpicture}
+
