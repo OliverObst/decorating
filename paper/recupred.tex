@@ -360,7 +360,7 @@ following properties:
   \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
 	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
 	value of all its eigenvalues. Note that the spectral radius of the
-	overall transition matrix $W$ may still be greater than $1$.
+	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
 	group of $d$ input/output neurons. They may be arbitrarily connected
 	like the reservoir neurons. We thus can imagine the whole network as a
@@ -1159,7 +1159,7 @@ In practice, we omit all network components with smallest errors as long as the
 RMSE is below a given threshold $\theta$. Network components that are not
 omitted are considered \emph{relevant}. Thus, from $A$, $J$, and
 $y$ (according to \cref{chad}), we successively derive reduced matrices
-$A'$ and $J'$ and the vector $y'$ as follows:
+$A$ and $J$ and the vector $y'$ as follows:
 \begin{itemize}
   \item Reduce $A$ to the rows corresponding to the input/output components and
 	the columns corresponding to the relevant network components.
@@ -1171,7 +1171,7 @@ $A'$ and $J'$ and the vector $y'$ as follows:
 
 Note that the dimensionality reduction does not only lead to a smaller number of
 reservoir neurons, but also to a rather simple network structure: The transition
-matrix $J'$ (which comprises the reservoir weights $W^\mathrm{res}$ of
+matrix $J$ (which comprises the reservoir weights $W^\mathrm{res}$ of
 the reduced network) is a sparse matrix with non-zero elements only on the main
 and immediately adjacent diagonals. Thus, the number of connections is in
 $O(N)$, i.e., linear in the number of reservoir neurons, not quadratic -- as in
@@ -1229,18 +1229,18 @@ components are sorted by their error $E$.}
 \end{figure}
 
 \begin{exmp}\label{continued}
-Let us illustrate the LRNN learning procedure with the Fibonacci series example
+Let us illustrate the LRNN learning procedure with the Fibonacci series
 (\cref{fibonacci}). We start with the first values of the Fibonacci series
 $f(0),\dots,f(n)$ as input $S$ and generate a random reservoir of size
-$N^\mathrm{res}$, e.g., $N^\mathrm{res}=n=30$. Note that always the spectral
-radius of the reservoir weights matrix $W^\mathrm{res}$ remains $1$ all the
-time. Only the spectral radius of the overall transition matrix $W$ (according
-to \cref{matrix}) of size $n+1$ $W^\mathrm{out}$ may be greater than $1$ after
-learning the output weights. This is the case for the Fibonacci series because
-it is exponentially increasing. The network size reduction procedure often
-yields minimal networks representing
+$N^\mathrm{res}$. Note that always the spectral radius of the reservoir weights
+matrix $W^\mathrm{res}$ remains $1$ all the time. Only the spectral radius of
+the overall transition matrix $W$ (according to \cref{matrix}) of size $n+1$
+may be greater than $1$ after learning the output weights $W^\mathrm{out}$. This
+is the case for the Fibonacci series because it is exponentially increasing. The
+network size reduction procedure often yields minimal networks with only two
+reservoir neurons representing
 \[
-    f(t) = A \cdot J^t \cdot y \text{~with~}
+    f(t) \overset{\text{\cref{chad}}}{=} A \cdot J^t \cdot y \text{~with~}
 	A \approx \left[ \frac{1}{\sqrt{5}} ~~ -\!\frac{1}{\sqrt{5}} \right] \text{~and~}
 	J \approx \left[ \begin{array}{cc}
 		\lambda_1 & 0\\
@@ -1252,8 +1252,11 @@ yields minimal networks representing
    \end{array} \right]
 \]
 where the eigenvalues $\lambda_1$ and $\lambda_2$ are as in Binet's formula
-(\cref{binet}). Hence, the LRNN in \cref{examples}\,c actually can be derived
-numerically by the LRNN learning procedure with network size reduction.
+(\cref{binet}). For instance, for $N^\mathrm{res}=n=30$, we obtain minimal
+networks in 32\% of the cases from $100$ trials. 3\% of them are the best
+networks with respect to their RSME. Thus, by employing a standard validation
+procedure, the LRNN in \cref{examples}\,c actually can be derived numerically by
+the LRNN learning procedure with network size reduction.
 \end{exmp}
 
 \subsection{Complexity and Generalization of the Procedure}
