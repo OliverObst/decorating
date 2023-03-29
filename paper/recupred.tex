@@ -1,6 +1,7 @@
 % !TeX spellcheck = en_US
 
 \documentclass[twoside,11pt]{article}
+
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[abbrvbib,preprint]{jmlr2e}
@@ -29,6 +30,7 @@
 \usepackage{csquotes,natbib,url}
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
+
 
 % to format tab head differently from numeric body columns
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
@@ -318,11 +320,13 @@ containing the following weight matrices:
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.7\textwidth]{fig/net.pdf}
+  \input{fig/esn.tikz}
   \caption{General recurrent neural network. In ESNs, only output weights are
 	trained and the hidden layer is also called reservoir.}
   \label{net}
 \end{figure}
+
+
 
 Let us now define the \emph{network activity}: The initial
 configuration of the neural network is given by a column vector $s$ with $N$
@@ -1663,18 +1667,14 @@ $286.71${\,\euro} of all stocks in the set, the average deviation is only~6.1\%.
 
 \begin{figure}
 \begin{minipage}[t]{0.48\textwidth}
- % \includegraphics[width=\textwidth]{fig/Airbus_ARIMA.pdf} % ,height=5.5cm
-  \caption{Example stock price (solid/blue) prediction for AIR.DE (Airbus), using an ARIMA(2,1,2)
-	model with drift over the first 610 data points predicting the
-	subsequent 152 data points (dashed/red).}
+\includegraphics[width=\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
+  \caption{Example MSO8 graph that will still be changed.}
   \label{arima}
 \end{minipage}
   \hfill%
 \begin{minipage}[t]{0.48\textwidth}
- % \includegraphics[width=\textwidth]{fig/Airbus_LRNN.pdf} % ,height=5cm
-  \caption{Stock price (solid/blue) prediction for AIR.DE (Airbus) with LRNNs and $N=600$ neurons (dashed/red).
-	While residuals during training (the first 610 steps) appear larger than
-	for the ARIMA model, the error on the testing set is smaller for LRNNs.}
+ \includegraphics[width=\textwidth]{fig/stock_prediction_fme} % ,height=5cm
+  \caption{Stock price (solid/blue) prediction for FME.DE (Fresenius Medical Care) with LRNNs and $N=600$ neurons (dashed/red).}
   \label{LRNN}
 \end{minipage}
 \end{figure}
