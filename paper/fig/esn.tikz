@@ -7,12 +7,12 @@
 ]
 
 % Input layer
-\node[node, label={[label distance=0.5cm]north:Input}] (x1) at (0, 0) {$x_1$};
+\node[node, label={[label distance=0.5cm,blue]north:Input}] (x1) at (0, 0) {$x_1$};
 \node[node] (x2) at (0, -1.5) {$x_2$};
 \node[node, label={[label distance=0.5cm]north east:$\mathbf{W}^\text{in}$}] (x3) at (0, -3) {$x_3$};
 
 % Hidden layer
-\node[hidden_layer, label={[label distance=0.5cm]north:Reservoir}] (hidden) at (5, -1.5) {};
+\node[hidden_layer, label={[label distance=0.5cm,red]north:Reservoir}] (hidden) at (5, -1.5) {};
 \node[node] (h1) at (3, -1) {$h_1$};
 \node[node] (h2) at (3.5, -2.5) {$h_2$};
 \node[node] (h3) at (4.5, 0) {$h_3$};
@@ -22,7 +22,7 @@
 \node[node] (h7) at (6.5, -2.7) {$h_7$};
 
 % Output layer
-\node[node, label={[label distance=0.5cm]north:Output}] (y1) at (10, -0.75) {$y_1$};
+\node[node, label={[label distance=0.5cm,blue]north:Output}] (y1) at (10, -0.75) {$y_1$};
 \node[node, label={[label distance=0.1cm]north west:$\mathbf{W}^\text{out}$}] (y2) at (10, -2.25) {$y_2$};
 
 % Edges
