@@ -324,8 +324,6 @@ containing the following weight matrices:
   \label{net}
 \end{figure}
 
-
-
 Let us now define the \emph{network activity}: The initial
 configuration of the neural network is given by a column vector $s$ with $N$
 components, called \emph{start vector}. It represents the network state at the
@@ -357,14 +355,14 @@ following properties:
   \item The weights in $W^\mathrm{in}$ and $W^\mathrm{res}$ are taken
 	randomly, independently, and identically distributed from the standard
 	normal distribution, i.e., the Gaussian distribution with mean $\mu = 0$
-	and standard deviation $\sigma = 1$, whereas the output weights
+	and standard deviation $\sigma = 1$ and remain unchanged all the time, whereas the output weights
 	$W^\mathrm{out}$ are learned (cf. \cref{output}).
   \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
 	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
 	value of all its eigenvalues. Note that the spectral radius of the
 	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $d$ input/output neurons. They may be arbitrarily connected
+	group of $N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may be arbitrarily connected
 	like the reservoir neurons. We thus can imagine the whole network as a
 	big reservoir because the input/output neurons are not particularly
 	special.
@@ -373,7 +371,8 @@ following properties:
 
 LRNNs can run in one of two \emph{modes}: either receiving input or generating
 (i.e., predicting) output. In output generating mode, \cref{recur} is applied to
-all neurons including the input/output neurons, whereas in input receiving mode
+all neurons including the input/output neurons, thus the output from the
+previous time step is copied to the input, whereas in input receiving mode
 the activation of every input/output neuron $x$ at time $t$ is always
 overwritten with the respective input value at time $t$ given by the time series
 $S$.
@@ -607,9 +606,9 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 
 \subsection{Long-Term Behavior}\label{ellipse}
 
-Let us now investigate the long-term behavior of an RNN (run in output generating
+Let us now investigate the long-term behavior of an LRNN (run in output generating
 mode) by understanding it as an (autonomous) \emph{dynamic system} \citep{CK14,Str15}.
-We will see (in \cref{infty}) that the network dynamics may be reduced to a
+We will see (in \cref{infty}) that often the network dynamics may be reduced to a
 very small number of neurons in the long run. They determine the behavior for $t
 \to \infty$. Nevertheless, for smaller $t$, the use of many neurons is important
 for computing short-term predictions.
@@ -627,19 +626,26 @@ multiplicity of the eigenvalues of the transition matrix $W$. Then, from
 as asymptotic behavior for large $t$.
 \end{proof}
 
+In fact, LRNNs can model polynomials (cf. \cref{parasin}, parabola), general
+single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
+multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
+\cref{approx}). For this, the overall transition matrix $W$ may have (a) a
+spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
+absolute value $1$. Nevertheless it is interesting to investigate a special
+case, namely a \emph{pure random reservoir}, where both conditions do not hold:
+
 \begin{prop}\label{infty}
-Consider an RNN solely consisting of a pure random reservoir whose transition
-matrix $W^\mathrm{res}$ is completely real-valued, has (according to
-\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot
-V^{-1}$ with unit spectral radius (i.e., the largest absolute value of all
-eigenvalues is $1$), and all eigenvalues are distinct. Then, almost all terms $x_k\,{\lambda_k}^t\,v_k$ in
-\cref{form} vanish for large $t$ because for all eigenvalues $\lambda_k$
-with $|\lambda_k| < 1$ we have $\lim\limits_{t \to \infty} {\lambda_k}^t = 0$.
-Although a general real matrix can have more than two complex eigenvalues which
-are on the unit disk, for a pure random reservoir as considered here, almost
-always, i.e., with probability close to $1$, only the (largest) eigenvalues $\lambda_1$ and possibly
-$\lambda_2$ have the absolute values $1$. In consequence, we have one of the
-following cases:
+Consider an LRNN solely consisting of a reservoir whose transition matrix
+$W^\mathrm{res}$ is completely real-valued, has (according to \cref{eigen}) an
+eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$ with unit spectral
+radius, and all eigenvalues are distinct. Then, almost all terms
+$x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$ because for all
+eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have $\lim\limits_{t \to
+\infty} {\lambda_k}^t = 0$. Although a general real matrix can have more than
+two complex eigenvalues which are on the unit disk, for a pure random reservoir
+as considered here, almost always, i.e., with probability close to $1$, only the
+(largest) eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute
+values $1$. In consequence, we have one of the following cases:
 \begin{enumerate}
   \item $\lambda_1 = +1$. In this case, the network activity contracts to one
 	point, i.e., to a \emph{singularity}: $\lim\limits_{t \to \infty}
@@ -725,13 +731,13 @@ In summary, we have
 \begin{equation}\label{twodim}
 	f(t) \approx \hat{V} \cdot \hat{D}^t \cdot \hat{x}
 \end{equation}
-for large $t$. Every RNN with many neurons can thus be
+for large $t$. Every LRNN with many neurons can thus be
 approximated by a simple network with at most two neurons, defined by the matrix
 $\hat{D}$ and start vector $\hat{x}$. The output values can be computed for
 all original dimensions by multiplication with the matrix $\hat{V}$. They lie on
 an ellipse in general. Nonetheless, in the beginning, i.e., for small $t$, the
 dynamics of the system is not that regular (cf. \cref{ell}). But although
-\cref{infty} states the asymptotic behavior of random RNNs with unit spectral
+\cref{infty} states the asymptotic behavior of random LRNNs with unit spectral
 radius, interestingly the network dynamics converges relatively fast to the
 final ellipse trajectory: The (Euclidean) distance between the actual value
 $f(t)$ (according to \cref{form}) and its approximation by the final ellipse
@@ -1246,18 +1252,18 @@ often yields minimal networks with only two reservoir neurons representing
 where the eigenvalues $\lambda_1$ and $\lambda_2$ are as in Binet's formula
 (\cref{binet}). For instance, for $N^\mathrm{res}=n=30$ and precision threshold
 $\theta=0.001$, we obtain minimal networks in 32\% of the cases from $100$
-trials, and the top 3\% are the best networks with respect to their RSME. Thus,
+trials and they belong to the best networks with respect to their RSME. Thus,
 by employing a standard validation procedure, the LRNN in \cref{examples}\,c
 actually can be derived numerically by the LRNN learning procedure with network
 size reduction.
 \end{exmp}
 
-Note that always the spectral radius of the reservoir weights matrix
-$W^\mathrm{res}$ remains $1$ all the time. Only the spectral radius of the
-overall transition matrix $W$ (according to \cref{matrix}) of size $n+1$ may be
-greater than $1$ after learning the output weights $W^\mathrm{out}$. This is the
-case for the Fibonacci series because it is exponentially increasing
-($\lambda_1>1$).
+Note that the spectral radius of the reservoir weights matrix $W^\mathrm{res}$
+remains $1$ all the time (cf. \cref{thedef}). However, after learning the output
+weights $W^\mathrm{out}$, the spectral radius of the overall transition matrix
+$W$ (according to \cref{matrix}) of size $n+1$ and hence of the matrix $J$ may
+be greater than $1$, if the function $f(t)$ to be modeled is exponentially
+increasing. This holds for the Fibonacci series ($\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
 
