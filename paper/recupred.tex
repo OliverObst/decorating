@@ -1204,12 +1204,15 @@ available under the following link:
 \newcommand{\commt}[1]{\%~#1\\}%
 \begin{algorithmic}[1]\State
         \commt{$d$-dimensional function, given sampled, as time series, and start vector}
-        $S = [ f(0) \cdots f(n) ]$\\
-        $s = \big[ S(0) \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
+        $S = \big[ f(0) \cdots f(n) \big]$\\
+	$s = \left[ \begin{array}{c} S(0) \\ r_0 \end{array} \right]$ where
+		$r_0 = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
+		\big[ \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
         \\
         \commt{random initialization of reservoir and input weights}
         $W^\mathrm{in} = \mathrm{randn}(N,d)$\\
-        $W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$\newline
+        $W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$
+        	normalized to unit spectral radius\newline
         \\
         \commt{learn output weights by linear regression}
         $X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
