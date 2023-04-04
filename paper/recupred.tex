@@ -285,12 +285,12 @@ altogether $N$ nodes, called \emph{neurons}. $x(t)$ denotes the
 \emph{activation} of the neuron $x$ at (discrete) time $t$. We may distinguish
 three groups of neurons (cf. \cref{net}):
 \begin{itemize}
-  \item \emph{input} neurons (usually without incoming edges) whose activation
-	is given by an external source, e.g., a time series,
-  \item \emph{output} neurons (usually without outgoing edges) whose activation
-	represents some output function, and
-  \item \emph{reservoir} or \emph{hidden} neurons (arbitrarily connected) that
-	are used for auxiliary computations.
+  \item $N^\mathrm{in}$ \emph{input} neurons (usually without incoming edges)
+	whose activation is given by an external source, e.g., a time series,
+  \item $N^\mathrm{out}$ \emph{output} neurons (usually without outgoing edges)
+	whose activation represents some output function, and
+  \item $N^\mathrm{res}$ \emph{reservoir} or \emph{hidden} neurons (arbitrarily
+	connected) that are used for auxiliary computations.
 \end{itemize}
 
 The edges of the graph represent the network connections. They are usually
@@ -311,8 +311,7 @@ containing the following weight matrices:
   \item \emph{output} weights $W^\mathrm{out}$ (all weights to the output and
 	possibly back to the input), and
   \item \emph{reservoir} weights $W^\mathrm{res}$ (weights within the reservoir,
-	a matrix of size $N^\mathrm{res} \times N^\mathrm{res}$ where
-	$N^\mathrm{res}$ is the number of reservoir neurons).
+	a matrix of size $N^\mathrm{res} \times N^\mathrm{res}$).
 \end{itemize}
 \end{defn}
 
@@ -320,7 +319,7 @@ containing the following weight matrices:
   \centering
   \input{fig/esn.tikz}
   \caption{General recurrent neural network. In ESNs, only output weights are
-	trained and the hidden layer is also called reservoir.}
+	trained, and the hidden layer is also called reservoir.}
   \label{net}
 \end{figure}
 
@@ -362,10 +361,10 @@ following properties:
 	value of all its eigenvalues. Note that the spectral radius of the
 	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may be arbitrarily connected
-	like the reservoir neurons. We thus can imagine the whole network as a
-	big reservoir because the input/output neurons are not particularly
-	special.
+	group of $N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
+	be arbitrarily connected like the reservoir neurons. We thus can imagine
+	the whole network as a big reservoir because the input/output neurons
+	are not particularly special.
 \end{enumerate}
 \end{defn}
 
@@ -905,7 +904,7 @@ obtain better numerical stability during the computation, they are adjusted as
 follows:
 \begin{itemize}
   \item Because of the linear activation, the spectral radius of the reservoir
-	weights matrix $W^\mathrm{res}$ is set to $1$ (cf. \cref{thedef}).
+	weights matrix $W^\mathrm{res}$ can be set to $1$ (cf. \cref{thedef}).
 	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
 	explode if the spectral radius is greater or vanish if the spectral
 	radius is smaller than $1$ (cf. \cref{ellipse}).
