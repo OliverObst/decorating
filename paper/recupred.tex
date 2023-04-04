@@ -25,6 +25,7 @@
 \newtheorem{remk}{Remark}
 
 % other packages
+\usepackage{algpseudocode}
 \usepackage{csquotes,natbib,url}
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
@@ -1201,26 +1202,34 @@ available under the following link:
 
 \begin{figure}[ht]
 \newcommand{\commt}[1]{\%~#1\\}%
-\begin{tabular}{rl}
-1 & \commt{$d$-dimensional function, given sampled, as time series}
-2 & $S = [ f(0) \dots f(n) ]$\\ \\
-3 & \commt{random initialization of reservoir and input weights}
-4 & $W^\mathrm{in} = \mathrm{randn}(N,d)$\\
-5 & $W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$\\ \\
-6 & \commt{learn output weights by linear regression}
-7 & $X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
-8 & $Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]$\\
-9 & $W^\mathrm{out} = Y^\mathrm{out}/X$\\ \\
-10 & \commt{transition matrix and its decomposition}
-11 & $W = \left[ \begin{array}{cc} \multicolumn{2}{c}{W^\mathrm{out}}\\ W^\mathrm{in} & W^\mathrm{res} \end{array} \right]$\\
-12 & $J = \mathrm{jordan\_matrix}(W)$\\ \\
-13 & \commt{network size reduction}
-14 & $y = \big[ 1 \cdots 1 \big]^\top$\\
-15 & $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
-16 & $A = X/Y$ with rows restricted to input/output dimensions\\
-17 & reduce($A,J,y$) to relevant components\\
-   & \hspace*{0.5cm} such that RMSE($S$,Out)\,$<\theta$
-\end{tabular}
+\begin{algorithmic}[1]\State
+        \commt{$d$-dimensional function, given sampled, as time series, and start vector}
+        $S = [ f(0) \cdots f(n) ]$\\
+        $s = \big[ S(0) \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
+        \\
+        \commt{random initialization of reservoir and input weights}
+        $W^\mathrm{in} = \mathrm{randn}(N,d)$\\
+        $W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$\newline
+        \\
+        \commt{learn output weights by linear regression}
+        $X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
+        $Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]$\\
+        $W^\mathrm{out} = Y^\mathrm{out}/X$\newline
+        \\
+        \commt{transition matrix and its decomposition}
+        $W = \left[ \begin{array}{cc}
+                \multicolumn{2}{c}{W^\mathrm{out}}\\
+                W^\mathrm{in} & W^\mathrm{res}
+        \end{array} \right]$\\
+        $J = \mathrm{jordan\_matrix}(W)$\newline
+        \\
+        \commt{network size reduction}
+        $y = \big[ 1 \cdots 1 \big]^\top$\\
+        $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
+        $A = X/Y$ with rows restricted to input/output dimensions\\
+        reduce($A,J,y$) to relevant components\\
+        \hspace*{0.5cm} such that RMSE($S$,Out)\,$<\theta$
+\end{algorithmic}
 \caption{Pseudocode for learning LRNNs including network size reduction. In the
 last statement, actually a binary search algorithm is employed for determining
 the relevant network components with smallest errors. For this, the network
@@ -1231,10 +1240,10 @@ components are sorted by their error $E$.}
 \begin{exmp}\label{continued}
 Let us illustrate the LRNN learning procedure (\cref{proc}) with the Fibonacci
 series (\cref{fibonacci}). We start with the first values of the Fibonacci
-series $f(0),\dots,f(n)$ as input $S$ (lines 1-2) and generate a random
-reservoir of size $N^\mathrm{res}$ (lines 3-5). After learning the output
-weights $W^\mathrm{out}$ (lines 6-9) and decomposing the resulting transition
-matrix $W$ (lines 10-12), the network size reduction procedure (lines 13-17)
+series $f(0),\dots,f(n)$ as input $S$ (lines 1-3) and generate a random
+reservoir of size $N^\mathrm{res}$ (lines 4-6). After learning the output
+weights $W^\mathrm{out}$ (lines 7-10) and decomposing the resulting transition
+matrix $W$ (lines 11-13), the network size reduction procedure (lines 14-19)
 often yields minimal networks with only two reservoir neurons representing
 \[
     f(t) \overset{\text{\cref{chad}}}{=} A \cdot J^t \cdot y \text{~with~}
