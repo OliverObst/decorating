@@ -1795,10 +1795,10 @@ recurrent layer, LRNNs are a powerful approach to model time-dependent functions
 The training procedure only uses standard matrix operations and is thus quite fast.
 In contrast to ESNs, also, no washout period is required. Any
 function can be approximated directly from its first step, with an arbitrary
-starting vector (cf. \cref{chad}).
+start vector (cf. \cref{chad}).
 
 Although any time-dependent function can be approximated with arbitrary
-precision (cf. \cref{approx}), not any function can be implemented by RNNs,
+precision (cf. \cref{approx}), not every function can be implemented by LRNNs,
 in particular functions increasing faster than single-exponential (cf.
 \cref{exponential}) like $2^{2^t}$ (double-exponential) or $t\/!$
 (factorial function). Nevertheless, experiments with reasonably
