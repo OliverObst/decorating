@@ -65,8 +65,8 @@ approximate any time-dependent function $f(t)$ given by a number of function
 values. The approximation can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
 and this is probably another main contribution of this article, the size of an
-LRNN can be reduced significantly in one step after inspecting the eigenvalues
-of the network transition matrix by taking only the most
+LRNN can be reduced significantly in one step after inspecting the spectrum
+of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
 learn network weights but also the network architecture. LRNNs have interesting
 properties: They end up in ellipse trajectories in the long run and allow the
@@ -293,10 +293,15 @@ three groups of neurons (cf. \cref{net}):
   \item $N^\mathrm{res}$ \emph{reservoir} or \emph{hidden} neurons (arbitrarily
 	connected) that are used for auxiliary computations.
 \end{itemize}
+The sets of input and output neurons are not necessarily disjoint, they may even
+be identical (cf. \cref{thedef}). Therefore, in the following, let
+$N^\mathrm{in\,out}$ denote the overall number of neurons in the union of both
+sets. Obviously it holds $N = N^\mathrm{in\,out}+N^\mathrm{res}$ and
+$N^\mathrm{in\,out} \le N^\mathrm{in}+N^\mathrm{out}$.
 
-The edges of the graph represent the network connections. They are usually
+The edges of the directed graph represent the network connections. They are
 annotated with \emph{weights} which are compiled in the \emph{transition matrix}
-$W$. An entry~$w_{ij}$ in row~$i$ and column~$j$ denotes the weight of the edge
+$W$ of size $N \times N$. An entry~$w_{ij}$ in row~$i$ and column~$j$ denotes the weight of the edge
 from neuron~$j$ to neuron~$i$. If there is no connection, then
 $w_{ij} = 0$. The transition matrix has the form
 \begin{equation}\label{matrix}
@@ -308,9 +313,9 @@ $w_{ij} = 0$. The transition matrix has the form
 containing the following weight matrices:
 \begin{itemize}
   \item \emph{input} weights $W^\mathrm{in}$ (weights from the input and
-	possibly the output to the reservoir),
+	possibly the output to the reservoir, a matrix of size $N^\mathrm{res} \times N^\mathrm{in\,out}$),
   \item \emph{output} weights $W^\mathrm{out}$ (all weights to the output and
-	possibly back to the input), and
+	possibly back to the input, a matrix of size $N^\mathrm{in\,out} \times N$), and
   \item \emph{reservoir} weights $W^\mathrm{res}$ (weights within the reservoir,
 	a matrix of size $N^\mathrm{res} \times N^\mathrm{res}$).
 \end{itemize}
@@ -329,10 +334,11 @@ configuration of the neural network is given by a column vector $s$ with $N$
 components, called \emph{start vector}. It represents the network state at the
 start time $t=t_0$. Because of the discrete time model, the activation
 of a (non-input) neuron $x_i$ at time $t+\tau$ (for some time step $\tau>0$) from
-the activation at time $t$ of the neurons $x_1,\dots,x_N$ that are connected to
-$x_i$ with the weights $w_{i1},\dots,w_{iN}$ is computed as follows:
+the activation at time $t$ of the neurons $x_1,\dots,x_k$ (for some $k>0$ ) that
+are connected to $x_i$ with the weights $w_{i1},\dots,w_{ik}$ is computed as
+follows:
 \begin{equation}\label{recur}
-	x_i(t+\tau) = g\big(w_{i1}\,x_1(t) +\dots+ w_{iN}\,x_N(t)\big)
+	x_i(t+\tau) = g\big(w_{i1}\,x_1(t) +\dots+ w_{ik}\,x_k(t)\big)
 \end{equation}
 This has to be done simultaneously for all neurons of the network. Here $g$ is a
 (real-valued) \emph{activation function}. Although we will not make use of it,
@@ -362,7 +368,7 @@ following properties:
 	value of all its eigenvalues. Note that the spectral radius of the
 	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
+	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
 	be arbitrarily connected like the reservoir neurons. We thus can imagine
 	the whole network as a big reservoir because the input/output neurons
 	are not particularly special.
@@ -905,7 +911,7 @@ obtain better numerical stability during the computation, they are adjusted as
 follows:
 \begin{itemize}
   \item Because of the linear activation, the spectral radius of the reservoir
-	weights matrix $W^\mathrm{res}$ can be set to $1$ (cf. \cref{thedef}).
+	weights matrix $W^\mathrm{res}$ shall be set to $1$ (cf. \cref{thedef}).
 	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
 	explode if the spectral radius is greater or vanish if the spectral
 	radius is smaller than $1$ (cf. \cref{ellipse}).
@@ -1073,8 +1079,8 @@ procedure sketched in the proof if they are not given in advance, starting with
 a random reservoir state sequence $R$. But our experiments indicate that this
 procedure is less reliable than the one with given, i.e., predefined but random
 input and reservoir weights and unit spectral radius for the reservoir (cf.
-\cref{output}). Depending on the relation between the overall network size $N$
-and the time series length $n$, we observe:
+\cref{output}).\opt{long}{ Depending on the relation between the overall network
+size $N$ and the time series length $n$, we observe:
 \begin{enumerate}
   \item \emph{stable} behavior for $N < n$: The predicted value for
 	the next time step $t+1$ is nearly identical to the current value at
@@ -1086,7 +1092,7 @@ and the time series length $n$, we observe:
   \item \emph{overfitting} to the training data for $N > n$: The accuracy on the
 	training data is almost perfect in this case, whereas the prediction for
 	the subsequent time steps is more or less arbitrary.
-\end{enumerate}
+\end{enumerate}}
 \end{remk}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
