@@ -334,7 +334,7 @@ configuration of the neural network is given by a column vector $s$ with $N$
 components, called \emph{start vector}. It represents the network state at the
 start time $t=t_0$. Because of the discrete time model, the activation
 of a (non-input) neuron $x_i$ at time $t+\tau$ (for some time step $\tau>0$) from
-the activation at time $t$ of the neurons $x_1,\dots,x_k$ (for some $k>0$ ) that
+the activation at time $t$ of the neurons $x_1,\dots,x_k$ (for some $k \ge 0$ ) that
 are connected to $x_i$ with the weights $w_{i1},\dots,w_{ik}$ is computed as
 follows:
 \begin{equation}\label{recur}
