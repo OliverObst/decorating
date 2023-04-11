@@ -1,5 +1,5 @@
 % evaluation script
-addpath('../prediction');
+addpath('../lrnn');
 
 % experimental setting
 step = 5;

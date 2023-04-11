@@ -12,7 +12,7 @@ if (N>1)
       lambda = max(eig(W)); % eigenvalue with maximal absolute value
 #     lambda = eigs(W,1,'lm'); % does not do the job accurately
       W /= abs(lambda); % set spectral radius to 1
-      lambda /= abs(lambda); % normalization of eigenvalue
+      lambda /= abs(lambda); % normalization to unit spectral radius
       break;
     catch
       ;

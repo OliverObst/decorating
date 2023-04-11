@@ -21,7 +21,7 @@ S = [12,15,8,11,4,7,0, 3;
 theta = 0.1;
 n = 1000;
 
-addpath('../prediction');
+addpath('../lrnn');
 
 Data = zeros(20,5,4);
 

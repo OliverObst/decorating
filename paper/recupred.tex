@@ -741,7 +741,7 @@ for large $t$. Every LRNN with many neurons can thus be
 approximated by a simple network with at most two neurons, defined by the matrix
 $\hat{D}$ and start vector $\hat{x}$. The output values can be computed for
 all original dimensions by multiplication with the matrix $\hat{V}$. They lie on
-an ellipse in general. Nonetheless, in the beginning, i.e., for small $t$, the
+an ellipse in general, thus only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
 dynamics of the system is not that regular (cf. \cref{ell}). But although
 \cref{infty} states the asymptotic behavior of random LRNNs with unit spectral
 radius, interestingly the network dynamics converges relatively fast to the
@@ -753,11 +753,14 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
 
 \begin{figure}
   \centering
-  \includegraphics[height=7cm]{fig/title.pdf}
-  \caption{Dynamic system behavior in two dimensions (qualitative illustration): In the long run, we get an
-	ellipse trajectory (dotted/red), though the original data may look like random
-	(dots/black). Projected to one dimension, we have pure sinusoids with one
-	single angular frequency, sampled in large steps (solid/blue).}
+    (a) \raisebox{-55mm}{\includegraphics[scale=0.45]{fig/spectrum.pdf}} \hfill
+    (b) \raisebox{-55mm}{\includegraphics[scale=0.45]{fig/ellipse.pdf}} \\[5mm]
+    (c) \raisebox{-55mm}{\includegraphics[scale=0.45]{fig/wave.pdf}}
+  \caption{Dynamic system behavior of a pure random reservoir with $N^\mathrm{res} = 100$ neurons:
+    (a) Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$.
+    (b) In the long run, we get an ellipse trajectory, thus only two dimensions.
+    (c) Projected to one dimension, we have pure sinusoids with one
+	single angular frequency, sampled in large steps.}
   \label{ell}
 \end{figure}
 

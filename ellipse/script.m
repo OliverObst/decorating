@@ -1,4 +1,4 @@
-addpath('../prediction');
+addpath('../lrnn');
 
 N = [100;500;1000]; % reservoir sizes
 Error = zeros(3,1001); % averaged errors
