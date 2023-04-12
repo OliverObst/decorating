@@ -6,9 +6,6 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[abbrvbib,preprint]{jmlr2e}
 
-% options: short,long
-\usepackage[short]{optional}
-
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
@@ -44,14 +41,14 @@
 \begin{document}
 
 \title{The Power of Linear Recurrent Neural Networks}
-\author{\name Frieder Stolzenburg \email fstolzenburg@hs-harz.de\\ %0000-0002-4037-2445
-	\name Sandra Litz\opt{long}{ \email litz\_sandra@web.de}\\ %0009-0000-8147-4424
+\author{\name Frieder Stolzenburg \email fstolzenburg@hs-harz.de\\ %\orcid 0000-0002-4037-2445
+	\name Sandra Litz\\ %\email litz\_sandra@web.de} \orcid 0009-0000-8147-4424
 	\addr Department of Automation and Computer Sciences,
 	Harz University of Applied Sciences,
 	38855 Wernigerode, Germany
 \AND	
-	\name Olivia Michael\opt{long}{ \email olivia\_michael@hotmail.com}\\ %0000-0002-5719-2299
-	\name Oliver Obst \email o.obst@westernsydney.edu.au\\ %0000-0002-8284-2062
+	\name Olivia Michael\\ %\email olivia\_michael@hotmail.com \orcid 0000-0002-5719-2299
+	\name Oliver Obst \email o.obst@westernsydney.edu.au\\ %\orcid 0000-0002-8284-2062
 	\addr Centre for Research in Mathematics and Data Science,
 	Western Sydney University,
 	Penrith NSW 2751, Australia}
@@ -751,12 +748,13 @@ trajectory (\cref{twodim}) is almost zero already after a few hundred
 steps (cf. \cref{asymptot}). Of course this depends on
 the eigenvalue distribution of the transition matrix \citep{TV10}.
 
-\begin{figure}
+\begin{figure}[h]
   \centering
     (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum.pdf}} \hfill
     (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse.pdf}} \\[5mm]
     (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave.pdf}}
-  \caption{Dynamic system behavior of a pure random reservoir with $N^\mathrm{res} = 100$ neurons:
+  \caption{Dynamic system behavior of a pure random reservoir with unit spectral
+	radius for $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
 	complex conjugate eigenvalue pairs, in the complex plane.
     (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
@@ -769,12 +767,12 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
 \begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
-  \caption{Asymptotic behavior of random reservoirs with unit spectral radius:
+  \caption{Asymptotic behavior of pure random reservoirs with unit spectral radius:
 	The (Euclidean) distance between the actual value $f(t)$
 	(according to \cref{form}) and its approximation by the final ellipse
 	trajectory (\cref{twodim}) is almost zero already after a few hundred
-	steps. The figure shows the distances for $N=100$ (solid/blue), $N=500$
-	(dashed/red), and $N=1000$ (dotted/black) random reservoir neurons,
+	steps. The figure shows the distances for $N^\mathrm{res}=100$ (solid/blue), $N^\mathrm{res}=500$
+	(dashed/red), and $N^\mathrm{res}=1000$ (dotted/black) random reservoir neurons,
 	starting with a random vector of unit length, averaged over 1000 trials.}
   \label{asymptot}
 \end{figure}
@@ -1084,20 +1082,21 @@ procedure sketched in the proof if they are not given in advance, starting with
 a random reservoir state sequence $R$. But our experiments indicate that this
 procedure is less reliable than the one with given, i.e., predefined but random
 input and reservoir weights and unit spectral radius for the reservoir (cf.
-\cref{output}).\opt{long}{ Depending on the relation between the overall network
-size $N$ and the time series length $n$, we observe:
-\begin{enumerate}
-  \item \emph{stable} behavior for $N < n$: The predicted value for
-	the next time step $t+1$ is nearly identical to the current value at
-	time $t$. In many cases, the predicted values lie on a straight line
-	approximately.
-  \item \emph{unstable} behavior for $N \approx n$: The equation system to be
-	solved often leads to matrices singular to machine precision and hence
-	to bad transition matrices $W$ in this case.
-  \item \emph{overfitting} to the training data for $N > n$: The accuracy on the
-	training data is almost perfect in this case, whereas the prediction for
-	the subsequent time steps is more or less arbitrary.
-\end{enumerate}}
+\cref{output}).
+%Depending on the relation between the overall network
+%size $N$ and the time series length $n$, we observe:
+%\begin{enumerate}
+%  \item \emph{stable} behavior for $N < n$: The predicted value for
+%	the next time step $t+1$ is nearly identical to the current value at
+%	time $t$. In many cases, the predicted values lie on a straight line
+%	approximately.
+%  \item \emph{unstable} behavior for $N \approx n$: The equation system to be
+%	solved often leads to matrices singular to machine precision and hence
+%	to bad transition matrices $W$ in this case.
+%  \item \emph{overfitting} to the training data for $N > n$: The accuracy on the
+%	training data is almost perfect in this case, whereas the prediction for
+%	the subsequent time steps is more or less arbitrary.
+%\end{enumerate}
 \end{remk}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
@@ -1833,7 +1832,7 @@ memory capacity of LRNNs -- analyzed for small networks by \citet{Mar17} and to
 some extent also by \citet{CW+16} -- taking inspiration from convolutional
 networks \citep{GBC16}. Last but not least, other machine learning tasks besides
 prediction shall be addressed in more detail, including classification and
-reinforcement learning\opt{short}{~\citep{SB18,PGL17}}.
+reinforcement learning~\citep{SB18,PGL17}.
 
 \acks{%
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
