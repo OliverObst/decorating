@@ -1031,9 +1031,9 @@ consists of the series of function values of $f$, provided that the linear
 matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
 least one solution.
 
-Since \cref{linear} is equivalent to simultaneously solving the equations $w_k
-\cdot X = y_k$, for $1 \le k \le N$ where $w_1,\dots,w_N$ and $y_1,\dots,y_N$
-denote the row vectors of the matrices $W^\mathrm{out}$ and $Y^\mathrm{out}$,
+Since \cref{linear} is equivalent to simultaneously solving the equations $y_k =
+w_k \cdot X$, for $1 \le k \le N$, where $y_1,\dots,y_N$ and $w_1,\dots,w_N$
+denote the row vectors of the matrices $Y^\mathrm{out}$ and $W^\mathrm{out}$,
 respectively, the latter is the case if the rank of the coefficient matrix $X$
 is equal to the rank of the augmented matrix $M_k = \big[ X ~ y_k \big]^\top$
 for every $k$. This leads to the equation $\mathrm{rank}(X) =
@@ -1057,50 +1057,50 @@ consider two cases:
 \end{itemize}
 \end{proof}
 
-Thus, in theory, any time-dependent function can be approximated with arbitrary
-precision, even continued on input other than nonnegative integer numbers (cf.
-\cref{general}), although clearly not every function can be implemented by
-LRNNs, in particular functions increasing faster than single-exponential (cf.
-\cref{exponential}) like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial
-function). Also in practice, the LRNN learning procedure performs rather well
-(cf. \cref{result}). Nevertheless, the matrix $X$ may be ill-conditioned,
-because the reservoir state sequence as part of the matrix $X$ reduces to at
-most two dimensions for large $t$ -- independent of the number of reservoir
-neurons (cf. \cref{ellipse}). Hence, the rank of the matrix $X$ may be not
-maximal and in consequence \cref{linear} may not be solvable numerically
-(although we may have an equation system with the same number of equations and
-unknowns). A simple increase of the number of reservoir neurons does not help
-much.
+Therefore, at least in theory, any time-dependent function $f(t)$ can be
+interpolated, i.e., exactly approximated on the given function values and
+continued on input other than nonnegative integer numbers (cf. \cref{general}),
+although clearly not every function can be implemented by LRNNs, in particular
+functions increasing faster than single-exponential (cf. \cref{exponential})
+like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
+practice, the LRNN learning procedure performs rather well (cf. \cref{result}).
+Nevertheless, the matrix $X$ may be ill-conditioned, because the reservoir state
+sequence as part of the matrix $X$ reduces to at most two dimensions for large
+$t$, independent of the number of reservoir neurons (cf. \cref{ellipse}). Hence,
+the rank of the matrix $X$ may be not maximal and in consequence \cref{linear}
+may not be solvable numerically (although we may have an equation system with
+the same number of equations and unknowns). A simple increase of the number of
+reservoir neurons does not help much.
 
 However, one could learn not only the output weights $W^\mathrm{out}$ as in ESNs
-but the complete transition matrix $W$: For this, let $\big[R(0) \cdots R(n)
-\big]$ be a random reservoir state sequence matrix for $N^\mathrm{res}$
+but the complete transition matrix $W$. For this, we employ a random reservoir
+state sequence matrix $\big[R(0) \cdots R(n) \big]$ with $N^\mathrm{res}$
 reservoir neurons, considered as additional input. If all elements of this
 matrix are random numbers, independently and identically distributed from the
 standard normal distribution, its rank is almost always maximal. We then just
-have to solve the linear matrix equation $W \cdot X = Y$ (cf. \cref{linear})
-with $X$ as in \cref{Xin} and:
+have to solve the linear matrix equation $Y = W \cdot X$ (cf. \cref{linear})
+with
 \[ Y = \left[ \begin{array}{ccc}
 	S(1) & \cdots & S(n)\\
 	R(1) & \cdots & R(n)
 \end{array} \right] \]
-By this, $W^\mathrm{in}$ and $W^\mathrm{res}$, i.e., the input and reservoir
-weights are learned, not only the output weights in $W^\mathrm{out}$. But our
-experiments indicate that this procedure is less reliable than the one with
-given, i.e., predefined random input and reservoir weights and unit spectral
-radius for the reservoir (cf. \cref{output}).
+and $X$ as in \cref{Xin}. By this, the input and reservoir weights
+$W^\mathrm{in}$ and $W^\mathrm{res}$ are learned, not only the output weights
+$W^\mathrm{out}$. But our experiments indicate that this procedure is less
+reliable than the one with given, i.e., predefined random input and reservoir
+weights and unit spectral radius for the reservoir (cf. \cref{output}).
 
-The topic of learning all weights in the matrix $W$ has also been investigated by
-\citet{PDW13} for ESNs with nonlinear activation function. However, for LRNNs, the
-given input and reservoir weights $W^\mathrm{in}$ and $W^\mathrm{res}$ together
-with the learned output weights $W^\mathrm{out}$ already provide the best
-approximation of the function $f(t)$. There is no need to learn the input and
-reservoir weights, simply because LRNNs are
-completely linearly activated RNNs (including the reservoir). If one tries to
-learn $W^\mathrm{in}$ and $W^\mathrm{res}$ taking not only the output time
-series $S$ but additionally the reservoir state time series $R$ into account,
-then exactly the given input and reservoir weights are learned if \cref{ineq}
-holds. Only with nonlinear activation there is a learning effect in this case.
+The topic of learning all weights in the matrix $W$ has also been investigated
+by \citet{PDW13} for ESNs with nonlinear activation function in the reservoir.
+However, for LRNNs, the given input and reservoir weights $W^\mathrm{in}$ and
+$W^\mathrm{res}$ together with the learned output weights $W^\mathrm{out}$
+already provide the best approximation of the function $f(t)$. There is no need
+to learn the input and reservoir weights, simply because LRNNs are completely
+linearly activated RNNs (including the reservoir). If one tries to learn
+$W^\mathrm{in}$ and $W^\mathrm{res}$ taking not only the output time series $S$
+but additionally the reservoir state time series $R$ into account, then exactly
+the given input and reservoir weights are learned if \cref{ineq} holds. Only
+with nonlinear activation there is a learning effect in this case.
 
 \begin{remk}
 \cref{approx} is related to the \emph{universal approximation theorem} for
@@ -1114,7 +1114,6 @@ are more general than feedforward networks, the universal approximation theorem
 also holds for them \citep{MNM02}. Any measurable function can be
 approximated with a (general) recurrent network arbitrarily well in probability
 \citep{Ham00}.
-\end{remk}
 
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(x)$ from the (possibly multi-dimensional) input $x$. Nevertheless,
@@ -1125,6 +1124,7 @@ the function $f(t)$ efficiently. No gradient-descent method like backpropagation
 required; we just have to solve a linear equation system. Hence learning is as
 easy as learning a single-layer perceptron, which however is restricted in
 expressibility because only linearly separable functions can be represented.
+\end{remk}
 
 \begin{remk}
 Any time series $S(0),\dots,S(n)$ can be generated by employing a backward shift
