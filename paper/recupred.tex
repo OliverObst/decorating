@@ -365,7 +365,7 @@ following properties:
 	value of all its eigenvalues. Note that the spectral radius of the
 	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
+	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}$ input/output neurons. They may
 	be arbitrarily connected like the reservoir neurons. We thus can imagine
 	the whole network as a big reservoir because the input/output neurons
 	are not particularly special.
@@ -629,7 +629,7 @@ multiplicity of the eigenvalues of the transition matrix $W$. Then, from
 as asymptotic behavior for large $t$.
 \end{proof}
 
-In fact, LRNNs can model polynomials (cf. \cref{parasin}, parabola), general
+In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
 single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
 multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
 \cref{approx}). For this, the overall transition matrix $W$ may have (a) a
@@ -738,7 +738,7 @@ for large $t$. Every LRNN with many neurons can thus be
 approximated by a simple network with at most two neurons, defined by the matrix
 $\hat{D}$ and start vector $\hat{x}$. The output values can be computed for
 all original dimensions by multiplication with the matrix $\hat{V}$. They lie on
-an ellipse in general, thus only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
+an ellipse in general, thus in only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
 dynamics of the system is not that regular (cf. \cref{ell}). But although
 \cref{infty} states the asymptotic behavior of random LRNNs with unit spectral
 radius, interestingly the network dynamics converges relatively fast to the
@@ -754,7 +754,7 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
     (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse.pdf}} \\[5mm]
     (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave.pdf}}
   \caption{Dynamic system behavior of a pure random reservoir with unit spectral
-	radius for $N^\mathrm{res} = 100$ neurons:
+	radius, with $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
 	complex conjugate eigenvalue pairs, in the complex plane.
     (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
@@ -920,11 +920,11 @@ follows:
 	radius is smaller than $1$ (cf. \cref{ellipse}).
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
         be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
-        neurons such that the reservoir start vector $r_0$ (with $N^\mathrm{res}$
+        neurons such that the reservoir start vector $r$ (with $N^\mathrm{res}$
         components) has unit norm by
         setting:
-	\[ r_0 = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
-	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r_0
+	\[ r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
+	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r
 	\end{array} \right]$ (cf. \cref{define}).
   \item We usually employ fully connected graphs, i.e., all, especially the
 	reservoir neurons are connected with each other because the
@@ -943,11 +943,11 @@ To learn the output weights $W^\mathrm{out}$, we run the input values from the
 time series $S(0),\dots,S(n)$ through the network (in input receiving mode),
 particularly through the reservoir. This means, we build the sequence of
 corresponding reservoir states $R(0),\dots,R(n)$ where the reservoir start
-vector $r_0$ in principle can be chosen arbitrarily but with all non-zero
+vector $r$ in principle can be chosen arbitrarily but with all non-zero
 entries (cf. \cref{chad}):
 \begin{equation}\label{Res}
-	R(t_0) = r_0 \text{~and~} R(t+\tau) =
-	\left[ W^\mathrm{in} ~~ W^\mathrm{res} \right] \cdot
+	R(t_0) = r \text{~and~} R(t+\tau) =
+	\left[ W^\mathrm{in} ~ W^\mathrm{res} \right] \cdot
 	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
 \end{equation}
 We want to predict the next input value $S(t+\tau)$, given the current input and
@@ -990,7 +990,7 @@ identical) lengths $n_1,\dots,n_K$ be given. For each $S_k$ with $1 \le k \le
 K$, we determine:
 \begin{itemize}
   \item the sequence of corresponding reservoir states $R_k$ (according to
-	\cref{Res}), taking always the same reservoir start vector $r_0$,
+	\cref{Res}), taking always the same reservoir start vector $r$,
   \item the corresponding input matrix $X_k$ (according to \cref{Xin}), and
   \item the corresponding predicted output matrix $Y^\mathrm{out}_k$ (according to \cref{Yout}).
 \end{itemize}
@@ -1018,55 +1018,80 @@ series of function values $f(t_0),\dots,f(t_n)$ be given. Then there is an
 LRNN with the following properties:
 \begin{enumerate}
   \item It runs exactly through all given $n+1$ function values, i.e., it approximates $f(t)$.
-  \item It can effectively be learned by the above-stated solution procedure (\cref{output}).
+  \item It can effectively be learned by the LRNN learning procedure (\cref{output}).
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
-The procedure for learning output weights (cf. \cref{output}) uses the
-reservoir state sequence as part of the coefficient matrix $X$ which reduces to
-at most two dimensions in the long run however -- independent of the number of reservoir neurons
-(cf. \cref{ellipse}). Thus, the rank of the coefficient matrix $X$ is
-not maximal in general and in consequence the linear equation system from
-\cref{linear} often has no solutions (although we may have an equation system
-with the same number of equations and unknowns). A simple increase of the number
-of reservoir neurons does not help much. Therefore, we shall apply the learning
-procedure in a specific way, learning not only the output weights
-$W^\mathrm{out}$ as in ESNs but the complete transition matrix $W$ as follows:
-
 First, we take the series of function values $f(t_0),\dots,f(t_n)$ and identify
-them with the time series $S(0),\dots,S(n)$. Let then $\big[R(0) \cdots R(n)
+them with the time series $S(0),\dots,S(n)$. After applying the LRNN learning
+procedure, the LRNN runs through all given values, because by construction the
+upper part $\big[ S(0) \cdots S(n-1) \big]$ of the matrix $X$ (cf. \cref{Xin})
+consists of the series of function values of $f$, provided that the linear
+matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
+least one solution.
+
+Since \cref{linear} is equivalent to simultaneously solving the equations $w_k
+\cdot X = y_k$, for $1 \le k \le N$ where $w_1,\dots,w_N$ and $y_1,\dots,y_N$
+denote the row vectors of the matrices $W^\mathrm{out}$ and $Y^\mathrm{out}$,
+respectively, the latter is the case if the rank of the coefficient matrix $X$
+is equal to the rank of the augmented matrix $M_k = \big[ X ~ y_k \big]^\top$
+for every $k$. This leads to the equation $\mathrm{rank}(X) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res},n) = \mathrm{rank}(M_k) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res}+1,n)$. From this, it follows that
+\begin{equation}\label{ineq}
+	N^\mathrm{res} \ge n-N^\mathrm{in\,out}
+\end{equation}
+reservoir neurons have to be employed to guarantee at least one solution for the
+$w_k$, provided that the rank of the matrix $X$ is maximal. For the latter, we
+consider two cases:
+\begin{itemize}
+  \item If the rank of the upper part of the matrix $X$ (see above) is not
+	maximal, then this does not cause any problems. We only have to replace
+	$N^\mathrm{in\,out}$ by the actual rank of the upper part of the matrix
+	$X$ in \cref{ineq}.
+  \item The rank of the lower part $\big[ R(0) \cdots R(n-1) \big]$ of the
+	matrix $X$ almost always has maximal rank, because we employ a random
+	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job.
+	This completes the proof. \qedhere
+\end{itemize}
+\end{proof}
+
+Thus, in theory, any time-dependent function can be approximated with arbitrary
+precision, even continued on input other than nonnegative integer numbers (cf.
+\cref{general}), although clearly not every function can be implemented by
+LRNNs, in particular functions increasing faster than single-exponential (cf.
+\cref{exponential}) like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial
+function). Also in practice, the LRNN learning procedure performs rather well
+(cf. \cref{result}). Nevertheless, the matrix $X$ may be ill-conditioned,
+because the reservoir state sequence as part of the matrix $X$ reduces to at
+most two dimensions for large $t$ -- independent of the number of reservoir
+neurons (cf. \cref{ellipse}). Hence, the rank of the matrix $X$ may be not
+maximal and in consequence \cref{linear} may not be solvable numerically
+(although we may have an equation system with the same number of equations and
+unknowns). A simple increase of the number of reservoir neurons does not help
+much.
+
+However, one could learn not only the output weights $W^\mathrm{out}$ as in ESNs
+but the complete transition matrix $W$: For this, let $\big[R(0) \cdots R(n)
 \big]$ be a random reservoir state sequence matrix for $N^\mathrm{res}$
-reservoir neurons, considered as additional input in this context. If all
-elements of this matrix are random numbers, independently and identically distributed from
-the standard normal distribution, its rank is almost always maximal. Let now
-$d'$ be the rank of the matrix $\big[ S(0) \cdots S(n-1) \big]$ and:
+reservoir neurons, considered as additional input. If all elements of this
+matrix are random numbers, independently and identically distributed from the
+standard normal distribution, its rank is almost always maximal. We then just
+have to solve the linear matrix equation $W \cdot X = Y$ (cf. \cref{linear})
+with $X$ as in \cref{Xin} and:
 \[ Y = \left[ \begin{array}{ccc}
 	S(1) & \cdots & S(n)\\
 	R(1) & \cdots & R(n)
 \end{array} \right] \]
-We now have to solve the linear matrix equation $W \cdot X = Y$ with $X$ as
-in \cref{Xin}. If $w_1,\dots,w_N$ and $y_1,\dots,y_N$ denote the row
-vectors of the matrices $W$ and $Y$, respectively, then this is equivalent to
-simultaneously solving the equations $w_k \cdot X = y_k$, for $1 \le k \le N$.
-We must ensure that there exists almost always at least one solution. This holds
-if and only if the rank of the coefficient matrix $X$ is equal to the rank of
-the augmented matrix $M_k = \left[ \begin{array}{c} X\\ y_k \end{array}
-\right]$, for every $k$. We obtain the equation $\mathrm{rank}(X) =
-\min(d'+N^\mathrm{res},n) = \mathrm{rank}(M_k) = \min(d'+N^\mathrm{res}+1,n)$.
-From this, it follows that
-\begin{equation}\label{ineq}
-	N^\mathrm{res} \ge n-d'
-\end{equation}
-reservoir neurons have to be employed to guarantee at least one exact solution
-for the $w_k$. By construction, the neural network with transition matrix $W$
-runs exactly through all given $n+1$ function values $f(t)$.
-\end{proof}
+By this, $W^\mathrm{in}$ and $W^\mathrm{res}$, i.e., the input and reservoir
+weights are learned, not only the output weights in $W^\mathrm{out}$. But our
+experiments indicate that this procedure is less reliable than the one with
+given, i.e., predefined random input and reservoir weights and unit spectral
+radius for the reservoir (cf. \cref{output}).
 
-\begin{remk}
-The just sketched proof of \cref{approx} suggests a way to learn the input
-and reservoir weights. This topic has also been investigated by \citet{PDW13} for
-ESNs with nonlinear activation function in the reservoir. However, for LRNNs, the
+The topic of learning all weights in the matrix $W$ has also been investigated by
+\citet{PDW13} for ESNs with nonlinear activation function. However, for LRNNs, the
 given input and reservoir weights $W^\mathrm{in}$ and $W^\mathrm{res}$ together
 with the learned output weights $W^\mathrm{out}$ already provide the best
 approximation of the function $f(t)$. There is no need to learn the input and
@@ -1077,28 +1102,7 @@ series $S$ but additionally the reservoir state time series $R$ into account,
 then exactly the given input and reservoir weights are learned if \cref{ineq}
 holds. Only with nonlinear activation there is a learning effect in this case.
 
-Nonetheless, $W^\mathrm{in}$ and $W^\mathrm{res}$ can be learned by the
-procedure sketched in the proof if they are not given in advance, starting with
-a random reservoir state sequence $R$. But our experiments indicate that this
-procedure is less reliable than the one with given, i.e., predefined but random
-input and reservoir weights and unit spectral radius for the reservoir (cf.
-\cref{output}).
-%Depending on the relation between the overall network
-%size $N$ and the time series length $n$, we observe:
-%\begin{enumerate}
-%  \item \emph{stable} behavior for $N < n$: The predicted value for
-%	the next time step $t+1$ is nearly identical to the current value at
-%	time $t$. In many cases, the predicted values lie on a straight line
-%	approximately.
-%  \item \emph{unstable} behavior for $N \approx n$: The equation system to be
-%	solved often leads to matrices singular to machine precision and hence
-%	to bad transition matrices $W$ in this case.
-%  \item \emph{overfitting} to the training data for $N > n$: The accuracy on the
-%	training data is almost perfect in this case, whereas the prediction for
-%	the subsequent time steps is more or less arbitrary.
-%\end{enumerate}
-\end{remk}
-
+\begin{remk}
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
 network with a linear output layer and at least one hidden layer activated by a
@@ -1110,6 +1114,7 @@ are more general than feedforward networks, the universal approximation theorem
 also holds for them \citep{MNM02}. Any measurable function can be
 approximated with a (general) recurrent network arbitrarily well in probability
 \citep{Ham00}.
+\end{remk}
 
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(x)$ from the (possibly multi-dimensional) input $x$. Nevertheless,
@@ -1215,8 +1220,8 @@ available under the following link:
 \begin{algorithmic}[1]\State
         \commt{$d$-dimensional function, given sampled, as time series, and start vector}
         $S = \big[ f(0) \cdots f(n) \big]$\\
-	$s = \left[ \begin{array}{c} S(0) \\ r_0 \end{array} \right]$ where
-		$r_0 = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
+	$s = \left[ \begin{array}{c} S(0) \\ r \end{array} \right]$ where
+		$r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
 		\big[ \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
         \\
         \commt{random initialization of reservoir and input weights}
@@ -1260,7 +1265,7 @@ matrix $W$ (lines 11-13), the network size reduction procedure (lines 14-19)
 often yields minimal networks with only two reservoir neurons representing
 \[
     f(t) \overset{\text{\cref{chad}}}{=} A \cdot J^t \cdot y \text{~with~}
-	A \approx \left[ \frac{1}{\sqrt{5}} ~~ -\!\frac{1}{\sqrt{5}} \right] \text{~and~}
+	A \approx \left[ \frac{1}{\sqrt{5}} ~ -\!\frac{1}{\sqrt{5}} \right] \text{~and~}
 	J \approx \left[ \begin{array}{cc}
 		\lambda_1 & 0\\
 		0 & \lambda_2
@@ -1284,7 +1289,7 @@ remains $1$ all the time (cf. \cref{thedef}). However, after learning the output
 weights $W^\mathrm{out}$, the spectral radius of the overall transition matrix
 $W$ (according to \cref{matrix}) of size $n+1$ and hence of the matrix $J$ may
 be greater than $1$, if the function $f(t)$ to be modeled is exponentially
-increasing. This holds for the Fibonacci series ($\lambda_1>1$).
+increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
 
@@ -1448,7 +1453,7 @@ time series:
 
 \cref{sideways} shows the evaluation results. As one can see, LRNNs outperform
 all other approaches on this benchmark by far. The reason for this is certainly
-the network size reduction procedure (cf. \cref{reduce}),unique in our approach,
+the network size reduction procedure (cf. \cref{reduce}), unique in our approach,
 because it exactly selects the relevant components of the network: Each complex
 conjugate
 eigenvalue pair corresponds to one of the frequencies $\alpha_1,\dots,\alpha_8$.
@@ -1457,7 +1462,7 @@ might be a musical harmony \citep{Sto17b}, consisting of $K$ sinusoids (cf.
 \cref{ellipse}). It can be learned by our LRNN learning procedure with
 dimensionality reduction. However, if several frequencies are close to each
 other (cf. example~\#1) or are rather small (cf. example~\#12), then LRNNs do
-not perform quite so well. 
+not perform quite so well.
 	
 \begin{sidewaystable}
   \centering\small
@@ -1806,14 +1811,8 @@ The training procedure only uses standard matrix operations and is thus quite fa
 In contrast to ESNs, also, no washout period is required. Any
 function can be approximated directly from its first step, with an arbitrary
 start vector (cf. \cref{chad}).
-
-Although any time-dependent function can be approximated with arbitrary
-precision (cf. \cref{approx}), not every function can be implemented by LRNNs,
-in particular functions increasing faster than single-exponential (cf.
-\cref{exponential}) like $2^{2^t}$ (double-exponential) or $t\/!$
-(factorial function). Nevertheless, experiments with reasonably
-large example and network sizes can be performed successfully within seconds on
-standard hardware.
+Experiments with reasonably large example and network sizes can be performed
+successfully within seconds on standard hardware.
 However, if thousands of reservoir neurons are employed, the procedure may
 become numerically unstable, at least our Octave implementation. The likelihood
 of almost identical eigenvectors and eigenvalues with absolute values greater
