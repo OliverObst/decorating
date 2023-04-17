@@ -53,8 +53,8 @@ for k=1:n
 
 #Omega = angle(Lambda); % angular frequencies for time step tau=1
 #%Frequency = Omega/(2*pi*tau); % real frequencies in Hz
-#Amplitude = zeros(K,L);
-#Phase = zeros(K,L);
+#Amplitude = zeros(K,L); % corresponding amplitudes for each input/output component
+#Phase = zeros(K,L); % corresponding phase shifts for each input/output component
 
 #pos = 0; % column position in matrix A
 #for (k=1:K)

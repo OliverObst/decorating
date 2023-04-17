@@ -22,7 +22,7 @@
 \newtheorem{remk}{Remark}
 
 % other packages
-\usepackage{algpseudocode}
+\usepackage{algorithmicx}
 \usepackage{csquotes,natbib,url}
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
@@ -748,7 +748,7 @@ trajectory (\cref{twodim}) is almost zero already after a few hundred
 steps (cf. \cref{asymptot}). Of course this depends on
 the eigenvalue distribution of the transition matrix \citep{TV10}.
 
-\begin{figure}[h]
+\begin{figure}[t]
   \centering
     (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum.pdf}} \hfill
     (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse.pdf}} \\[5mm]
@@ -1240,7 +1240,7 @@ available under the following link:
                 W^\mathrm{in} & W^\mathrm{res}
         \end{array} \right]$\\
         $J = \mathrm{jordan\_matrix}(W)$ with components sorted in decreasing order\\
-        \quad with respect to $\mathrm{RMSE}\left(S,\mathrm{Out}(J_{\langle 1,\dots,k-1,k+1,\dots,K \rangle})\right)$\\
+        \quad with respect to $\mathrm{Error}(J_{\langle 1,\dots,k-1,k+1,\dots,K \rangle})$\\
         \quad where $K = \#$\,Jordan components in $J$\newline
         \\
         \commt{network size reduction (with binary search)}
@@ -1248,25 +1248,26 @@ available under the following link:
         $R = K$\\
         while ($L \neq R$)\\
         \quad $M = (L+R)/2$\\
-        \quad if $\mathrm{RMSE}(S,\mathrm{Out}(J_{\langle 1,\dots,R \rangle}))<\theta$\\
+        \quad if $\mathrm{Error}(J_{\langle 1,\dots,M \rangle}) < \theta$\\
         \qquad then $R = M$\\
         \qquad else $L = M+1$\\
-        return(M)\newline
+        return\big($M$\big)\newline
         \\
-        \commt{subroutine $\mathrm{Out}(J_I)$}
-	\commt{\quad output for Jordan matrix reduced to indexed components}
-        reduce $J$ to components indexed by $I$\\
-	$y = \big[ 1 \cdots 1 \big]^\top$\\
-	$Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
-        $A = X/Y$ with rows restricted to input/output dimensions\\
-	return($A \cdot Y$)        
+        \commt{subroutine $\mathrm{Error}(J_I)$}
+	\commt{\quad compute error for Jordan matrix reduced to indexed components}
+        \quad reduce $J$ to components indexed by $I$\\
+	\quad $y = \big[ 1 \cdots 1 \big]^\top$\\
+	\quad $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
+        \quad $A = X/Y$ with rows restricted to input/output dimensions\\
+	return\big($\mathrm{RMSE}(S,A \cdot Y)$\big)        
 \end{algorithmic}
 \caption{Pseudocode for learning LRNNs including network size reduction. A
 binary search algorithm is employed for determining the relevant network
 components with smallest errors. For this, the network components are sorted by
-their RMSE. The program returns the number $M$ of relevant components in the Jordan matrix $J$ (line 24).
-The subroutine $\mathrm{Out}(J_I)$ (line 25-31) computes the output for the
-Jordan matrix reduced to the components indexed by $I$.}
+their RMSE. The program returns the number $M$ of relevant components in the
+Jordan matrix $J$ (line 24). The subroutine $\mathrm{Out}(J_I)$ (lines 25-31)
+computes the output for the Jordan matrix reduced to the components indexed by
+$I$.}
 \label{proc}
 \end{figure}
 
@@ -1552,7 +1553,7 @@ evaluation with altogether $20 \cdot 50 \cdot 1000 = 1\,000\,000$ trials
 including possibly repeated network generation and network size reduction ran in
 only a few minutes on standard hardware.
 
-\begin{table}[ht]
+\begin{table}[t]
   \centering
   \sisetup{table-number-alignment = center, %
 	table-figures-integer = 3, table-figures-decimal = 1, table-figures-exponent = 0, %

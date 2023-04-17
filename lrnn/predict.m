@@ -21,9 +21,6 @@ function [Out,Err,A,J,Y,W,X,Lambda,Multi] = predict(S,M=0,Nres=-1,theta=-Inf,del
 % X : original input and reservoir state sequence [S; R]
 % Lambda : eigenvalues of J (without eigenvalues with negative imaginery part)
 % Multi : their multiplicities (counting complex conjugated eigenvalues twice)
-# Omega : angular frequencies for time step tau=1
-# Amplitude : corresponding amplitudes for each input/output component
-# Phase : corresponding phase shifts for each input/output component
 
 
 % INITIALISATION
