@@ -611,7 +611,7 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 
 Let us now investigate the long-term behavior of an LRNN (run in output generating
 mode) by understanding it as an (autonomous) \emph{dynamic system} \citep{CK14,Str15}.
-We will see (in \cref{infty}) that often the network dynamics may be reduced to a
+We will see (in \cref{infty}) that the network dynamics may be reduced to a
 very small number of neurons in the long run. They determine the behavior for $t
 \to \infty$. Nevertheless, for smaller $t$, the use of many neurons is important
 for computing short-term predictions.
@@ -1100,7 +1100,7 @@ linearly activated RNNs (including the reservoir). If one tries to learn
 $W^\mathrm{in}$ and $W^\mathrm{res}$ taking not only the output time series $S$
 but additionally the reservoir state time series $R$ into account, then exactly
 the given input and reservoir weights are learned if \cref{ineq} holds. Only
-with nonlinear activation there is a learning effect in this case.
+with nonlinear activation there is a learning effect.
 
 \begin{remk}
 \cref{approx} is related to the \emph{universal approximation theorem} for
@@ -1215,7 +1215,7 @@ available under the following link:
 	\url{http://github.com/OliverObst/decorating/}
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}
 \newcommand{\commt}[1]{\%~#1\\}%
 \begin{algorithmic}[1]\State
         \commt{$d$-dimensional function, given sampled, as time series, and start vector}
@@ -1239,19 +1239,34 @@ available under the following link:
                 \multicolumn{2}{c}{W^\mathrm{out}}\\
                 W^\mathrm{in} & W^\mathrm{res}
         \end{array} \right]$\\
-        $J = \mathrm{jordan\_matrix}(W)$\newline
+        $J = \mathrm{jordan\_matrix}(W)$ with components sorted in decreasing order\\
+        \quad with respect to $\mathrm{RMSE}\left(S,\mathrm{Out}(J_{\langle 1,\dots,k-1,k+1,\dots,K \rangle})\right)$\\
+        \quad where $K = \#$\,Jordan components in $J$\newline
         \\
-        \commt{network size reduction}
-        $y = \big[ 1 \cdots 1 \big]^\top$\\
-        $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
+        \commt{network size reduction (with binary search)}
+        $L = 1$\\
+        $R = K$\\
+        while ($L \neq R$)\\
+        \quad $M = (L+R)/2$\\
+        \quad if $\mathrm{RMSE}(S,\mathrm{Out}(J_{\langle 1,\dots,R \rangle}))<\theta$\\
+        \qquad then $R = M$\\
+        \qquad else $L = M+1$\\
+        return(M)\newline
+        \\
+        \commt{subroutine $\mathrm{Out}(J_I)$}
+	\commt{\quad output for Jordan matrix reduced to indexed components}
+        reduce $J$ to components indexed by $I$\\
+	$y = \big[ 1 \cdots 1 \big]^\top$\\
+	$Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
         $A = X/Y$ with rows restricted to input/output dimensions\\
-        reduce($A,J,y$) to relevant components\\
-        \hspace*{0.5cm} such that RMSE($S$,Out)\,$<\theta$
+	return($A \cdot Y$)        
 \end{algorithmic}
-\caption{Pseudocode for learning LRNNs including network size reduction. In the
-last statement, actually a binary search algorithm is employed for determining
-the relevant network components with smallest errors. For this, the network
-components are sorted by their error $E$.}
+\caption{Pseudocode for learning LRNNs including network size reduction. A
+binary search algorithm is employed for determining the relevant network
+components with smallest errors. For this, the network components are sorted by
+their RMSE. The program returns the number $M$ of relevant components in the Jordan matrix $J$ (line 24).
+The subroutine $\mathrm{Out}(J_I)$ (line 25-31) computes the output for the
+Jordan matrix reduced to the components indexed by $I$.}
 \label{proc}
 \end{figure}
 
@@ -1261,7 +1276,7 @@ series (\cref{fibonacci}). We start with the first values of the Fibonacci
 series $f(0),\dots,f(n)$ as input $S$ (lines 1-3) and generate a random
 reservoir of size $N^\mathrm{res}$ (lines 4-6). After learning the output
 weights $W^\mathrm{out}$ (lines 7-10) and decomposing the resulting transition
-matrix $W$ (lines 11-13), the network size reduction procedure (lines 14-19)
+matrix $W$ (lines 11-15), the network size reduction procedure (lines 16-24)
 often yields minimal networks with only two reservoir neurons representing
 \[
     f(t) \overset{\text{\cref{chad}}}{=} A \cdot J^t \cdot y \text{~with~}
