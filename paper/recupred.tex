@@ -61,7 +61,7 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks (L
 approximate any time-dependent function $f(t)$ given by a number of function
 values. The approximation can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-and this is probably another main contribution of this article, the size of an
+and this is probably the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
@@ -1064,7 +1064,7 @@ although clearly not every function can be implemented by LRNNs, in particular
 functions increasing faster than single-exponential (cf. \cref{exponential})
 like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
 practice, the LRNN learning procedure performs rather well (cf. \cref{result}).
-Nevertheless, the matrix $X$ may be ill-conditioned, because the reservoir state
+Nevertheless, the matrix $X$ may be ill-conditioned for long input sequences, because the reservoir state
 sequence as part of the matrix $X$ reduces to at most two dimensions for large
 $t$, independent of the number of reservoir neurons (cf. \cref{ellipse}). Hence,
 the rank of the matrix $X$ may be not maximal and in consequence \cref{linear}
@@ -1266,8 +1266,8 @@ binary search algorithm is employed for determining the relevant network
 components with smallest errors. For this, the network components are sorted by
 their RMSE. The program returns the number $M$ of relevant components in the
 Jordan matrix $J$ (line 24). The subroutine $\mathrm{Out}(J_I)$ (lines 25-31)
-computes the output for the Jordan matrix reduced to the components indexed by
-$I$.}
+computes the error of the predicted output for the Jordan matrix reduced to the
+components indexed by $I$.}
 \label{proc}
 \end{figure}
 
@@ -1426,14 +1426,16 @@ this number is not further reduced.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{fig/signal2}
+  %\includegraphics[width=0.9\textwidth]{fig/signal2}
+  \includegraphics[width=0.65\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
   \caption{The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1 \le t
 	\le 300$ and time step $\tau=1$) does not have a simple periodic structure. LRNN learning leads
 	to minimal networks with only $N=16=2K$ reservoir neurons, i.e., two for
 	each frequency in the signal.}
+  %\caption{Example MSO8 graph that will still be changed.}
   \label{signal}
 \bigskip
-  \includegraphics[width=0.6\textwidth]{fig/mso8}%
+  \includegraphics[width=0.56\textwidth]{fig/mso8}%
   \caption{Experimental results for the MSO example ($K=8$). The diagram shows the
 	success rate (from 100 trials): from an initial reservoir size of $N^\mathrm{res}$
 	neurons, how often is the minimal LRNN with size
@@ -1710,17 +1712,10 @@ smaller training set of 240 points. With an average stock price of
 $286.71${\,\euro} of all stocks in the set, the average deviation is only~6.1\%.
 
 \begin{figure}
-\begin{minipage}[t]{0.48\textwidth}
-\includegraphics[width=\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
-  \caption{Example MSO8 graph that will still be changed.}
-  \label{arima}
-\end{minipage}
-  \hfill%
-\begin{minipage}[t]{0.48\textwidth}
- \includegraphics[width=\textwidth]{fig/stock_prediction_fme} % ,height=5cm
+  \centering
+  \includegraphics[width=0.65\textwidth]{fig/stock_prediction_fme} % ,height=5cm
   \caption{Stock price (solid/blue) prediction for FME.DE (Fresenius Medical Care) with LRNNs and $N=600$ neurons (dashed/red).}
   \label{LRNN}
-\end{minipage}
 \end{figure}
 
 Apart from the good prediction results, LRNNs have the advantage that they allow
