@@ -6,9 +6,6 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[abbrvbib,preprint]{jmlr2e}
 
-% options: short,long
-\usepackage[short]{optional}
-
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
@@ -25,7 +22,7 @@
 \newtheorem{remk}{Remark}
 
 % other packages
-\usepackage{algpseudocode}
+\usepackage{algorithmicx}
 \usepackage{csquotes,natbib,url}
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
@@ -44,14 +41,14 @@
 \begin{document}
 
 \title{The Power of Linear Recurrent Neural Networks}
-\author{\name Frieder Stolzenburg \email fstolzenburg@hs-harz.de\\ %0000-0002-4037-2445
-	\name Sandra Litz\opt{long}{ \email litz\_sandra@web.de}\\ %0009-0000-8147-4424
+\author{\name Frieder Stolzenburg \email fstolzenburg@hs-harz.de\\ %\orcid 0000-0002-4037-2445
+	\name Sandra Litz\\ %\email litz\_sandra@web.de} \orcid 0009-0000-8147-4424
 	\addr Department of Automation and Computer Sciences,
 	Harz University of Applied Sciences,
 	38855 Wernigerode, Germany
 \AND	
-	\name Olivia Michael\opt{long}{ \email olivia\_michael@hotmail.com}\\ %0000-0002-5719-2299
-	\name Oliver Obst \email o.obst@westernsydney.edu.au\\ %0000-0002-8284-2062
+	\name Olivia Michael\\ %\email olivia\_michael@hotmail.com \orcid 0000-0002-5719-2299
+	\name Oliver Obst \email o.obst@westernsydney.edu.au\\ %\orcid 0000-0002-8284-2062
 	\addr Centre for Research in Mathematics and Data Science,
 	Western Sydney University,
 	Penrith NSW 2751, Australia}
@@ -64,7 +61,7 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks (L
 approximate any time-dependent function $f(t)$ given by a number of function
 values. The approximation can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-and this is probably another main contribution of this article, the size of an
+and this is probably the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
@@ -107,11 +104,11 @@ $f(t)$, and prediction of further values.
 
 Numerous research addresses these topics by RNNs, in particular variants of
 networks with long short-term memory (LSTM) \citep{HS97}. In the following, we
-consider an alternative, simple, yet very powerful type of RNNs: linear
+consider an alternative, simple but very powerful type of RNNs: linear
 recurrent neural networks (LRNNs). Thus we only use linear activation, which
 allows us to minimize the network size in one step, namely by inspecting the
 eigenvalues of the network transition matrix (cf. \cref{reduce}). Therefore, in
-contrast to others, we do not only learn network weights but also the
+contrast to other approaches, we do not only learn network weights but also the
 network architecture.
 
 The rest of this paper is structured as follows: First, we briefly review related
@@ -155,7 +152,7 @@ networks on complex and difficult sequence modeling problems which may contain
 long-term data dependencies. This can also be done with LRNNs (cf. MSO
 benchmark, \cref{mso}).
 \citet{Tin18} considers the effect of weight changes in linear symmetric ESNs on
-(Fisher) memory of the network. From a solely theoretical point of view,
+(Fisher) memory of the network. Furthermore, from a solely theoretical point of view,
 \citet{CW+16} investigate the asymptotic performance of linear ESNs.
 
 \subsection{Recurrent Neural Networks}
@@ -169,7 +166,7 @@ the indispensable tools for modeling such temporal dependencies. Linear RNNs and
 some of their properties (like short-term memory) are already investigated by
 \citet{WLS94}. Unfortunately, however, it can be a struggle to train RNNs to
 capture long-term dependencies \citep{BSF94,PMB13}. This is due to the
-gradients vanishing or exploding during backpropagation, which in turn makes the
+gradients vanishing or exploding during backpropagation which in turn makes the
 gradient-based optimization difficult.
 
 Nowadays, probably the most prominent and dominant type of RNNs are long
@@ -207,17 +204,17 @@ Legendre memory unit (LMU). It is derived from the linear transfer function for
 a continuous-time history of its input signal across a sliding window,
 approximated by coupled differential equations, which can implicitly also be
 solved by LRNNs (cf. \cref{rem}).
-\citet{CSB21} propose an approach to address memorization challenges in RNNs,
+\citet{CSB21} propose an approach to address memorization challenges in RNNs
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
 employing linear autoencoder for sequences. In both cases, backpropagation is
 employed, which is not needed for LRNNs whose network size is reduced
-significantly in addition (cf. \cref{reduce}), thus addressing the topic of
+significantly in addition (cf. \cref{reduce}), thus we address the topic of
 architecture learning.
 
-Architecture learning, in particular neural network pruning, is
-investigated many times in the literature. An early survey on pruning algorithms
+Architecture learning, in particular the pruning of neural networks, has been
+studied extensively in the literature. An early survey on pruning algorithms
 for neural networks is given by \citet{Ree93}. In more recent work,
 \citet{LAT19} present a method that prunes irrelevant connections between
 neurons for a given task prior to training and is applicable to a variety of
@@ -238,18 +235,18 @@ activated, but its output does not only depend on its own previous values and
 possibly white noise but on the complete state of the possibly big reservoir
 whose dynamics is explicitly dealt with. In addition, the size of the network
 might be reduced in the subsequent process. We will continue the comparison
-between autoregression and LRNNs later (see \cref{output}) and mainly consider
+between autoregression and LRNNs later (cf. \cref{output}) and mainly consider
 autoregressive tasks in the following.
 
 A popular choice in this context is the autoregressive integrated moving average
 (ARIMA) model \citep{HK08,HA13}. A standard ARIMA($p,d,q$) model consists of
 autoregression AR($p$) and a moving average MA($q$). The parameter $p$ describes
-the history length (lag order) used to predict the stock price at time $t$. We
+the history length (lag order) used to predict the time series at time $t$. We
 have $f(t) = c_1 f(t-1) + \dots + c_p f(t-p) + e_t$ where $c_1,\dots,c_p$ are
 (real-valued) autocorrelation coefficients and $e_t$, the residuals, are
 Gaussian white noise. In the moving average process MA($q$), the value $q$
 specifies the number of past residuals considered for prediction. An underlying
-trend of the stock is modeled by using a drift, i.e., a constant that extends
+trend of the time series is modeled by using a drift, i.e., a constant that extends
 the term. This procedure is particularly well-suited for stationary time series.
 Many time series, however, exhibit non-stationary behavior and thus require a
 transformation to make them stationary. This is achieved by investigating the
@@ -259,7 +256,7 @@ $d$.
 Autoregressive frameworks are common in current machine-learning applications
 like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
 by next word prediction \citep{BM+20}. The model applied in this context,
-however, is very complex (175 billion parameters) and non-linear.
+however, is very complex (175 billion parameters and more) and non-linear.
 Related to autoregression is autoencoding of sequences. For this, \citet{PS14}
 show that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citet{Spe06} gives an
@@ -270,7 +267,7 @@ related to the approximation theorem for LRNNs (cf. \cref{approx}).
 
 RNNs often host several types of neurons, each activated in a different manner
 \citep{Elm90,HS97}. In contrast to this, we here simply understand a homogeneous
-interconnected group of standard neurons as a neural network which may have
+interconnected group of standard neurons as a (recurrent) neural network which may have
 arbitrary loops, akin to biological neuronal networks. We adopt a \emph{discrete
 time model}, i.e., input and output can be represented by a time series and is
 processed stepwise by the network.
@@ -325,7 +322,7 @@ containing the following weight matrices:
   \centering
   \input{fig/esn.tikz}
   \caption{General recurrent neural network. In ESNs, only output weights are
-	trained, and the hidden layer is also called reservoir.}
+	trained and the hidden layer is also called reservoir.}
   \label{net}
 \end{figure}
 
@@ -353,7 +350,7 @@ time-dependent functions (cf. \cref{approx}).
 A \emph{linear recurrent network} (LRNN) is an RNN with the
 following properties:
 \begin{enumerate}
-  \item For the start time, it holds that $t_0=0$, and $\tau$ is constant, often $\tau=1$.
+  \item For the start time, it holds that $t_0=0$ and $\tau$ is constant, usually $\tau=1$.
   \item The initial state $S(0)$ of the given time series constitutes the first
 	$d$ components of the start vector $s$.
   \item For all neurons we have \emph{linear activation}, i.e., everywhere $g$
@@ -361,14 +358,15 @@ following properties:
   \item The weights in $W^\mathrm{in}$ and $W^\mathrm{res}$ are taken
 	randomly, independently, and identically distributed from the standard
 	normal distribution, i.e., the Gaussian distribution with mean $\mu = 0$
-	and standard deviation $\sigma = 1$ and remain unchanged all the time, whereas the output weights
-	$W^\mathrm{out}$ are learned (cf. \cref{output}).
+	and standard deviation $\sigma = 1$, and remain unchanged all the time,
+	whereas the output weights $W^\mathrm{out}$ are learned (cf. \cref{output}).
   \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
 	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
 	value of all its eigenvalues. Note that the spectral radius of the
-	overall transition matrix $W$ may still be greater than $1$ (cf. \cref{continued}).
+	overall transition matrix $W$ may still be greater than $1$ if required
+	by the application (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
+	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}$ input/output neurons. They may
 	be arbitrarily connected like the reservoir neurons. We thus can imagine
 	the whole network as a big reservoir because the input/output neurons
 	are not particularly special.
@@ -408,7 +406,7 @@ Consequently, starting at $t=0$ with time step $\tau=1$, we have:
 	1$, and hence $x_1(t) = t^2$ because of the identity $(t+1)^2 = t^2 +
 	2\,t + 1$ (cf. first row of the transition matrix $W$).
 \end{itemize}
-Thus, in the neuron $x_1$, the function $f(t)$ is computed. This is the only
+Thus, in the neuron $x_1$, the function $f(t)$ is computed. It is the only
 input/output neuron.
 \end{exmp}
 
@@ -473,14 +471,14 @@ numerically. To see this, consider the homogeneous linear differential equation
 \end{equation}
 where $c_k \in \mathbb{R}$ are constant coefficients, $x^{(k)}(t)$ is the $k$-th
 derivative of the function $x$ with respect to time $t$, and $n>0$. For a
-function $x$ and its derivative $\dot{x}$, we have
+function $x$ and its derivative $\dot{x}$ with respect to time $t$, we have
 \begin{equation}
   \dot{x}(t) = \lim\limits_{\tau \to 0} \frac{x(t+\tau)-x(t)}{\tau}
 	\quad\text{and hence}\quad
   x(t+\tau) \approx x(t) + \tau\,\dot{x}(t) \label{limit}
 \end{equation}
-for small time steps $\tau$. If we consider the difference of \cref{diff}
-between the times $t+\tau$ and $t$, we obtain, after dividing by $\tau$ and
+for small time steps $\tau>0$. If we consider the difference of \cref{diff}
+between the times $t+\tau$ and $t$, we obtain after dividing by $\tau$ and
 applying \cref{limit} to $x^{(k)}(t)$ for $k \ge 0$:
 \[
 	x^{(n)}(t+\tau)
@@ -513,7 +511,7 @@ the transition matrix $W$ and start vector $s$ of the corresponding LRNN are:
    \end{array} \right]
 \]
 Induction over time yields immediately $x(t) = \dot{x}(t) = (1+\tau)^{t/\tau}
-\approx e^t$ for small $\tau$ (according to Euler) as expected.
+\approx e^t$ for small $\tau>0$ (according to Euler) as expected.
 \end{exmp}
 
 The strong relationship between RNNs and differential equations is already known
@@ -531,7 +529,7 @@ An LRNN runs through network states $f(t)$ for $t
 	s, & t=0\\
 	W \cdot f(t-\tau), & \text{otherwise}
 \end{array} \right. \]
-and hence simply $f(t) = W^t \cdot s$. Note that we have $\tau = 1$ here.
+and hence simply $f(t) = W^t \cdot s$. Note that we assume $\tau = 1$ here (cf. \cref{thedef}).
 
 \begin{prop}\label{jordan}
 Let $W = V \cdot J \cdot V^{-1}$ be the Jordan decomposition of the transition
@@ -575,7 +573,7 @@ are always real. For this, we consider the Jordan block powers from \cref{power}
 	\cref{jordan}). With $c = |c|\,e^{\mathfrak{i}\psi}$ and
 	$\lambda = |\lambda|\,e^{\mathfrak{i}\omega}$, we get $c\,\lambda^t +
 	\overline{c}\,\overline{\lambda}{}^t = |c|\,|\lambda|^t \cos(\omega
-	t+\psi)$, applying Euler's formula. This obviously is defined for all
+	t+\psi)$ applying Euler's formula. This obviously is defined for all
 	$t \in \mathbb{R}$ and always yields real-valued $f(t)$.
   \item Negative real eigenvalues, i.e., the case $\lambda<0$, should be treated
 	in a special way, namely by replacing $\lambda^t$ by $|\lambda|^t \cos(\pi t)$.
@@ -614,8 +612,8 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 
 Let us now investigate the long-term behavior of an LRNN (run in output generating
 mode) by understanding it as an (autonomous) \emph{dynamic system} \citep{CK14,Str15}.
-We will see (in \cref{infty}) that often the network dynamics may be reduced to a
-very small number of neurons in the long run. They determine the behavior for $t
+We will see (in \cref{infty}) that the network dynamics may be reduced to a
+very small number of dimensions/neurons in the long run. They determine the behavior for $t
 \to \infty$. Nevertheless, for smaller $t$, the use of many neurons is important
 for computing short-term predictions.
 
@@ -632,13 +630,13 @@ multiplicity of the eigenvalues of the transition matrix $W$. Then, from
 as asymptotic behavior for large $t$.
 \end{proof}
 
-In fact, LRNNs can model polynomials (cf. \cref{parasin}, parabola), general
+In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
 single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
 multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
 \cref{approx}). For this, the overall transition matrix $W$ may have (a) a
 spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
 absolute value $1$. Nevertheless it is interesting to investigate a special
-case, namely a \emph{pure random reservoir}, where both conditions do not hold:
+case, namely a \emph{pure random reservoir} where both conditions do not hold:
 
 \begin{prop}\label{infty}
 Consider an LRNN solely consisting of a reservoir whose transition matrix
@@ -648,7 +646,7 @@ radius, and all eigenvalues are distinct. Then, almost all terms
 $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$ because for all
 eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have $\lim\limits_{t \to
 \infty} {\lambda_k}^t = 0$. Although a general real matrix can have more than
-two complex eigenvalues which are on the unit disk, for a pure random reservoir
+two complex eigenvalues which are on the unit circle, for a pure random reservoir
 as considered here, almost always, i.e., with probability close to $1$, only the
 (largest) eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute
 values $1$. In consequence, we have one of the following cases:
@@ -676,9 +674,9 @@ values $1$. In consequence, we have one of the following cases:
 \end{prop}
 
 We consider now the latter case in more detail, converting all complex values
-into real ones (cf.~\cref{real}): In this case, the matrix
-$\tilde{V}$ consists of the two complex conjugate eigenvectors $v = v_1$ and
-$\overline{v} = v_2$. From all linear combinations of both eigenvectors $\ell(\kappa)
+into real ones (cf.~\cref{real}): The matrix $\tilde{V}$ consists of the two
+complex conjugate eigenvectors $v = v_1$ and $\overline{v} = v_2$ in this case.
+From all linear combinations of both eigenvectors $\ell(\kappa)
 = \kappa v + \overline{\kappa}\,\overline{v}$ for $\kappa \in \mathbb{C}$ with $|\kappa| =
 1$, we can determine the vectors with extremal lengths. Since we only have two
 real-valued dimensions because clearly the activity induced by the real
@@ -714,7 +712,7 @@ speed can be derived from the eigenvalue $\lambda_1$. In each step of length
 $\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$ is the
 angular frequency which can be determined from the equation $\lambda_1 =
 |\lambda_1|\,e^{\mathfrak{i}\omega\tau}$. The two-dimensional ellipse trajectory can be stated by
-two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) \quad b\,\sin(\omega\,t)
+two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) ~~ b\,\sin(\omega\,t)
 \big]^\top$ with $a,b > 0$. Applying the addition theorems of trigonometry, we
 get:
 \begin{eqnarray*}
@@ -741,9 +739,9 @@ for large $t$. Every LRNN with many neurons can thus be
 approximated by a simple network with at most two neurons, defined by the matrix
 $\hat{D}$ and start vector $\hat{x}$. The output values can be computed for
 all original dimensions by multiplication with the matrix $\hat{V}$. They lie on
-an ellipse in general, thus only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
+an ellipse in general, thus in only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
 dynamics of the system is not that regular (cf. \cref{ell}). But although
-\cref{infty} states the asymptotic behavior of random LRNNs with unit spectral
+\cref{infty} states only the asymptotic behavior of random LRNNs with unit spectral
 radius, interestingly the network dynamics converges relatively fast to the
 final ellipse trajectory: The (Euclidean) distance between the actual value
 $f(t)$ (according to \cref{form}) and its approximation by the final ellipse
@@ -751,12 +749,13 @@ trajectory (\cref{twodim}) is almost zero already after a few hundred
 steps (cf. \cref{asymptot}). Of course this depends on
 the eigenvalue distribution of the transition matrix \citep{TV10}.
 
-\begin{figure}
+\begin{figure}[t]
   \centering
-    (a) \raisebox{-55mm}{\includegraphics[scale=0.42]{fig/spectrum.pdf}} \hfill
-    (b) \raisebox{-55mm}{\includegraphics[scale=0.42]{fig/ellipse.pdf}} \\[5mm]
-    (c) \raisebox{-55mm}{\includegraphics[scale=0.42]{fig/wave.pdf}}
-  \caption{Dynamic system behavior of a pure random reservoir with $N^\mathrm{res} = 100$ neurons:
+    (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum.pdf}} \hfill
+    (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse.pdf}} \\[5mm]
+    (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave.pdf}}
+  \caption{Dynamic system behavior of a pure random reservoir with unit spectral
+	radius, with $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
 	complex conjugate eigenvalue pairs, in the complex plane.
     (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
@@ -769,12 +768,12 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
 \begin{figure}
  \centering
  \includegraphics[width=0.7\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
-  \caption{Asymptotic behavior of random reservoirs with unit spectral radius:
+  \caption{Asymptotic behavior of pure random reservoirs with unit spectral radius:
 	The (Euclidean) distance between the actual value $f(t)$
 	(according to \cref{form}) and its approximation by the final ellipse
 	trajectory (\cref{twodim}) is almost zero already after a few hundred
-	steps. The figure shows the distances for $N=100$ (solid/blue), $N=500$
-	(dashed/red), and $N=1000$ (dotted/black) random reservoir neurons,
+	steps. The figure shows the distances for $N^\mathrm{res}=100$ (solid/blue), $N^\mathrm{res}=500$
+	(dashed/red), and $N^\mathrm{res}=1000$ (dotted/black) random reservoir neurons,
 	starting with a random vector of unit length, averaged over 1000 trials.}
   \label{asymptot}
 \end{figure}
@@ -786,7 +785,7 @@ than $1$. Then reservoirs with zero input collapse because of $|\!\tanh(z)| \le
 to the so-called \emph{echo state property} \citep{MJ13}: Any random initial
 state of a reservoir is forgotten such that, after a washout period, the current
 network state is a function of the driving input. In contrast to ESNs, LRNNs
-have linear activation and usually a spectral radius of exactly $1$.
+have linear activation and a spectral radius of exactly $1$ (cf. \cref{thedef}).
 But as we have just shown, there is a similar effect in the long run: The
 network activity reduces to at most two dimensions which are independent from
 the initial state of the network.
@@ -837,7 +836,7 @@ This procedure yields the real Jordan matrix $J$. In consequence, we have to
 transform $V$ also into a completely real-valued form. For a complex
 conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
 two eigenvectors in $V$ could be replaced by the vectors in $\hat{V}$ (cf.
-\cref{ellipse}). The subsequent theorem shows a more general way: The
+\cref{ellipse}). The subsequent theorem (\cref{chad}) shows a more general way: The
 matrix $V$ from \cref{jordan} is transformed into a real matrix $A$
 and, what is more, the start vector $s$ can be replaced by an arbitrary column
 vector $y$ with all non-zero entries.
@@ -916,17 +915,17 @@ obtain better numerical stability during the computation, they are adjusted as
 follows:
 \begin{itemize}
   \item Because of the linear activation, the spectral radius of the reservoir
-	weights matrix $W^\mathrm{res}$ shall be set to $1$ (cf. \cref{thedef}).
+	weights matrix $W^\mathrm{res}$ is set to $1$ (cf. \cref{thedef}).
 	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
 	explode if the spectral radius is greater or vanish if the spectral
 	radius is smaller than $1$ (cf. \cref{ellipse}).
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
-        be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
-        neurons such that the reservoir start vector $r_0$ (with $N^\mathrm{res}$
-        components) has unit norm by
-        setting:
-	\[ r_0 = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
-	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r_0
+	be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
+	neurons such that the reservoir start vector $r$ (with $N^\mathrm{res}$
+	components) has unit norm by
+	setting:
+	\[ r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
+	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r
 	\end{array} \right]$ (cf. \cref{define}).
   \item We usually employ fully connected graphs, i.e., all, especially the
 	reservoir neurons are connected with each other because the
@@ -945,10 +944,10 @@ To learn the output weights $W^\mathrm{out}$, we run the input values from the
 time series $S(0),\dots,S(n)$ through the network (in input receiving mode),
 particularly through the reservoir. This means, we build the sequence of
 corresponding reservoir states $R(0),\dots,R(n)$ where the reservoir start
-vector $r_0$ in principle can be chosen arbitrarily but with all non-zero
+vector $r$ in principle can be chosen arbitrarily but with all non-zero
 entries (cf. \cref{chad}):
 \begin{equation}\label{Res}
-	R(t_0) = r_0 \text{~and~} R(t+\tau) =
+	R(t_0) = r \text{~and~} R(t+\tau) =
 	\left[ W^\mathrm{in} ~~ W^\mathrm{res} \right] \cdot
 	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
 \end{equation}
@@ -961,12 +960,12 @@ all but the last input and reservoir states in one matrix $X$ with:
 	R(0) & \cdots & R(n-1)
 	\end{array} \right]
 \end{equation}
-Each output value corresponds to the respective next input value $S(t+\tau)$.
+Each output value shall correspond to the respective next input value $S(t+\tau)$.
 Therefore, we compose another matrix
 \begin{equation}\label{Yout}
 	Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]
 \end{equation}
-consisting of the predicted next values of the time series $S$
+consisting of the next values of the time series $S$ to be predicted
 where the first value $S(0)$ clearly has to be omitted because it cannot be
 predicted. We compute $Y^\mathrm{out}(t) = S(t+\tau)$ from $X(t)$ by assuming a
 linear dependency:
@@ -992,7 +991,7 @@ identical) lengths $n_1,\dots,n_K$ be given. For each $S_k$ with $1 \le k \le
 K$, we determine:
 \begin{itemize}
   \item the sequence of corresponding reservoir states $R_k$ (according to
-	\cref{Res}), taking always the same reservoir start vector $r_0$,
+	\cref{Res}), taking always the same reservoir start vector $r$,
   \item the corresponding input matrix $X_k$ (according to \cref{Xin}), and
   \item the corresponding predicted output matrix $Y^\mathrm{out}_k$ (according to \cref{Yout}).
 \end{itemize}
@@ -1020,86 +1019,91 @@ series of function values $f(t_0),\dots,f(t_n)$ be given. Then there is an
 LRNN with the following properties:
 \begin{enumerate}
   \item It runs exactly through all given $n+1$ function values, i.e., it approximates $f(t)$.
-  \item It can effectively be learned by the above-stated solution procedure (\cref{output}).
+  \item It can effectively be learned by the LRNN learning procedure (\cref{output}).
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
-The procedure for learning output weights (cf. \cref{output}) uses the
-reservoir state sequence as part of the coefficient matrix $X$ which reduces to
-at most two dimensions in the long run however -- independent of the number of reservoir neurons
-(cf. \cref{ellipse}). Thus, the rank of the coefficient matrix $X$ is
-not maximal in general and in consequence the linear equation system from
-\cref{linear} often has no solutions (although we may have an equation system
-with the same number of equations and unknowns). A simple increase of the number
-of reservoir neurons does not help much. Therefore, we shall apply the learning
-procedure in a specific way, learning not only the output weights
-$W^\mathrm{out}$ as in ESNs but the complete transition matrix $W$ as follows:
-
 First, we take the series of function values $f(t_0),\dots,f(t_n)$ and identify
-them with the time series $S(0),\dots,S(n)$. Let then $\big[R(0) \cdots R(n)
-\big]$ be a random reservoir state sequence matrix for $N^\mathrm{res}$
-reservoir neurons, considered as additional input in this context. If all
-elements of this matrix are random numbers, independently and identically distributed from
-the standard normal distribution, its rank is almost always maximal. Let now
-$d'$ be the rank of the matrix $\big[ S(0) \cdots S(n-1) \big]$ and:
+them with the time series $S(0),\dots,S(n)$. After applying the LRNN learning
+procedure, the LRNN runs through all given values, because by construction the
+upper part $\big[ S(0) \cdots S(n-1) \big]$ of the matrix $X$ (cf. \cref{Xin})
+consists of the series of function values of $f$, provided that the linear
+matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
+least one solution.
+
+Since \cref{linear} is equivalent to simultaneously solving the equations $y_k =
+w_k \cdot X$, for $1 \le k \le N$ where $y_1,\dots,y_N$ and $w_1,\dots,w_N$
+denote the row vectors of the matrices $Y^\mathrm{out}$ and $W^\mathrm{out}$,
+respectively, the latter is the case if the rank of the coefficient matrix $X$
+is equal to the rank of the augmented matrix $M_k = \big[ X ~~ y_k \big]^\top$
+for every $k$. This leads to the equation $\mathrm{rank}(X) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res},n) = \mathrm{rank}(M_k) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res}+1,n)$. From this, it follows that
+\begin{equation}\label{ineq}
+	N^\mathrm{res} \ge n-N^\mathrm{in\,out}
+\end{equation}
+reservoir neurons have to be employed to guarantee at least one solution for the
+$w_k$, provided that the rank of the matrix $X$ is maximal. For the latter, we
+consider two cases:
+\begin{itemize}
+  \item If the rank of the upper part of the matrix $X$ (see above) is not
+	maximal, then this does not cause any problems. We only have to replace
+	$N^\mathrm{in\,out}$ by the actual rank of the upper part of the matrix
+	$X$ in \cref{ineq}.
+  \item The rank of the lower part $\big[ R(0) \cdots R(n-1) \big]$ of the
+	matrix $X$ almost always has maximal rank, because we employ a random
+	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
+	which completes the proof. \qedhere
+\end{itemize}
+\end{proof}
+
+Therefore, at least in theory, any time-dependent function $f(t)$ can be
+interpolated, i.e., exactly approximated on the given function values and
+continued on input other than nonnegative integer numbers (cf. \cref{general}),
+although clearly not every function can be implemented by LRNNs, in particular
+functions increasing faster than single-exponential (cf. \cref{exponential})
+like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
+practice, the LRNN learning procedure performs rather well (cf. \cref{result}).
+Nevertheless, the matrix $X$ may be ill-conditioned for long input sequences, because the reservoir state
+sequence as part of the matrix $X$ reduces to at most two dimensions for large
+$t$, independent of the number of reservoir neurons (cf. \cref{ellipse}). Hence,
+the rank of the matrix $X$ may not be maximal and consequently \cref{linear} may not
+be solvable numerically in practice (although we may have an equation system with
+the same number of equations and unknowns). A simple increase of the number of
+reservoir neurons does not help much.
+
+However, one could learn not only the output weights $W^\mathrm{out}$ as in ESNs
+but the complete transition matrix $W$: For this, we employ a random reservoir
+state sequence matrix $\big[R(0) \cdots R(n) \big]$ with $N^\mathrm{res}$
+reservoir neurons, considered as additional input. If all elements of this
+matrix are random numbers, independently and identically distributed from the
+standard normal distribution, its rank is almost always maximal. We then just
+have to solve the linear matrix equation $Y = W \cdot X$ (cf. \cref{linear})
+with
 \[ Y = \left[ \begin{array}{ccc}
 	S(1) & \cdots & S(n)\\
 	R(1) & \cdots & R(n)
 \end{array} \right] \]
-We now have to solve the linear matrix equation $W \cdot X = Y$ with $X$ as
-in \cref{Xin}. If $w_1,\dots,w_N$ and $y_1,\dots,y_N$ denote the row
-vectors of the matrices $W$ and $Y$, respectively, then this is equivalent to
-simultaneously solving the equations $w_k \cdot X = y_k$, for $1 \le k \le N$.
-We must ensure that there exists almost always at least one solution. This holds
-if and only if the rank of the coefficient matrix $X$ is equal to the rank of
-the augmented matrix $M_k = \left[ \begin{array}{c} X\\ y_k \end{array}
-\right]$, for every $k$. We obtain the equation $\mathrm{rank}(X) =
-\min(d'+N^\mathrm{res},n) = \mathrm{rank}(M_k) = \min(d'+N^\mathrm{res}+1,n)$.
-From this, it follows that
-\begin{equation}\label{ineq}
-	N^\mathrm{res} \ge n-d'
-\end{equation}
-reservoir neurons have to be employed to guarantee at least one exact solution
-for the $w_k$. By construction, the neural network with transition matrix $W$
-runs exactly through all given $n+1$ function values $f(t)$.
-\end{proof}
+and $X$ as in \cref{Xin}. By this, the input and reservoir weights
+$W^\mathrm{in}$ and $W^\mathrm{res}$ are learned, not only the output weights
+$W^\mathrm{out}$. But our experiments indicate that this procedure is less
+reliable than the one with given, i.e., predefined random input and reservoir
+weights and unit spectral radius for the reservoir (cf. \cref{output}).
+
+The topic of learning all weights in the matrix $W$ has been investigated
+by \citet{PDW13} for ESNs with nonlinear activation function in the reservoir.
+However, for LRNNs, the given input and reservoir weights $W^\mathrm{in}$ and
+$W^\mathrm{res}$ together with the learned output weights $W^\mathrm{out}$
+already provide the best approximation of the function $f(t)$. There is no need
+to learn the input and reservoir weights, simply because LRNNs are completely
+linearly activated RNNs (including the reservoir). If one tries to learn
+$W^\mathrm{in}$ and $W^\mathrm{res}$ taking not only the output time series $S$
+but additionally the reservoir state time series $R$ into account, then exactly
+the given input and reservoir weights are learned if \cref{ineq} holds. Only
+with nonlinear activation there is a learning effect.
 
 \begin{remk}
-The just sketched proof of \cref{approx} suggests a way to learn the input
-and reservoir weights. This topic has also been investigated by \citet{PDW13} for
-ESNs with nonlinear activation function in the reservoir. However, for LRNNs, the
-given input and reservoir weights $W^\mathrm{in}$ and $W^\mathrm{res}$ together
-with the learned output weights $W^\mathrm{out}$ already provide the best
-approximation of the function $f(t)$. There is no need to learn the input and
-reservoir weights, simply because LRNNs are
-completely linearly activated RNNs (including the reservoir). If one tries to
-learn $W^\mathrm{in}$ and $W^\mathrm{res}$ taking not only the output time
-series $S$ but additionally the reservoir state time series $R$ into account,
-then exactly the given input and reservoir weights are learned if \cref{ineq}
-holds. Only with nonlinear activation there is a learning effect in this case.
-
-Nonetheless, $W^\mathrm{in}$ and $W^\mathrm{res}$ can be learned by the
-procedure sketched in the proof if they are not given in advance, starting with
-a random reservoir state sequence $R$. But our experiments indicate that this
-procedure is less reliable than the one with given, i.e., predefined but random
-input and reservoir weights and unit spectral radius for the reservoir (cf.
-\cref{output}).\opt{long}{ Depending on the relation between the overall network
-size $N$ and the time series length $n$, we observe:
-\begin{enumerate}
-  \item \emph{stable} behavior for $N < n$: The predicted value for
-	the next time step $t+1$ is nearly identical to the current value at
-	time $t$. In many cases, the predicted values lie on a straight line
-	approximately.
-  \item \emph{unstable} behavior for $N \approx n$: The equation system to be
-	solved often leads to matrices singular to machine precision and hence
-	to bad transition matrices $W$ in this case.
-  \item \emph{overfitting} to the training data for $N > n$: The accuracy on the
-	training data is almost perfect in this case, whereas the prediction for
-	the subsequent time steps is more or less arbitrary.
-\end{enumerate}}
-\end{remk}
-
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
 network with a linear output layer and at least one hidden layer activated by a
@@ -1121,6 +1125,7 @@ the function $f(t)$ efficiently. No gradient-descent method like backpropagation
 required; we just have to solve a linear equation system. Hence learning is as
 easy as learning a single-layer perceptron, which however is restricted in
 expressibility because only linearly separable functions can be represented.
+\end{remk}
 
 \begin{remk}
 Any time series $S(0),\dots,S(n)$ can be generated by employing a backward shift
@@ -1169,16 +1174,16 @@ constant because it is part of the start vector~$y$. Then it follows from
 vanishes if $\|v\| \approx 0$ and/or $|\lambda| \ll 1$.
 
 In consequence, we can omit all Jordan components causing only small errors,
-until a given threshold is exceeded. The error $E$ of a network component
-corresponding to a Jordan block $J_m(\lambda)$ can be estimated by the
+until a given threshold is exceeded. The error $E$ of a network can be estimated by the
 root-mean-square error (RMSE) normalized to the number of all sample components
 between input $x$ and predicted output $y$:
   \[ \mathrm{RMSE}(x,y) = \sqrt{\frac{1}{n} \sum_{t=1}^n \big\|x(t)-y(t)\big\|^2} \]
-In practice, we omit all network components with smallest errors as long as the
+We shall omit all network components corresponding to Jordan blocks
+$J_m(\lambda)$ with smallest errors as long as the
 RMSE is below a given threshold $\theta$. Network components that are not
 omitted are considered \emph{relevant}. Thus, from $A$, $J$, and
 $y$ (according to \cref{chad}), we successively derive reduced matrices
-$A$ and $J$ and the vector $y'$ as follows:
+$A$ and $J$ and the vector $y$ as follows:
 \begin{itemize}
   \item Reduce $A$ to the rows corresponding to the input/output components and
 	the columns corresponding to the relevant network components.
@@ -1189,7 +1194,7 @@ $A$ and $J$ and the vector $y'$ as follows:
 \end{prop}
 
 Note that the dimensionality reduction does not only lead to a smaller number of
-reservoir neurons, but also to a rather simple network structure: The transition
+reservoir neurons but also to a rather simple network structure: The transition
 matrix $J$ (which comprises the reservoir weights $W^\mathrm{res}$ of
 the reduced network) is a sparse matrix with non-zero elements only on the main
 and immediately adjacent diagonals. Thus, the number of connections is in
@@ -1211,43 +1216,59 @@ available under the following link:
 	\url{http://github.com/OliverObst/decorating/}
 \end{center}
 
-\begin{figure}[ht]
+\begin{figure}
 \newcommand{\commt}[1]{\%~#1\\}%
 \begin{algorithmic}[1]\State
-        \commt{$d$-dimensional function, given sampled, as time series, and start vector}
-        $S = \big[ f(0) \cdots f(n) \big]$\\
-	$s = \left[ \begin{array}{c} S(0) \\ r_0 \end{array} \right]$ where
-		$r_0 = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
+	\commt{$d$-dimensional function, given sampled, as time series, and start vector}
+	$S = \big[ f(0) \cdots f(n) \big]$\\
+	$s = \left[ \begin{array}{c} S(0) \\ r \end{array} \right]$ where
+		$r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
 		\big[ \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
-        \\
-        \commt{random initialization of reservoir and input weights}
-        $W^\mathrm{in} = \mathrm{randn}(N,d)$\\
-        $W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$
-        	normalized to unit spectral radius\newline
-        \\
-        \commt{learn output weights by linear regression}
-        $X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
-        $Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]$\\
-        $W^\mathrm{out} = Y^\mathrm{out}/X$\newline
-        \\
-        \commt{transition matrix and its decomposition}
-        $W = \left[ \begin{array}{cc}
-                \multicolumn{2}{c}{W^\mathrm{out}}\\
-                W^\mathrm{in} & W^\mathrm{res}
-        \end{array} \right]$\\
-        $J = \mathrm{jordan\_matrix}(W)$\newline
-        \\
-        \commt{network size reduction}
-        $y = \big[ 1 \cdots 1 \big]^\top$\\
-        $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
-        $A = X/Y$ with rows restricted to input/output dimensions\\
-        reduce($A,J,y$) to relevant components\\
-        \hspace*{0.5cm} such that RMSE($S$,Out)\,$<\theta$
+	\\
+	\commt{random initialization of reservoir and input weights}
+	$W^\mathrm{in} = \mathrm{randn}(N,d)$\\
+	$W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$
+		normalized to unit spectral radius\newline
+	\\
+	\commt{learn output weights by linear regression}
+	$X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
+	$Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]$\\
+	$W^\mathrm{out} = Y^\mathrm{out}/X$\newline
+	\\
+	\commt{transition matrix and its decomposition}
+	$W = \left[ \begin{array}{cc}
+		\multicolumn{2}{c}{W^\mathrm{out}}\\
+		W^\mathrm{in} & W^\mathrm{res}
+	\end{array} \right]$\\
+	$J = \mathrm{jordan\_matrix}(W)$ with components sorted in decreasing order\\
+	\quad with respect to $\mathrm{Error}(J_{\langle 1,\dots,k-1,k+1,\dots,K \rangle})$\\
+	\quad where $K = \#$\,Jordan components in $J$\newline
+	\\
+	\commt{network size reduction (with binary search)}
+	$L = 1$\\
+	$R = K$\\
+	while ($L \neq R$)\\
+	\quad $M = (L+R)/2$\\
+	\quad if $\mathrm{Error}(J_{\langle 1,\dots,M \rangle}) < \theta$\\
+	\qquad then $R = M$\\
+	\qquad else $L = M+1$\\
+	return\big($M$\big)\newline
+	\\
+	\commt{subroutine $\mathrm{Error}(J_I)$}
+	\commt{\quad compute error for Jordan matrix reduced to indexed components}
+	\quad reduce $J$ to components indexed by $I$\\
+	\quad $y = \big[ 1 \cdots 1 \big]^\top$\\
+	\quad $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
+	\quad $A = X/Y$ with rows restricted to input/output dimensions\\
+	return\big($\mathrm{RMSE}(S,A \cdot Y)$\big)
 \end{algorithmic}
-\caption{Pseudocode for learning LRNNs including network size reduction. In the
-last statement, actually a binary search algorithm is employed for determining
-the relevant network components with smallest errors. For this, the network
-components are sorted by their error $E$.}
+\caption{Pseudocode for learning LRNNs including network size reduction. A
+binary search algorithm is employed for determining the relevant network
+components with smallest errors. For this, the network components are sorted by
+their RMSE. The program returns the number $M$ of relevant components in the
+Jordan matrix $J$ (line 24). The subroutine $\mathrm{Out}(J_I)$ (lines 25-31)
+computes the error of the predicted output for the Jordan matrix reduced to the
+components indexed by $I$.}
 \label{proc}
 \end{figure}
 
@@ -1257,7 +1278,7 @@ series (\cref{fibonacci}). We start with the first values of the Fibonacci
 series $f(0),\dots,f(n)$ as input $S$ (lines 1-3) and generate a random
 reservoir of size $N^\mathrm{res}$ (lines 4-6). After learning the output
 weights $W^\mathrm{out}$ (lines 7-10) and decomposing the resulting transition
-matrix $W$ (lines 11-13), the network size reduction procedure (lines 14-19)
+matrix $W$ (lines 11-15), the network size reduction procedure (lines 16-24)
 often yields minimal networks with only two reservoir neurons representing
 \[
     f(t) \overset{\text{\cref{chad}}}{=} A \cdot J^t \cdot y \text{~with~}
@@ -1284,8 +1305,8 @@ Note that the spectral radius of the reservoir weights matrix $W^\mathrm{res}$
 remains $1$ all the time (cf. \cref{thedef}). However, after learning the output
 weights $W^\mathrm{out}$, the spectral radius of the overall transition matrix
 $W$ (according to \cref{matrix}) of size $n+1$ and hence of the matrix $J$ may
-be greater than $1$, if the function $f(t)$ to be modeled is exponentially
-increasing. This holds for the Fibonacci series ($\lambda_1>1$).
+be greater than $1$ if the function $f(t)$ to be modeled is exponentially
+increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
 
@@ -1293,7 +1314,7 @@ increasing. This holds for the Fibonacci series ($\lambda_1>1$).
 In both learning steps, it is possible to employ any of the many available fast
 and constructive algorithms for linear regression and eigendecomposition
 \citep{DDH07}. Therefore, the time complexity is just $O(N^3)$ for both output
-weights learning and dimensionality reduction. In theory, if we assume that
+weights learning and network size reduction. In theory, if we assume that
 the basic numerical operations like $+$~and~$\cdot$ can be done in constant
 time, the asymptotic complexity is even a bit better. In practice, however, the
 complexity depends on the bit length of numbers in floating point arithmetic,
@@ -1339,7 +1360,7 @@ by our LRNN learning procedure (cf. \cref{learn})?
 \end{exmp}
 
 \begin{figure}
-        \centering
+	\centering
 	\includegraphics[width=0.55\textwidth]{fig/parasin2} % height=5cm,
 	\caption{Graphs for \cref{quest}: a parabola and a sinusoid.
 	The question is: which one is which? Both can be learned and
@@ -1376,7 +1397,7 @@ to \cref{eigen} but only a Jordan decomposition according to \cref{jordan}.
 	starting already with $N^\mathrm{res} = 40$ reservoir neurons in about
 	77\% (parabola, solid/blue) or 99\% (sinusoid, dashed/red) of the
 	trials.}
-        \label{dimens}
+	\label{dimens}
 \end{figure}
 
 \subsection{Multiple Superimposed Oscillators}\label{mso}
@@ -1392,9 +1413,8 @@ where $K \le 8$ denotes the number of sinusoids and $\alpha_k \in \big\{ 0.200,
 \end{exmp}
 
 Various publications have investigated the MSO problem with different numbers of
-sinusoids. We concentrate here solely on the most complex case $K=8$ whose graph
-is shown in \cref{signal} because in contrast to other approaches it is still
-easy to learn for LRNNs.
+sinusoids. We concentrate here solely on the most complex case $K=8$ (cf. \cref{signal})
+because in contrast to other approaches it is still easy to learn for LRNNs.
 Applying the LRNN learning procedure with precision threshold $\theta = 0.5$,
 we arrive at LRNNs with only $N=16$ reservoir neurons and an RMSE less than
 $10^{-5}$, if we start with a large enough reservoir (cf. \cref{mso8}). Since
@@ -1406,14 +1426,16 @@ this number is not further reduced.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{fig/signal2}
+  %\includegraphics[width=0.9\textwidth]{fig/signal2}
+  \includegraphics[width=0.65\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
   \caption{The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1 \le t
 	\le 300$ and time step $\tau=1$) does not have a simple periodic structure. LRNN learning leads
 	to minimal networks with only $N=16=2K$ reservoir neurons, i.e., two for
 	each frequency in the signal.}
+  %\caption{Example MSO8 graph that will still be changed.}
   \label{signal}
 \bigskip
-  \includegraphics[width=0.6\textwidth]{fig/mso8}%
+  \includegraphics[width=0.56\textwidth]{fig/mso8}%
   \caption{Experimental results for the MSO example ($K=8$). The diagram shows the
 	success rate (from 100 trials): from an initial reservoir size of $N^\mathrm{res}$
 	neurons, how often is the minimal LRNN with size
@@ -1433,7 +1455,7 @@ steps, i.e., $t=1,\dots,250$, as training data and the subsequent $50$ time
 steps as testing data and compare the performance of LRNNs with other approaches
 (cf. \cref{related}) with respect to their RSME on the testing data, partially
 using the Python library Darts (see \url{http://unit8co.github.io/darts/}) for
-time series:
+time series, including a simple baseline:
 
 \begin{itemize}
   \item Baseline: Constantly predict the arithmetic mean of the training data.
@@ -1449,16 +1471,16 @@ time series:
 
 \cref{sideways} shows the evaluation results. As one can see, LRNNs outperform
 all other approaches on this benchmark by far. The reason for this is certainly
-the network size reduction procedure (cf. \cref{reduce}),unique in our approach,
+the network size reduction procedure (cf. \cref{reduce}), unique in our approach,
 because it exactly selects the relevant components of the network: Each complex
 conjugate
 eigenvalue pair corresponds to one of the frequencies $\alpha_1,\dots,\alpha_8$.
 In general, an LRNN with $2K$ neurons suffices to represent a signal, which
 might be a musical harmony \citep{Sto17b}, consisting of $K$ sinusoids (cf.
-\cref{ellipse}). It can be learned by our LRNN learning procedure with
-dimensionality reduction. However, if several frequencies are close to each
-other (cf. example~\#1) or are rather small (cf. example~\#12), then LRNNs do
-not perform quite so well. 
+\cref{ellipse}). It can be learned by the LRNN learning procedure with network
+size reduction. However, if several frequencies are close to each other (cf.
+example~\#1 in \cref{sideways}) or are rather small (cf. example~\#12), then
+LRNNs do not perform quite so well.
 	
 \begin{sidewaystable}
   \centering\small
@@ -1491,15 +1513,15 @@ not perform quite so well.
 \caption{Evaluation results for 20 generalized MSO examples with 8 randomly
 generated frequencies each. The best performing approach is highlighted by bold
 face. For the LSTMs, the number of input and hidden units of the best performing
-neural network is given. For LRNNs, the network size $N$ after size reduction is
-shown.}
+neural network is given. For LRNNs, the network size $N$ after network size
+reduction is shown.}
 \label{sideways}
 \end{sidewaystable}
 
 \subsection{Solving Number Puzzles}
 
 \begin{exmp}
-Number series tests are a popular task in intelligence tests. The function
+Number series tests are a popular type of intelligence test. The function
 represented by a number series can often be learned also by artificial neural
 networks, in particular RNNs. \citet{GW13} list 20 number puzzles \citep[cf.][]{RK11}.
 Among them are the series:
@@ -1533,13 +1555,13 @@ evaluation with altogether $20 \cdot 50 \cdot 1000 = 1\,000\,000$ trials
 including possibly repeated network generation and network size reduction ran in
 only a few minutes on standard hardware.
 
-\begin{table}[ht]
+\begin{table}[t]
   \centering
   \sisetup{table-number-alignment = center, %
 	table-figures-integer = 3, table-figures-decimal = 1, table-figures-exponent = 0, %
 	table-space-text-post = \% }%
   \begin{tabular}{cSSSSS}
-        \toprule
+	\toprule
  	\head{series} & \head{$N^\mathrm{res}=3$}& \head{$N^\mathrm{res}=4$} & \head{$N^\mathrm{res}=5$} & \head{with reduction} & \head{plus clue}\\ \midrule
 	$S_{1}$ & 2.2\% & 1.3\% & 1.3\% & 0.8\% & 33.4\% \\
 	$S_{2}$ & 37.6\% & 42.2\% & 29.4\% & 32.0\% & 100.0\% \\
@@ -1649,7 +1671,7 @@ trajectories of the goalkeeper of the RoboCup simulation team FRA-UNIted during
 the seeding and the qualifying round of RoboCup Japan Open 2020 (see
 \url{http://bit.ly/japanopen2020ssim}). For learning one LRNN from this, we employ a
 reservoir with $N^\mathrm{res} = 1000$ neurons, adopt again a maximum threshold
-for the RMSE of $\theta = 1$\,m, and only use every $20$-th step of each of the
+for the RMSE of $\theta = 1$\,m, and only use every $20^\text{th}$ step of each of the
 $7$ games. The overall trajectory of the FRA-UNIted goalkeeper can be learned
 easily then (cf. \cref{frankfurt}). From this, one may conclude that the
 goalkeeper takes up three basic positions in front of the goal, does not
@@ -1677,7 +1699,7 @@ Stock price prediction is a topic that receives a considerable amount of
 attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
-\citet{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs, using the
+\citet{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
 closing stock prices 2016--2019. The stock price time series are split into
 training and testing data, with the first 80\% of each series for training and the
 final 20\% for evaluation. For a representative comparison, the RMSE of the
@@ -1689,32 +1711,18 @@ E$_\mathrm{test}=17.46${\,\euro} by using smaller LRNNs of 200 neurons with a
 smaller training set of 240 points. With an average stock price of
 $286.71${\,\euro} of all stocks in the set, the average deviation is only~6.1\%.
 
-\begin{figure}
-\begin{minipage}[t]{0.48\textwidth}
-\includegraphics[width=\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
-  \caption{Example MSO8 graph that will still be changed.}
-  \label{arima}
-\end{minipage}
-  \hfill%
-\begin{minipage}[t]{0.48\textwidth}
- \includegraphics[width=\textwidth]{fig/stock_prediction_fme} % ,height=5cm
-  \caption{Stock price (solid/blue) prediction for FME.DE (Fresenius Medical Care) with LRNNs and $N=600$ neurons (dashed/red).}
-  \label{LRNN}
-\end{minipage}
-\end{figure}
-
 Apart from the good prediction results, LRNNs have the advantage that they allow
 the prediction of multiple stocks at the same time. An LRNN can read in 30
 stocks and predict each of them concurrently. For a concurrent forecast for 60
-steps, LRNNs using 600 neurons achieved an average RMSE of
+steps, LRNNs using 600 neurons achieve an average RMSE of
 $E_\mathrm{test}=30.02${\,\euro} with 240 training steps. Compared to ARIMA,
 LRNNs have also an advantage when it comes to the number of hyperparameters that
 have to be tuned. The LRNN model is robust when it comes to choosing the number
 of neurons, whereas the ARIMA model requires the adjustment of many parameters
 (e.g., for seasonal patterns). The compute time for ARIMA increases
-significantly with the number of hyperparameters. In our example, LRNNs are
-computed about 15 times faster than the ARIMA models with the selected number of
-Fourier terms.
+significantly with the number of hyperparameters. For the considered $30$
+stocks, LRNNs are computed about 15 times faster than the ARIMA models with the
+selected number of Fourier terms.
 
 For a more systematic evaluation, we take the stocks of the German stock market
 index DAX (again from \url{http://de.finance.yahoo.com/}) and consider the last
@@ -1728,15 +1736,22 @@ constantly predict the stock price of the last trading day of the training data.
 As one can see in \cref{dax}, LRNNs outperform the other approaches in the
 majority of all cases, namely for 19~of~39 stocks, where the resulting network
 size $N$ after size reduction often is rather small. However, the overall
-performance for all approaches often is not much better than the baseline. In
-line with that, the review by \citet{SIZ19} shows that predicting stock prices
-remains a challenging problem, especially for a longer timeframe, which we
-investigate
+performance for all approaches often is not much better than the baseline (cf.
+\cref{stockfig}). In line with that, the review by \citet{SIZ19} shows that
+predicting stock prices remains a challenging problem, especially for a longer
+timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
 \citep{NPO17,RPV17} to attention-based models that use further information about
 the events that drive the stock prices, e.g., news texts from social media
 \citep{LL+19}. These models and also LRNNs yield accurate results, but mainly
 only in the short run.
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.65\textwidth]{fig/stock_prediction_fme} % ,height=5cm
+  \caption{Stock price (solid/blue) prediction for FME.DE (Fresenius Medical Care) with LRNNs and $N=600$ neurons (dashed/red).}
+  \label{stockfig}
+\end{figure}
 
 \begin{table}
 \small
@@ -1807,14 +1822,8 @@ The training procedure only uses standard matrix operations and is thus quite fa
 In contrast to ESNs, also, no washout period is required. Any
 function can be approximated directly from its first step, with an arbitrary
 start vector (cf. \cref{chad}).
-
-Although any time-dependent function can be approximated with arbitrary
-precision (cf. \cref{approx}), not every function can be implemented by LRNNs,
-in particular functions increasing faster than single-exponential (cf.
-\cref{exponential}) like $2^{2^t}$ (double-exponential) or $t\/!$
-(factorial function). Nevertheless, experiments with reasonably
-large example and network sizes can be performed successfully within seconds on
-standard hardware.
+Experiments with reasonably large example and network sizes can be performed
+successfully within seconds on standard hardware.
 However, if thousands of reservoir neurons are employed, the procedure may
 become numerically unstable, at least our Octave implementation. The likelihood
 of almost identical eigenvectors and eigenvalues with absolute values greater
@@ -1833,7 +1842,7 @@ memory capacity of LRNNs -- analyzed for small networks by \citet{Mar17} and to
 some extent also by \citet{CW+16} -- taking inspiration from convolutional
 networks \citep{GBC16}. Last but not least, other machine learning tasks besides
 prediction shall be addressed in more detail, including classification and
-reinforcement learning\opt{short}{~\citep{SB18,PGL17}}.
+reinforcement learning~\citep{SB18,PGL17}.
 
 \acks{%
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,

@@ -1,0 +1,1 @@
+data = load('JapanOpen2020.out');csvwrite('d_in1.csv', data.In(1,:));csvwrite('d_in2.csv', data.In(2,:));csvwrite('d_out11.csv', data.Out1(1,:));csvwrite('d_out12.csv', data.Out1(2,:));csvwrite('d_out21.csv', data.Out2(1,:));csvwrite('d_out22.csv', data.Out2(2,:));
