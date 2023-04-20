@@ -1313,7 +1313,7 @@ increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 \begin{prop}\label{complexity}
 In both learning steps, it is possible to employ any of the many available fast
 and constructive algorithms for linear regression and eigendecomposition
-\citep{DDH07}. Therefore, the time complexity is just $O(N^3)$ for both output
+\citep{DDH07}. Therefore, the time complexity is just $O(N^3\log(N))$ for both output
 weights learning and network size reduction. In theory, if we assume that
 the basic numerical operations like $+$~and~$\cdot$ can be done in constant
 time, the asymptotic complexity is even a bit better. In practice, however, the
@@ -1327,7 +1327,7 @@ already are NP-hard to train \citep{BR92}. This results from the fact
 that the universal approximation theorem for feedforward networks differs from
 \cref{approx} because the former holds for multi-dimensional functions and
 not only time-dependent input. In this light, the computational complexity of
-$O(N^3)$ for LRNNs does not look overly expensive. It dominates the
+$O(N^3\log(N))$ for LRNNs does not look overly expensive. It is the
 overall time complexity of the whole learning procedure because it is not
 embedded in a time-consuming iterative learning procedure (like backpropagation)
 as in other state-of-the-art methods.
