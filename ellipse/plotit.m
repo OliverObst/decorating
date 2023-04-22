@@ -27,7 +27,7 @@ print(figure(2),'-dpdf','-color','ellipse.pdf');
 
 diagram=figure(3);
 plot(X(1,1:500),'LineWidth',2,'b-');
-axis([0,700,-0.18,0.18],'on');
+axis([0,500,-0.18,0.18],'on');
 axe=get(gcf,'currentaxes');
 set(axe,'Fontsize',20,'LineWidth',2);
 xlabel('t','Fontsize',25);
