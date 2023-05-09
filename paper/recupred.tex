@@ -366,7 +366,7 @@ following properties:
 	overall transition matrix $W$ may still be greater than $1$ if required
 	by the application (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
-	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}$ input/output neurons. They may
+	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
 	be arbitrarily connected like the reservoir neurons. We thus can imagine
 	the whole network as a big reservoir because the input/output neurons
 	are not particularly special.
@@ -635,7 +635,7 @@ single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
 multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
 \cref{approx}). For this, the overall transition matrix $W$ may have (a) a
 spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
-absolute value $1$. Nevertheless it is interesting to investigate a special
+absolute value $1$. Nevertheless, it is interesting to investigate a special
 case, namely a \emph{pure random reservoir} where both conditions do not hold:
 
 \begin{prop}\label{infty}
@@ -757,7 +757,7 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
   \caption{Dynamic system behavior of a pure random reservoir with unit spectral
 	radius, with $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
-	complex conjugate eigenvalue pairs, in the complex plane.
+	complex conjugate eigenvalue pairs in the complex plane.
     (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
 	ellipse trajectory, thus only two dimensions (cf. \cref{twodim}).
     (c)~Projected to one (arbitrary) dimension, we have pure sinusoids with one
@@ -918,7 +918,8 @@ follows:
 	weights matrix $W^\mathrm{res}$ is set to $1$ (cf. \cref{thedef}).
 	Otherwise, with increasing $t$, the values of $f(t) = W^t \cdot s$
 	explode if the spectral radius is greater or vanish if the spectral
-	radius is smaller than $1$ (cf. \cref{ellipse}).
+	radius is smaller than $1$ (cf. \cref{ellipse}). In consequence, the
+	overall learning procedure behaves rather stable.
   \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
 	be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
 	neurons such that the reservoir start vector $r$ (with $N^\mathrm{res}$
@@ -1028,7 +1029,8 @@ First, we take the series of function values $f(t_0),\dots,f(t_n)$ and identify
 them with the time series $S(0),\dots,S(n)$. After applying the LRNN learning
 procedure, the LRNN runs through all given values, because by construction the
 upper part $\big[ S(0) \cdots S(n-1) \big]$ of the matrix $X$ (cf. \cref{Xin})
-consists of the series of function values of $f$, provided that the linear
+and the matrix $Y^\mathrm{out}$ (cf. \cref{Yout}) consist of the series of
+function values of $f$, provided that the linear
 matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
 least one solution.
 
@@ -1091,7 +1093,7 @@ $W^\mathrm{out}$. But our experiments indicate that this procedure is less
 reliable than the one with given, i.e., predefined random input and reservoir
 weights and unit spectral radius for the reservoir (cf. \cref{output}).
 
-The topic of learning all weights in the matrix $W$ has been investigated
+The topic of learning all weights in the matrix $W$ is investigated
 by \citet{PDW13} for ESNs with nonlinear activation function in the reservoir.
 However, for LRNNs, the given input and reservoir weights $W^\mathrm{in}$ and
 $W^\mathrm{res}$ together with the learned output weights $W^\mathrm{out}$
@@ -1248,7 +1250,7 @@ available under the following link:
 	$L = 1$\\
 	$R = K$\\
 	while ($L \neq R$)\\
-	\quad $M = (L+R)/2$\\
+	\quad $M = \left\lfloor\frac{L+R}{2}\right\rfloor$\\
 	\quad if $\mathrm{Error}(J_{\langle 1,\dots,M \rangle}) < \theta$\\
 	\qquad then $R = M$\\
 	\qquad else $L = M+1$\\
@@ -1295,7 +1297,7 @@ often yields minimal networks with only two reservoir neurons representing
 where the eigenvalues $\lambda_1$ and $\lambda_2$ are as in Binet's formula
 (\cref{binet}). For instance, for $N^\mathrm{res}=n=30$ and precision threshold
 $\theta=0.001$, we obtain minimal networks in 32\% of the cases from $100$
-trials and they belong to the best networks with respect to their RSME. Thus,
+trials. They belong to the best networks with respect to their RSME. Thus,
 by employing a standard validation procedure, the LRNN in \cref{examples}\,c
 actually can be derived numerically by the LRNN learning procedure with network
 size reduction.
@@ -1544,7 +1546,7 @@ respective series is predicted (according to \cref{predict}) and rounded to the
 nearest integer because all considered number series are integer.
 
 \cref{table} lists the percentages of correct predictions of the last
-element for different settings. Here the series with definitions recurring to
+element for different settings. Here, the series with definitions recurring to
 $f(t-2)$ but not $f(t-1)$, e.g., $S_8$ and $S_{15}$, turned out to be the most
 difficult. If we now just add the previous values of the time series, i.e., $f(t-2)$,
 as clue to the input, then the correctness of the procedure increases
@@ -1700,26 +1702,29 @@ attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
 \citet{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
-closing stock prices 2016--2019. The stock price time series are split into
-training and testing data, with the first 80\% of each series for training and the
-final 20\% for evaluation. For a representative comparison, the RMSE of the
-predictions on every stock in the set has been calculated. The average RMSE
-using LRNNs is $E_\mathrm{test}=18.40${\,\euro}, lower than the average RMSE
-using ARIMA models with $E_\mathrm{test}=24.23${\,\euro}. For shorter term
+closing stock prices 2016--2019. The stock price time series (consisting of
+$762$ data points each) are split into training and testing data, with the first
+80\% of each series for training and the final 20\% for evaluation. For a
+representative comparison, the RMSE of the predictions on every stock in the set
+is calculated. The average RMSE using LRNNs with $N^\mathrm{res}=600$ reservoir
+neurons is $E_\mathrm{test}=18.40${\,\euro}, lower than the average RMSE using
+ARIMA models with seasonal patterns modeled using Fourier terms
+\citep[p.~321]{HA13} which is $E_\mathrm{test}=24.23${\,\euro}. For shorter term
 predictions of 60 steps, it is possible to slightly reduce the RMSE further to
-E$_\mathrm{test}=17.46${\,\euro} by using smaller LRNNs of 200 neurons with a
-smaller training set of 240 points. With an average stock price of
-$286.71${\,\euro} of all stocks in the set, the average deviation is only~6.1\%.
+E$_\mathrm{test}=17.46${\,\euro} by using smaller LRNNs of $N^\mathrm{res}=200$
+reservoir neurons and a smaller training set of $240$ data points. With an
+average stock price of $286.71${\,\euro} of all stocks in the set, the average
+deviation is only~6.1\%.
 
 Apart from the good prediction results, LRNNs have the advantage that they allow
 the prediction of multiple stocks at the same time. An LRNN can read in 30
-stocks and predict each of them concurrently. For a concurrent forecast for 60
-steps, LRNNs using 600 neurons achieve an average RMSE of
-$E_\mathrm{test}=30.02${\,\euro} with 240 training steps. Compared to ARIMA,
+stocks and predict each of them concurrently. For a concurrent forecast for $60$
+steps, LRNNs achieve an average RMSE of
+$E_\mathrm{test}=30.02${\,\euro} with $240$ training steps. Compared to ARIMA,
 LRNNs have also an advantage when it comes to the number of hyperparameters that
 have to be tuned. The LRNN model is robust when it comes to choosing the number
-of neurons, whereas the ARIMA model requires the adjustment of many parameters
-(e.g., for seasonal patterns). The compute time for ARIMA increases
+of reservoir neurons, whereas the ARIMA model requires the adjustment of many
+parameters (e.g., for seasonal patterns). The compute time for ARIMA increases
 significantly with the number of hyperparameters. For the considered $30$
 stocks, LRNNs are computed about 15 times faster than the ARIMA models with the
 selected number of Fourier terms.
@@ -1743,7 +1748,7 @@ timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
 \citep{NPO17,RPV17} to attention-based models that use further information about
 the events that drive the stock prices, e.g., news texts from social media
-\citep{LL+19}. These models and also LRNNs yield accurate results, but mainly
+\citep{LL+19}. These models and also LRNNs yield rather accurate results, but mainly
 only in the short run.
 
 \begin{figure}
@@ -1830,7 +1835,7 @@ of almost identical eigenvectors and eigenvalues with absolute values greater
 than $1$ in the learned transition matrix $W$ is increased then. Nonetheless,
 the underlying major problem here seems to be that existing scientific
 programming libraries do not calculate the eigenvalues of large matrices
-accurately enough.
+accurately enough. This point needs further investigation.
 
 A particularly interesting application of our approach reducing the network size
 is in hardware implementations of neural networks, e.g., for neuromorphic or
