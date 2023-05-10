@@ -17,7 +17,7 @@ Nres = 10; % reservoir size
 result = zeros(n,5);
 
 % prediction of single stock from single/all stocks
-for k=1:n#4=BASF
+for k=18:18#18=FME
   k##
   In = traindat(k,:);
   Range = 1; Seq = In; % training sequence - single stock
@@ -69,3 +69,4 @@ endfor
 #dim_avg = mean(result(:,3)) % mean testing error with size reduction
 #num_avg = mean(result(:,4)) % mean net size
 #eva_avg = mean(result(:,5)) % mean evaluation error for best nets
+save('stock_prediction.mat', 'In', 'Eval', 'Test')
