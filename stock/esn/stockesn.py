@@ -71,7 +71,7 @@ runs = 30
 allresults = np.zeros((N,runs,8))
 test_data = np.zeros((test_size,N))
 predictions = np.zeros((runs,test_size,N))
-results = np.zeros((runs,N,8), dtype=object)
+results = np.zeros((runs,N,9), dtype=object)
 
 VERBOSE = False
 normalize = True
@@ -81,6 +81,10 @@ SEED = int(time.time()*10000000) & 0xFFFFFFFF
 rpy.set_seed(SEED)
 rng = np.random.default_rng(SEED)
 
+scaling = np.ones((3,39)) # min, max, max-min
+scaling[0,:] = 0.0
+stocknames = []
+
 with open(datadir + '/files.txt', 'r') as f:
     for n, filename in enumerate(f):
         filename = filename.strip()
@@ -88,7 +92,8 @@ with open(datadir + '/files.txt', 'r') as f:
         plotfile = resultsdir + '/' + name + '.png'
         predfile = resultsdir + '/' + name + 'prediction.csv'
         paramfile = resultsdir + '/' + name + 'params.txt'
-
+        stocknames.append(name)
+        
         print('Using ' + filename)
         file = datadir + '/' + filename
 
@@ -106,6 +111,9 @@ with open(datadir + '/files.txt', 'r') as f:
             trainmin = data[start:train_size + start].min()
             trainmax = data[start:train_size + start].max()
             data = (data - trainmin) / (trainmax - trainmin)
+            scaling[0,n] = trainmin
+            scaling[1,n] = trainmax
+            scaling[2,n] = trainmax - trainmin
         
             if VERBOSE:
                 print("Normalization...")
@@ -223,18 +231,25 @@ with open(datadir + '/files.txt', 'r') as f:
             # ---- Evaluate the ESN ----
             wy = esn.run(X[:-warmup], reset=True)
             x = wy[-1].reshape(1,-1)
+            
+            yval_pred = np.zeros_like(X_val)
+            for i in range(yval_pred.shape[0]):    
+                x = esn(x)
+                yval_pred[i] = x
     
             y_pred = np.zeros_like(X_test)
             for i in range(y_pred.shape[0]):    
                 x = esn(x)
                 y_pred[i] = x
 
-            predictions[r,:,n,np.newaxis] = y_pred
+            predictions[r,:,n,np.newaxis] = y_pred * scaling[2,n] + scaling[0,n]
 
             # Mean Squared Error
             mse_score = mse(y_test, y_pred)
             # Root Mean Squared Error
             rmse_score = rmse(y_test, y_pred)
+            rmseval_score = rmse(y_val, yval_pred)
+    
             # Normalised RMSE (based on mean of training data)
             nmrse_mean = nrmse(y_test, y_pred, norm_value=y.mean())
 
@@ -247,7 +262,8 @@ with open(datadir + '/files.txt', 'r') as f:
             results[r,n,5] = leak_rate    
             results[r,n,6] = rho
             results[r,n,7] = rc_connectivity
-    
+            results[r,n,8] = rmseval_score
+            
             print("\n********************")
             print(f"Errors computed over {test_size} time steps")
             print("\nMean Squared error (MSE):\t%.4e" % mse_score)
@@ -266,11 +282,16 @@ with open(datadir + '/files.txt', 'r') as f:
 meanresults = np.mean(results, axis=0)
 stdresults = np.std(results.astype(float), axis=0)
 allresults = np.zeros((N,11))
-idx=np.argmin(results[:,:,1],axis=0)   
+idx=np.argmin(results[:,:,8],axis=0)   
 
 for n in range(N):
-    p = plot_predicted_actual(test_data[:,n], predictions[idx[n], :, n],
-                              name = 'best ESN', 
+    predfile = resultsdir + '/' + stocknames[n] + '_prediction.csv'
+    np.savetxt(predfile, predictions[idx[n], :, n], delimiter = ',',
+               fmt='%.8f')
+
+    p = plot_predicted_actual(test_data[:,n] * scaling[2,n] + scaling[0,n], 
+                              predictions[idx[n], :, n],
+                              name = 'best val ESN', 
                               filename=f"best_stocks{n+1:02d}.png")
     p.close()
     allresults[n,0] = n+1
@@ -290,7 +311,7 @@ np.savetxt('results-stocks-esn.csv', allresults, delimiter=',',
 
 best_results = results[idx, np.arange(N),:]
 np.savetxt('best-stocks-esn.csv', best_results, delimiter=',', 
-           fmt='%i,%.8f,%.8f,%.8f,%i,%.2f,%.3f,%.2f')
+           fmt='%i,%.8f,%.8f,%.8f,%i,%.2f,%.3f,%.2f,%8f')
 
     
     
