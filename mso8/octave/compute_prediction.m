@@ -5,7 +5,7 @@ addpath('../../lrnn/');
 trainlen = 200;
 evallen = 50;
 testlen = 50;
-trials = 100;
+trials = 1;
 
 % read in stock data
 n = 20; % number of files
@@ -14,10 +14,10 @@ n = 20; % number of files
 % parameters
 Nres = -1;
 theta = 0.5;
-result = zeros(n,5);
+result = zeros(n+1,5);
 
 % prediction
-for k=1:n
+for k=21:21
   k#
   In = traindat(k,:);
   Eval = restdat(k,1:evallen); % validation data;

@@ -11,9 +11,9 @@ cd('../data/'); % data directory
 n = 20; % number of files
 
 % initialisation
-traindat = zeros(n,trainlen);
-testdat = zeros(n,testlen);
-alpha = zeros(n,8);
+traindat = zeros(n+1,trainlen);
+testdat = zeros(n+1,testlen);
+alpha = zeros(n+1,8);
 
 % read in data
 for k=1:n
@@ -22,6 +22,10 @@ for k=1:n
   testdat(k,:) = alldat(trainlen+(1:testlen));
   alpha(k,:) = csvread(strcat('alpha',num2str(k,'%.2d'),'.csv'));
 endfor
+alldat = csvread('signal00.csv');
+traindat(n+1,:) = alldat(1:trainlen); % data from start 
+testdat(n+1,:) = alldat(trainlen+(1:testlen));
+alpha(n+1,:) = csvread('alpha00.csv');
 
 cd('../octave/'); % go back
 endfunction
