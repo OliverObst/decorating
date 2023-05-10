@@ -7,7 +7,7 @@ library('zoo')
 #library('TSA') 
 
 #read in data (mso8 examples)
-  sdata=read.csv(file='../data/signal03.csv',header=FALSE,sep=",",stringsAsFactors=FALSE)  
+  sdata=read.csv(file='../data/signal00.csv',header=FALSE,sep=",",stringsAsFactors=FALSE)  
   sdata=t(sdata)
 
 #separate data into training and test data
@@ -52,3 +52,4 @@ rmse <- function(S,O) {
 RMSE_test=rmse(testing_data$timeseries,testing_data$Prediction)
 RMSE_test
 
+write.csv(testing_data$Prediction, "forecast_testing_s0.csv", row.names = FALSE)
