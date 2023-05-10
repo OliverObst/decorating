@@ -135,6 +135,8 @@ hyperparms = []
 with open(datadir + '/files.txt', 'r') as f:
     for i, filename in enumerate(f):
         filename = filename.strip()
+#        if filename != 'BMW.DE.csv':
+#            continue
         name = filename.split('.', 1)[0]
         plotfile = resultsdir + '/' + name + '.png'
         predfile = resultsdir + '/' + name + 'prediction.csv'
@@ -179,3 +181,4 @@ with open(datadir + '/files.txt', 'r') as f:
         p = plot_predicted_actual(y1, y1hat, d1, name=acronyms[name], filename=plotfile)
         p.close()
         print(f"Test NRMSE ({hyper_steps[k0]}, {hyper_units[k1]}): {rmse1[0,0]}")
+
