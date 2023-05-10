@@ -38,6 +38,35 @@ def plot_predicted_actual(data, prediction, name = None, filename = None):
         
     return plt
 
+def plot_predicted_actual2(data, prediction, name = None, filename = None):
+    title = 'Stocks (DAX)'
+    if isinstance(name, str):
+        title += ': ' + name
+
+    # Create the main plot
+    fig, ax = plt.subplots()
+    ax.plot(data[250:], label='True Data', color='b', linewidth=1.5)
+    ax.plot(prediction[250:], label='Predicted Data', color='r', linestyle='--', linewidth=1.5)
+    ax.set_xlabel('Time Step')
+    ax.set_ylabel('Value')
+
+    # Create the inset plot
+    ax_inset = plt.axes([0.16, 0.6, 0.3, 0.25])
+    ax_inset.plot(data, label='True Data', color='b', linewidth=1.5)
+    ax_inset.plot(prediction, label='Predicted Data', color='r', linestyle='--', linewidth=1.5)
+    ax_inset.set_title('Full Series Overview')
+    ax_inset.tick_params(axis='both', which='both', bottom=False, top=False, labelbottom=False, right=False, left=False, labelleft=False)
+
+    # Show the legend
+    ax.legend()
+            
+    if filename is None:
+        plt.show()
+    else:
+        plt.savefig(filename, dpi=300, bbox_inches='tight')
+        
+    return plt
+
 
 def get_acronyms(datadir):
     acronyms = {}
@@ -78,7 +107,9 @@ results = np.zeros((39,5))
 
 with open(datadir + '/files.txt', 'r') as f:
     for i, filename in enumerate(f):
-
+        if i != 17:
+            continue
+        
         filename = filename.strip()
         name = filename.split('.', 1)[0]
         plotfile = resultsdir + '/' + name + '.png'
@@ -100,7 +131,7 @@ with open(datadir + '/files.txt', 'r') as f:
  
         yhat = model_arima.predict(len(test))
 
-        p = plot_predicted_actual(test.values(copy=True), 
+        p = plot_predicted_actual2(test.values(copy=True), 
                                   yhat.values(copy=True),
                                   name = None, 
                                   filename = f"stock_{name}.png")
@@ -112,5 +143,5 @@ with open(datadir + '/files.txt', 'r') as f:
         results[i,3] = mse(test, yhat, intersect = True)
         results[i,4] = rmse(test, yhat, intersect = True)
 
-np.savetxt(resultsdir + 'results-mso8-arima.csv', results, 
-           delimiter=',', fmt='%i,%.8f,%.8f,%.8f,%.8f')
+#np.savetxt(resultsdir + 'results-mso8-arima.csv', results, 
+#           delimiter=',', fmt='%i,%.8f,%.8f,%.8f,%.8f')

@@ -7,7 +7,7 @@ library('zoo')
 #library('TSA') 
 
 #read in data (insert stock name)
-  sdata=read.csv('../data/ZAL.DE.csv',header=TRUE,sep=",",stringsAsFactors=FALSE)
+  sdata=read.csv('../data/FRE.DE.csv',header=TRUE,sep=",",stringsAsFactors=FALSE)
   sdata$Date = as.Date(sdata$Date)                  #set Date in according format 'Date'
   
   sdata=sdata[1:nrow(sdata),]
@@ -63,3 +63,4 @@ rmse <- function(S,O) {
 RMSE_test=rmse(testing_data$timeseries,testing_data$Prediction)
 RMSE_test/mean(training_data$timeseries)
 
+write.csv(testing_data$Prediction, "forecast_testing.csv", row.names = FALSE)
