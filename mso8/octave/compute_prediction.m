@@ -7,7 +7,7 @@ evallen = 50;
 testlen = 50;
 trials = 1;
 
-% read in stock data
+% read in mso8 data
 n = 20; % number of files
 [traindat,restdat,alpha] = read_in_data(trainlen,evallen+testlen);
 
@@ -69,3 +69,4 @@ for k=21:21
 #endfor
 
 endfor
+save('mso8_prediction.mat', 'traindat', 'restdat', 'Out')

@@ -1,6 +1,7 @@
 %% uncomment to load previously saved run of compute_prediction
 % load timeseries_prediction.mat
-
+load('mso8_prediction.mat')
+%
 % Combine the training and test data
 full_dat = [traindat(21,:), restdat(21,:)];
 
@@ -16,7 +17,7 @@ lstm = dlmread('../lstm/RESULTS-20230425/outputs-00.csv', ',', 1, 0);
 % Extract the first column from the daarimta_matrix
 lstm_column = lstm(:, 2);
 
-% read LSTM prediction using dlmread
+% read ESN prediction using dlmread
 esn = dlmread('../esn/esnresults00.csv', ',', 1, 0);
 
 % Extract the first column from the daarimta_matrix
@@ -27,11 +28,12 @@ esn_column = esn(:, 2);
 arima = dlmread('../arima/forecast_testing_s1.csv', ' ', 1, 0);
 arima = arima(1:50)
 
-cmap = [0.1 0.4 0.7; % Deep Blue
+cmap = [0.0 0.0 0.0; % Black
+        1.0 0.5 0.0; % Orange
         0.8 0.2 0.2; % Red
         0.0 0.6 0.0; % Green
-        0.6 0.3 0.2; % Brown
-        0.0 0.0 0.0]; % Black
+        0.1 0.4 0.7]; % Deep Blue
+        
 
 % Set up the figure and axis with a light gray background
 figure('Color', [0.9 0.9 0.9]);
@@ -48,13 +50,13 @@ plot(time_pred, full_dat(251:end), 'LineWidth', 2, 'Color', cmap(1,:), 'DisplayN
 plot(time_pred, Out(251:end), 'LineWidth', 2, 'Color', cmap(2,:), 'LineStyle', '--', 'DisplayName', 'LRNN');
 
 % lstm
-plot(time_pred, lstm_column, 'LineWidth', 2, 'Color', cmap(3,:), 'LineStyle', '--', 'DisplayName', 'LSTM');
+plot(time_pred, lstm_column, 'LineWidth', 2, 'Color', cmap(3,:), 'LineStyle', ':', 'DisplayName', 'LSTM');
 
 % esn
-plot(time_pred, esn_column, 'LineWidth', 2, 'Color', cmap(4,:), 'LineStyle', '--', 'DisplayName', 'ESN');
+plot(time_pred, esn_column, 'LineWidth', 2, 'Color', cmap(4,:), 'LineStyle', ':', 'DisplayName', 'ESN');
 
 % arima
-plot(time_pred, arima, 'LineWidth', 2, 'Color', cmap(5,:), 'LineStyle', '--', 'DisplayName', 'ARIMA');
+plot(time_pred, arima, 'LineWidth', 2, 'Color', cmap(5,:), 'LineStyle', ':', 'DisplayName', 'ARIMA');
 
 % Configure the main axis
 set(ax, 'FontSize', 16);
@@ -76,9 +78,9 @@ hold on;
 % Plot the full data in the inset
 plot(ax_inset, time_full, full_dat, 'LineWidth', 1.5, 'Color', cmap(1,:), 'DisplayName', 'True Data');
 plot(ax_inset, time_pred, Out(251:end), 'LineWidth', 1.5, 'Color', cmap(2,:), 'LineStyle', '--', 'DisplayName', 'LRNN');
-plot(ax_inset, time_pred, lstm_column, 'LineWidth', 1.5, 'Color', cmap(3,:), 'LineStyle', '--', 'DisplayName', 'LSTM');
-plot(ax_inset, time_pred, lstm_column, 'LineWidth', 1.5, 'Color', cmap(4,:), 'LineStyle', '--', 'DisplayName', 'ESN');
-plot(ax_inset, time_pred, arima, 'LineWidth', 1.5, 'Color', cmap(5,:), 'LineStyle', '--', 'DisplayName', 'ARIMA');
+plot(ax_inset, time_pred, lstm_column, 'LineWidth', 1.5, 'Color', cmap(3,:), 'LineStyle', '-.', 'DisplayName', 'LSTM');
+plot(ax_inset, time_pred, lstm_column, 'LineWidth', 1.5, 'Color', cmap(4,:), 'LineStyle', '-.', 'DisplayName', 'ESN');
+plot(ax_inset, time_pred, arima, 'LineWidth', 1.5, 'Color', cmap(5,:), 'LineStyle', '-.', 'DisplayName', 'ARIMA');
 
 % Configure the inset axis
 set(ax_inset, 'FontSize', 10);
