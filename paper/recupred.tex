@@ -1363,7 +1363,7 @@ by our LRNN learning procedure (cf. \cref{learn})?
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.55\textwidth]{fig/parasin2} % height=5cm,
+	\includegraphics[width=0.55\textwidth]{fig/parasin2}
 	\caption{Graphs for \cref{quest}: a parabola and a sinusoid.
 	The question is: which one is which? Both can be learned and
 	distinguished by LRNNs from the visually similar positive parts of the
@@ -1378,7 +1378,8 @@ $\tau=0.01$. After that, we learn the output weights $W^\mathrm{out}$ (cf.
 \cref{output}), starting with a large enough reservoir consisting of up to
 $N^\mathrm{res} = 100$ neurons (cf. \cref{approx}). Finally, we reduce the
 size of the overall transition matrix $W$ with precision threshold $\theta =
-0.01$ and cluster threshold $\delta = 0.03$ (cf. \cref{reduce}). Minimal LRNNs consist of $N_1 = 3$ neurons for
+0.01$ and cluster threshold $\delta = 0.03$ (cf. \cref{reduce}). Minimal LRNNs
+consist of $N_1 = 3$ neurons for
 the parabola (cf. \cref{parabola}) and $N_2 = 2$ neurons for the sinusoid
 (cf. \cref{ellipse}). The networks of minimal size are learned already with
 $N^\mathrm{res} = 40$ reservoir neurons before network size reduction in about
@@ -1415,11 +1416,11 @@ where $K \le 8$ denotes the number of sinusoids and $\alpha_k \in \big\{ 0.200,
 \end{exmp}
 
 Various publications have investigated the MSO problem with different numbers of
-sinusoids. We concentrate here solely on the most complex case $K=8$ (cf. \cref{signal})
+sinusoids. We concentrate here solely on the most complex case $K=8$
 because in contrast to other approaches it is still easy to learn for LRNNs.
 Applying the LRNN learning procedure with precision threshold $\theta = 0.5$,
 we arrive at LRNNs with only $N=16$ reservoir neurons and an RMSE less than
-$10^{-5}$, if we start with a large enough reservoir (cf. \cref{mso8}). Since
+$10^{-5}$ (cf. \cref{signal}), if we start with a large enough reservoir (cf. \cref{mso8}). Since
 two neurons are required for each frequency (cf. \cref{ellipse}), $2\,K=16$ is
 the minimal size. Thus LRNNs outperform the previous state-of-the-art for the
 MSO task with a minimal number of units. \citet{KLB12} report $N^\mathrm{res} =
@@ -1428,17 +1429,17 @@ this number is not further reduced.
 
 \begin{figure}
   \centering
-  %\includegraphics[width=0.9\textwidth]{fig/signal2}
-  \includegraphics[width=0.65\textwidth]{fig/mso8_prediction_1} % ,height=5.5cm
-  \caption{The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1 \le t
-	\le 300$ and time step $\tau=1$) does not have a simple periodic structure. LRNN learning leads
-	to minimal networks with only $N=16=2K$ reservoir neurons, i.e., two for
-	each frequency in the signal.}
-  %\caption{Example MSO8 graph that will still be changed.}
+  \includegraphics[width=0.65\textwidth]{fig/mso8_prediction_1}
+  \caption{The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1
+	\le t \le 300$ and time step $\tau=1$) does not have a simple periodic
+	structure (small figure). LRNN learning leads to minimal networks with
+	only $N=16=2K$ reservoir neurons, i.e., two for each frequency in the
+	signal, and an RMSE less than $10^{-5}$ (dashed line). Other methods do
+	not perform that well on the MSO benchmark (dotted lines).}
   \label{signal}
 \bigskip
   \includegraphics[width=0.56\textwidth]{fig/mso8}%
-  \caption{Experimental results for the MSO example ($K=8$). The diagram shows the
+  \caption{Experimental results for the MSO benchmark ($K=8$). The diagram shows the
 	success rate (from 100 trials): from an initial reservoir size of $N^\mathrm{res}$
 	neurons, how often is the minimal LRNN with size
 	$N=16$ learned? The two curves are for different lengths $T$ of the time series
@@ -1741,8 +1742,8 @@ constantly predict the stock price of the last trading day of the training data.
 As one can see in \cref{dax}, LRNNs outperform the other approaches in the
 majority of all cases, namely for 19~of~39 stocks, where the resulting network
 size $N$ after size reduction often is rather small. However, the overall
-performance for all approaches often is not much better than the baseline (cf.
-\cref{stockfig}). In line with that, the review by \citet{SIZ19} shows that
+performance for all approaches often is not much better than the baseline (see
+also \cref{stockfig}). In line with that, the review by \citet{SIZ19} shows that
 predicting stock prices remains a challenging problem, especially for a longer
 timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
@@ -1753,8 +1754,10 @@ only in the short run.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.65\textwidth]{fig/stock_prediction_fme} % ,height=5cm
-  \caption{Stock price (solid/blue) prediction for FME.DE (Fresenius Medical Care) with LRNNs and $N=600$ neurons (dashed/red).}
+  \includegraphics[width=0.65\textwidth]{fig/stock_prediction_fme}
+  \caption{Stock price prediction for Fresenius Medical Care (FME.DE) with LRNNs
+	(dashed line) and other approaches. The overall performance for all
+	approaches often is not much better than the baseline (cf. \cref{dax}).}
   \label{stockfig}
 \end{figure}
 
