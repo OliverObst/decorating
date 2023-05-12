@@ -34,7 +34,7 @@
 \sloppy
 \frenchspacing
 
-\jmlrheading{1}{2023}{PAGES}{04/23}{PUBLISHED}{meila00a}{Marina Meil\u{a} and Michael I. Jordan}
+%\jmlrheading{1}{2023}{PAGES}{04/23}{PUBLISHED}{meila00a}{Marina Meil\u{a} and Michael I. Jordan}
 \ShortHeadings{The Power of Linear Recurrent Neural Networks}{Stolzenburg, Litz, Michael, Obst}
 \firstpageno{1}
 
@@ -751,9 +751,9 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
 
 \begin{figure}[t]
   \centering
-    (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum.pdf}} \hfill
-    (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse.pdf}} \\[5mm]
-    (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave.pdf}}
+    (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum}} \hfill
+    (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse}} \\[5mm]
+    (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave}}
   \caption{Dynamic system behavior of a pure random reservoir with unit spectral
 	radius, with $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
@@ -1056,8 +1056,9 @@ consider two cases:
   \item The rank of the lower part $\big[ R(0) \cdots R(n-1) \big]$ of the
 	matrix $X$ almost always has maximal rank, because we employ a random
 	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
-	which completes the proof. \qedhere
+	which completes the proof.
 \end{itemize}
+\vspace*{-5ex} %\qedhere
 \end{proof}
 
 Therefore, at least in theory, any time-dependent function $f(t)$ can be
@@ -1434,10 +1435,10 @@ this number is not further reduced.
 	\le t \le 300$ and time step $\tau=1$) does not have a simple periodic
 	structure (small figure). LRNN learning leads to minimal networks with
 	only $N=16=2K$ reservoir neurons, i.e., two for each frequency in the
-	signal, and an RMSE less than $10^{-5}$ (dashed line). Other methods do
-	not perform that well on the MSO benchmark (dotted lines).}
+	signal, with RMSE less than $10^{-5}$ (dashed line). Other methods do
+	not perform so well on the MSO benchmark (cf. dotted lines).}
   \label{signal}
-\bigskip
+\medskip
   \includegraphics[width=0.56\textwidth]{fig/mso8}%
   \caption{Experimental results for the MSO benchmark ($K=8$). The diagram shows the
 	success rate (from 100 trials): from an initial reservoir size of $N^\mathrm{res}$
@@ -1657,7 +1658,7 @@ runs in less than a minute on standard hardware.
 
 \begin{figure}[htb]
   \centering
-  \includegraphics[width=0.8\columnwidth]{fig/game6.pdf}
+  \includegraphics[width=0.8\columnwidth]{fig/game6}
   \caption{Ball trajectory of RoboCup 2D soccer simulation game \#6
 	(\emph{Oxsy}~0 versus \emph{Gliders}~2016) on a pitch of size
 	$105\,\mathrm{m} \times 68\,\mathrm{m}$. For all time steps, the
@@ -1867,7 +1868,6 @@ A first short and preliminary version of this paper was presented at the confere
 \emph{Cognitive Computing} in Hannover \citep{SMO18}. It received the prize for the
 most technologically feasible poster contribution.}
 
-\clearpage
 \bibliography{recupred}
 
 \end{document}
