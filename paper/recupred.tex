@@ -374,12 +374,12 @@ following properties:
 \end{defn}
 
 LRNNs can run in one of two \emph{modes}: either receiving input or generating
-(i.e., predicting) output. In output generating mode, \cref{recur} is applied to
-all neurons including the input/output neurons, thus the output from the
-previous time step is copied to the input, whereas in input receiving mode
-the activation of every input/output neuron $x$ at time $t$ is always
-overwritten with the respective input value at time $t$ given by the time series
-$S$.
+(i.e., predicting) output. In output generating mode, the network runs
+autonomously, thus without external input. In this case, \cref{recur} is applied
+to all neurons including the input/output neurons, thus the output from the
+previous time step is copied to the input. In input receiving mode, the
+activation of every input/output neuron $x$ at time $t$ is always overwritten
+with the respective input value at time $t$ given by the time series $S$.
 
 \subsection{Examples}
 
@@ -469,17 +469,24 @@ numerically. To see this, consider the homogeneous linear differential equation
 \begin{equation}
 	\sum_{k=0}^n c_k\,x^{(k)}(t) = 0 \label{diff}
 \end{equation}
-where $c_k \in \mathbb{R}$ are constant coefficients, $x^{(k)}(t)$ is the $k$-th
-derivative of the function $x$ with respect to time $t$, and $n>0$. For a
-function $x$ and its derivative $\dot{x}$ with respect to time $t$, we have
+where $c_k \in \mathbb{R}$ are constant coefficients with $c_n \neq 0$,
+$x^{(k)}(t)$ is the $k$-th derivative of the function $x$ with respect to time
+$t$, and $n>0$. For a function $x$ and its first derivative $\dot{x}$ with
+respect to time $t$, we have
 \begin{equation}
   \dot{x}(t) = \lim\limits_{\tau \to 0} \frac{x(t+\tau)-x(t)}{\tau}
 	\quad\text{and hence}\quad
   x(t+\tau) \approx x(t) + \tau\,\dot{x}(t) \label{limit}
 \end{equation}
 for small time steps $\tau>0$. If we consider the difference of \cref{diff}
-between the times $t+\tau$ and $t$, we obtain after dividing by $\tau$ and
-applying \cref{limit} to $x^{(k)}(t)$ for $k \ge 0$:
+between the times $t+\tau$ and $t$ divided by $\tau$ we obtain by applying
+\cref{limit} to $x^{(k)}(t)$ for $k \ge 0$:
+\begin{eqnarray*}
+  0 & = & \frac{\displaystyle\sum_{k=0}^n c_k\,x^{(k)}(t+\tau)-\sum_{k=0}^n c_k\,x^{(k)}(t)}{\tau}\\
+    & = & \sum_{k=0}^{n-1} c_k \frac{x^{(k)}(t+\tau)-x^{(k)}(t)}{\tau} + c_n \frac{x^{(n)}(t+\tau)-x^{(n)}(t)}{\tau}\\
+    & \approx & \sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t) + \frac{c_n}{\tau} \left(x^{(n)}(t+\tau)-x^{(n)}(t)\right)
+\end{eqnarray*}
+This is equivalent to:
 \[
 	x^{(n)}(t+\tau)
 	\approx x^{(n)}(t) - \frac{\tau}{c_n}\,\sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t)
@@ -499,7 +506,7 @@ matrix:
 \begin{exmp}\label{exp}
 The exponential function $\exp(t) = e^t$ can be defined by the differential
 equation $\dot{x}(t) = x(t)$, i.e., we have $c_0 = 1$ and $c_1 = -1$ in
-\cref{diff}. In consequence, according to \cref{rem} and because $\exp(0)=1$,
+\cref{diff}. In consequence, according to \cref{rem} and because $\exp(0)=\dot{\exp}(0)=1$,
 the transition matrix $W$ and start vector $s$ of the corresponding LRNN are:
 \[ W = \left[ \begin{array}{cc}
 	1 & \tau\\
@@ -639,17 +646,19 @@ absolute value $1$. Nevertheless, it is interesting to investigate a special
 case, namely a \emph{pure random reservoir} where both conditions do not hold:
 
 \begin{prop}\label{infty}
-Consider an LRNN solely consisting of a reservoir whose transition matrix
-$W^\mathrm{res}$ is completely real-valued, has (according to \cref{eigen}) an
-eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$ with unit spectral
-radius, and all eigenvalues are distinct. Then, almost all terms
-$x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$ because for all
-eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have $\lim\limits_{t \to
-\infty} {\lambda_k}^t = 0$. Although a general real matrix can have more than
-two complex eigenvalues which are on the unit circle, for a pure random reservoir
-as considered here, almost always, i.e., with probability close to $1$, only the
-(largest) eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute
-values $1$. In consequence, we have one of the following cases:
+Consider an LRNN solely consisting of a random reservoir whose transition matrix
+$W^\mathrm{res}$ (a)~is completely real-valued, (b)~has (according to
+\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$
+with unit spectral radius, and (c)~all eigenvalues are distinct (which is almost
+always, i.e., with probability close to $1$, true for random matrices), together
+with a completely real-valued random start vector $s$ with unit norm. Then,
+almost all terms $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$
+because for all eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have
+$\lim\limits_{t \to \infty} {\lambda_k}^t = 0$. Although a general real matrix
+can have more than two complex eigenvalues which are on the unit circle, for a
+pure random reservoir as considered here, almost always only the (largest)
+eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute values $1$.
+In consequence, we have one of the following cases:
 \begin{enumerate}
   \item $\lambda_1 = +1$. In this case, the network activity contracts to one
 	point, i.e., to a \emph{singularity}: $\lim\limits_{t \to \infty}
@@ -674,32 +683,32 @@ values $1$. In consequence, we have one of the following cases:
 \end{prop}
 
 We consider now the latter case in more detail, converting all complex values
-into real ones (cf.~\cref{real}): The matrix $\tilde{V}$ consists of the two
-complex conjugate eigenvectors $v = v_1$ and $\overline{v} = v_2$ in this case.
-From all linear combinations of both eigenvectors $\ell(\kappa)
-= \kappa v + \overline{\kappa}\,\overline{v}$ for $\kappa \in \mathbb{C}$ with $|\kappa| =
-1$, we can determine the vectors with extremal lengths. Since we only have two
-real-valued dimensions because clearly the activity induced by the real
-matrix $W^\mathrm{res}$ remains in the real space, there are two such vectors.
-Let now $\kappa = e^{\mathfrak{i} \varphi} = \cos(\varphi) + \mathfrak{i}
-\sin(\varphi)$ (Euler's formula) and $v_\Re$ and $v_\Im$ be the real and
-imaginary parts of $v$, respectively, i.e., $v = v_\Re+\mathfrak{i} v_\Im$ and
-$\overline{v} = v_\Re-\mathfrak{i} v_\Im$. Then, for the square of the vector
-length, it holds:
+into real ones (cf.~\cref{real}): Obviously, all values of $f(t)$ are
+(a)~real-valued (because $W^\mathrm{res}$ and the start vector $s$ are
+completely real-valued) and (b)~are linear combinations of the two complex
+conjugate eigenvectors $v = v_1$ and $\overline{v} = v_2$ in this case. Let us
+consider the vectors $\ell(\kappa) = \kappa v + \overline{\kappa}\,\overline{v}$
+for $\kappa \in \mathbb{C}$ with $|\kappa| = 1$, which share both properties,
+and determine the vectors with extremal lengths among them. Let $\kappa =
+e^{\mathfrak{i} \varphi} = \cos(\varphi) + \mathfrak{i} \sin(\varphi)$ (Euler's
+formula) and $v_\Re$ and $v_\Im$ be the real and imaginary parts of $v$,
+respectively, i.e., $v = v_\Re+\mathfrak{i} v_\Im$ and $\overline{v} =
+v_\Re-\mathfrak{i} v_\Im$. Then, for the square of the vector lengths, it holds:
 \begin{eqnarray*}
 \|\ell(\kappa)\|^2
 & = & \kappa^2 v^2 + 2 \kappa \overline{\kappa} v\!\cdot\!\overline{v} + \overline{\kappa}^2 \overline{v}^2
 = e^{2 \mathfrak{i} \varphi} v^2 + 2 v \overline{v} + e^{-2 \mathfrak{i} \varphi}\,\overline{v}^2\\[3pt]
 & = & 2 \big(\!\cos(2\varphi) ({v_\Re}^2\!-\!{v_\Im}^2) + ({v_\Re}^2\!+\!{v_\Im}^2) - \sin(2\varphi) (2 v_\Re\!\cdot\!v_\Im) \big)
 \end{eqnarray*}
-To find out the angle $\varphi$ with extremal vector length of $\ell(\kappa)$,
+In order to find out the vectors $\ell(\kappa)$ with extremal lengths,
 we have to investigate the derivative of the latter term above with respect to
 $\varphi$ and compute its zeros. This yields $2\,\big(\mathrm{-}2 \sin(2\varphi)
 ({v_\Re}^2\!-\!{v_\Im}^2) - 2\cos(2\varphi) (2 v_\Re\!\cdot\!v_\Im) \big) = 0$
 and thus $\tan(2\varphi) = \frac{-2 v_\Re \cdot v_\Im}{{v_\Re}^2-{v_\Im}^2}$.
 Because of the periodicity of the tangent function there are two main solutions
-for $\kappa$ that are orthogonal to each other: $\kappa_1 = e^{\mathfrak{i}\varphi}$ and
-$\kappa_2 = e^{\mathfrak{i}(\varphi+\pi/2)}$. They represent the main axes of an ellipse.
+for $\kappa$ that are orthogonal to each other: $\kappa_1 =
+e^{\mathfrak{i}\varphi}$ and $\kappa_2 = e^{\mathfrak{i}(\varphi+\pi/2)}$.
+$\ell(\kappa_1)$ and $\ell(\kappa_2)$ represent the main axes of an ellipse.
 All points the dynamic system runs through lie on this ellipse in the long run.
 The length ratio of the ellipse axes is $\mu = \|\ell(\kappa_1)\| \,/\,
 \|\ell(\kappa_2)\|$. We normalize both vectors to unit length and put them in
@@ -745,9 +754,10 @@ dynamics of the system is not that regular (cf. \cref{ell}). But although
 radius, interestingly the network dynamics converges relatively fast to the
 final ellipse trajectory: The (Euclidean) distance between the actual value
 $f(t)$ (according to \cref{form}) and its approximation by the final ellipse
-trajectory (\cref{twodim}) is almost zero already after a few hundred
-steps (cf. \cref{asymptot}). Of course this depends on
-the eigenvalue distribution of the transition matrix \citep{TV10}.
+trajectory (\cref{twodim}) is almost zero already after a few hundred steps (cf.
+\cref{asymptot}). Of course this depends on the eigenvalue distribution of the
+transition matrix \citep{TV10}. So the long-term behavior may be different for
+transition matrices other than pure random reservoirs.
 
 \begin{figure}[t]
   \centering
@@ -781,7 +791,9 @@ the eigenvalue distribution of the transition matrix \citep{TV10}.
 The long-term behavior of LRNNs is related to that of ESNs. For the latter,
 usually the activation function is $\tanh$ and the spectral radius is smaller
 than $1$. Then reservoirs with zero input collapse because of $|\!\tanh(z)| \le
-|z|$ for all $z \in \mathbb{R}$ but the convergence may be rather slow. This leads
+|z|$ for all $z \in \mathbb{R}$ but the convergence may be rather slow, but it
+guarantees contractivity and hence for any fixed input (not just the origin) the
+system converges to a unique fixed point. This leads
 to the so-called \emph{echo state property} \citep{MJ13}: Any random initial
 state of a reservoir is forgotten such that, after a washout period, the current
 network state is a function of the driving input. In contrast to ESNs, LRNNs
@@ -1856,7 +1868,8 @@ reinforcement learning~\citep{SB18,PGL17}.
 
 \acks{%
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
-Kai Steckhan, Flora Stolzenburg, and Ruben Zilibowitz for helpful discussions
+Kai Steckhan, Flora Stolzenburg, and Ruben Zilibowitz, as well as several
+anonymous referees for helpful discussions
 and comments. The research reported in this paper has been supported by the
 German Academic Exchange Service (DAAD) by funds of the German Federal Ministry
 of Education and Research (BMBF) in the Programmes for Project-Related Personal
