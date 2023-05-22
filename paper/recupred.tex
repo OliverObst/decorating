@@ -376,7 +376,7 @@ following properties:
 LRNNs can run in one of two \emph{modes}: either receiving input or generating
 (i.e., predicting) output. In output generating mode, the network runs
 autonomously, thus without external input. In this case, \cref{recur} is applied
-to all neurons including the input/output neurons, thus the output from the
+to all neurons including the input/output neurons. The output from the
 previous time step is copied to the input. In input receiving mode, the
 activation of every input/output neuron $x$ at time $t$ is always overwritten
 with the respective input value at time $t$ given by the time series $S$.
@@ -506,7 +506,7 @@ matrix:
 \begin{exmp}\label{exp}
 The exponential function $\exp(t) = e^t$ can be defined by the differential
 equation $\dot{x}(t) = x(t)$, i.e., we have $c_0 = 1$ and $c_1 = -1$ in
-\cref{diff}. In consequence, according to \cref{rem} and because $\exp(0)=\dot{\exp}(0)=1$,
+\cref{diff}. In consequence, according to \cref{rem} and because of $\exp(0)=\dot{\exp}(0)=1$,
 the transition matrix $W$ and start vector $s$ of the corresponding LRNN are:
 \[ W = \left[ \begin{array}{cc}
 	1 & \tau\\
