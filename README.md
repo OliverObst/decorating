@@ -16,7 +16,7 @@ The relevant paper for the software and case studies is at <http://arxiv.org/abs
 
 Frieder Stolzenburg, Sandra Litz, Olivia Michael und Oliver Obst. The power of
 linear recurrent neural networks. CoRR – Computing Research Repository
-abs/1802.03308, Cornell University Library, 2018. Latest revision 2022.
+abs/1802.03308, Cornell University Library, 2018. Latest revision 2023.
 
 
 ## Acknowledgements
