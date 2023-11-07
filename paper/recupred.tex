@@ -599,7 +599,7 @@ eigenvectors of $W$:
 
 \begin{prop}\label{eigen}
 Let $W = V \cdot D \cdot V^{-1}$ be the eigendecomposition of the transition matrix $W$ with column
-eigenvectors $v_1,\dots,v_N$ in $V$ and eigenvalues $\lambda_1, \dots, \lambda_N$,
+eigenvectors $v_1,\dots,v_N$ in $V$ and corresponding eigenvalues $\lambda_1, \dots, \lambda_N$,
 on the diagonal of the diagonal matrix $D$, sorted in decreasing order with
 respect to their absolute values. Like every column vector, we can represent the
 start vector $s$ as linear combination of the eigenvectors, namely as $s =
@@ -614,193 +614,6 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 	x_1\,{\lambda_1}^t\,v_1 + \dots + x_N\,{\lambda_N}^t\,v_N
 \end{equation}
 \end{prop}
-
-\subsection{Long-Term Behavior}\label{ellipse}
-
-Let us now investigate the long-term behavior of an LRNN (run in output generating
-mode) by understanding it as an (autonomous) \emph{dynamic system} \citep{CK14,Str15}.
-We will see (in \cref{infty}) that the network dynamics may be reduced to a
-very small number of dimensions/neurons in the long run. They determine the behavior for $t
-\to \infty$. Nevertheless, for smaller $t$, the use of many neurons is important
-for computing short-term predictions.
-
-\begin{prop}\label{exponential}
-In none of the $N$ dimensions $f(t) = W^t \cdot s$ grows faster than a
-polynomial and only single-exponential in $t$.
-\end{prop}
-
-\begin{proof}
-Let $f_k(t)$ denote the value of the $k$-th dimension of $f(t)$, $\lambda$ be
-the eigenvalue of $W$ with maximal absolute value and $m$ be the maximal (geometric)
-multiplicity of the eigenvalues of the transition matrix $W$. Then, from
-\cref{jordan}, we can easily deduce \[ |f_k(t)| = O(t^m\,|\lambda|^t) \]
-as asymptotic behavior for large $t$.
-\end{proof}
-
-In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
-single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
-multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
-\cref{approx}). For this, the overall transition matrix $W$ may have (a) a
-spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
-absolute value $1$. Nevertheless, it is interesting to investigate a special
-case, namely a \emph{pure random reservoir} where both conditions do not hold:
-
-\begin{prop}\label{infty}
-Consider an LRNN solely consisting of a random reservoir whose transition matrix
-$W^\mathrm{res}$ (a)~is completely real-valued, (b)~has (according to
-\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$
-with unit spectral radius, and (c)~all eigenvalues are distinct (which is almost
-always, i.e., with probability close to $1$, true for random matrices), together
-with a completely real-valued random start vector $s$ with unit norm. Then,
-almost all terms $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$
-because for all eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have
-$\lim\limits_{t \to \infty} {\lambda_k}^t = 0$. Although a general real matrix
-can have more than two complex eigenvalues which are on the unit circle, for a
-pure random reservoir as considered here, almost always only the (largest)
-eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute values $1$.
-In consequence, we have one of the following cases:
-\begin{enumerate}
-  \item $\lambda_1 = +1$. In this case, the network activity contracts to one
-	point, i.e., to a \emph{singularity}: $\lim\limits_{t \to \infty}
-	f(t) = x_1\,v_1$
-  \item $\lambda_1 = -1$. For large $t$ it holds that $f(t) \approx
-	x_1\,(-1)^t\,v_1$. This means we have an \emph{oscillation} in this
-	case. The dynamic system alternates between the two points $\pm x_1\,v_1$.
-  \item $\lambda_1$ and $\lambda_2$ are two (properly) complex eigenvalues with
-	absolute value $1$. Since $W^\mathrm{res}$ is a real-valued matrix, the two
-	eigenvalues as well as the corresponding eigenvectors $v_1$ and $v_2$
-	are complex conjugate with respect to each other. Thus, for large $t$, we
-	have an \emph{ellipse} trajectory
-	\[
-		f(t) \approx x_1\,{\lambda_1}^t\,v_1 + x_2\,{\lambda_2}^t\,v_2
-		= \tilde{V} \cdot \tilde{D}^t \cdot \tilde{x}
-	\]
-	where $\tilde{V} = \big[ v_1\;v_2 \big]$, $\tilde{D} = \left[
-	\begin{array}{cc} \lambda_1 & 0 \\ 0 & \lambda_2 \end{array} \right]$,
-	and $\tilde{x} = \left[ \begin{array}{c} x_1 \\ x_2 \end{array}
-	\right]$.
-\end{enumerate}
-\end{prop}
-
-We consider now the latter case in more detail, converting all complex values
-into real ones (cf.~\cref{real}): Obviously, all values of $f(t)$ are
-(a)~real-valued (because $W^\mathrm{res}$ and the start vector $s$ are
-completely real-valued) and (b)~are linear combinations of the two complex
-conjugate eigenvectors $v = v_1$ and $\overline{v} = v_2$ in this case. Let us
-consider the vectors $\ell(\kappa) = \kappa v + \overline{\kappa}\,\overline{v}$
-for $\kappa \in \mathbb{C}$ with $|\kappa| = 1$, which share both properties,
-and determine the vectors with extremal lengths among them. Let $\kappa =
-e^{\mathfrak{i} \varphi} = \cos(\varphi) + \mathfrak{i} \sin(\varphi)$ (Euler's
-formula) and $v_\Re$ and $v_\Im$ be the real and imaginary parts of $v$,
-respectively, i.e., $v = v_\Re+\mathfrak{i} v_\Im$ and $\overline{v} =
-v_\Re-\mathfrak{i} v_\Im$. Then, for the square of the vector lengths, it holds:
-\begin{eqnarray*}
-\|\ell(\kappa)\|^2
-& = & \kappa^2 v^2 + 2 \kappa \overline{\kappa} v\!\cdot\!\overline{v} + \overline{\kappa}^2 \overline{v}^2
-= e^{2 \mathfrak{i} \varphi} v^2 + 2 v \overline{v} + e^{-2 \mathfrak{i} \varphi}\,\overline{v}^2\\[3pt]
-& = & 2 \big(\!\cos(2\varphi) ({v_\Re}^2\!-\!{v_\Im}^2) + ({v_\Re}^2\!+\!{v_\Im}^2) - \sin(2\varphi) (2 v_\Re\!\cdot\!v_\Im) \big)
-\end{eqnarray*}
-In order to find out the vectors $\ell(\kappa)$ with extremal lengths,
-we have to investigate the derivative of the latter term above with respect to
-$\varphi$ and compute its zeros. This yields $2\,\big(\mathrm{-}2 \sin(2\varphi)
-({v_\Re}^2\!-\!{v_\Im}^2) - 2\cos(2\varphi) (2 v_\Re\!\cdot\!v_\Im) \big) = 0$
-and thus $\tan(2\varphi) = \frac{-2 v_\Re \cdot v_\Im}{{v_\Re}^2-{v_\Im}^2}$.
-Because of the periodicity of the tangent function there are two main solutions
-for $\kappa$ that are orthogonal to each other: $\kappa_1 =
-e^{\mathfrak{i}\varphi}$ and $\kappa_2 = e^{\mathfrak{i}(\varphi+\pi/2)}$.
-$\ell(\kappa_1)$ and $\ell(\kappa_2)$ represent the main axes of an ellipse.
-All points the dynamic system runs through lie on this ellipse in the long run.
-The length ratio of the ellipse axes is $\mu = \|\ell(\kappa_1)\| \,/\,
-\|\ell(\kappa_2)\|$. We normalize both vectors to unit length and put them in
-the matrix $\hat{V} = \big[ \ell(\kappa_1) \,/\, \|\ell(\kappa_1)\| \quad
-\ell(\kappa_2) \,/\, \|\ell(\kappa_2)\| \big]$.
-
-We now build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely
-real-valued which states the ellipse rotation. The rotation
-speed can be derived from the eigenvalue $\lambda_1$. In each step of length
-$\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$ is the
-angular frequency which can be determined from the equation $\lambda_1 =
-|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$. The two-dimensional ellipse trajectory can be stated by
-two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) ~~ b\,\sin(\omega\,t)
-\big]^\top$ with $a,b > 0$. Applying the addition theorems of trigonometry, we
-get:
-\begin{eqnarray*}
-	f(t+\tau) & = &
-	\left[ \begin{array}{c} a\,\cos\!\big(\omega\,(t+\tau)\big) \\ b\,\sin\!\big(\omega\,(t+\tau)\big) \end{array} \right]\\ & = &
-	\left[ \begin{array}{c}
-		a\,\big(\!\cos(\omega\,t) \cos(\omega\,\tau) - \sin(\omega\,t) \sin(\omega\,\tau) \big) \\
-		b\,\big(\!\sin(\omega\,t) \cos(\omega\,\tau) + \cos(\omega\,t) \sin(\omega\,\tau) \big)
-	\end{array} \right] \\ & = &
-	\underbrace{\left[ \begin{array}{cc}
-		\cos(\omega\,\tau) & -a/b \sin(\omega\,\tau) \\
-		b/a \sin(\omega\,\tau) & \cos(\omega\,\tau)
-	\end{array} \right]}_{\displaystyle\hat{D}}\,\cdot\,f(t)
-\end{eqnarray*}
-From this, we can read off the desired ellipse rotation matrix $\hat{D}$ as
-indicated above and $\mu = a/b$. Finally, we can determine the corresponding
-two-dimensional start vector $\hat{x}$ by solving the equation $\hat{V} \cdot
-\hat{D} \cdot \hat{x} = \tilde{V} \cdot \tilde{D} \cdot \tilde{x}$.
-In summary, we have
-\begin{equation}\label{twodim}
-	f(t) \approx \hat{V} \cdot \hat{D}^t \cdot \hat{x}
-\end{equation}
-for large $t$. Every LRNN with many neurons can thus be
-approximated by a simple network with at most two neurons, defined by the matrix
-$\hat{D}$ and start vector $\hat{x}$. The output values can be computed for
-all original dimensions by multiplication with the matrix $\hat{V}$. They lie on
-an ellipse in general, thus in only two dimensions. Nonetheless, in the beginning, i.e., for small $t$, the
-dynamics of the system is not that regular (cf. \cref{ell}). But although
-\cref{infty} states only the asymptotic behavior of random LRNNs with unit spectral
-radius, interestingly the network dynamics converges relatively fast to the
-final ellipse trajectory: The (Euclidean) distance between the actual value
-$f(t)$ (according to \cref{form}) and its approximation by the final ellipse
-trajectory (\cref{twodim}) is almost zero already after a few hundred steps (cf.
-\cref{asymptot}). Of course this depends on the eigenvalue distribution of the
-transition matrix \citep{TV10}. So the long-term behavior may be different for
-transition matrices other than pure random reservoirs.
-
-\begin{figure}[t]
-  \centering
-    (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum}} \hfill
-    (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse}} \\[5mm]
-    (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave}}
-  \caption{Dynamic system behavior of a pure random reservoir with unit spectral
-	radius, with $N^\mathrm{res} = 100$ neurons:
-    (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
-	complex conjugate eigenvalue pairs in the complex plane.
-    (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
-	ellipse trajectory, thus only two dimensions (cf. \cref{twodim}).
-    (c)~Projected to one (arbitrary) dimension, we have pure sinusoids with one
-	single angular frequency for large $t$, sampled in large steps.}
-  \label{ell}
-\end{figure}
-
-\begin{figure}
- \centering
- \includegraphics[width=0.7\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
-  \caption{Asymptotic behavior of pure random reservoirs with unit spectral radius:
-	The (Euclidean) distance between the actual value $f(t)$
-	(according to \cref{form}) and its approximation by the final ellipse
-	trajectory (\cref{twodim}) is almost zero already after a few hundred
-	steps. The figure shows the distances for $N^\mathrm{res}=100$ (solid/blue), $N^\mathrm{res}=500$
-	(dashed/red), and $N^\mathrm{res}=1000$ (dotted/black) random reservoir neurons,
-	starting with a random vector of unit length, averaged over 1000 trials.}
-  \label{asymptot}
-\end{figure}
-
-The long-term behavior of LRNNs is related to that of ESNs. For the latter,
-usually the activation function is $\tanh$ and the spectral radius is smaller
-than $1$. Then reservoirs with zero input collapse because of $|\!\tanh(z)| \le
-|z|$ for all $z \in \mathbb{R}$ but the convergence may be rather slow, but it
-guarantees contractivity and hence for any fixed input (not just the origin) the
-system converges to a unique fixed point. This leads
-to the so-called \emph{echo state property} \citep{MJ13}: Any random initial
-state of a reservoir is forgotten such that, after a washout period, the current
-network state is a function of the driving input. In contrast to ESNs, LRNNs
-have linear activation and a spectral radius of exactly $1$ (cf. \cref{thedef}).
-But as we have just shown, there is a similar effect in the long run: The
-network activity reduces to at most two dimensions which are independent from
-the initial state of the network.
 
 \subsection{Real-Valued Transition Matrix Decomposition}\label{real}
 
@@ -845,20 +658,20 @@ transformed as follows:
 \end{enumerate}
 
 This procedure yields the real Jordan matrix $J$. In consequence, we have to
-transform $V$ also into a completely real-valued form. For a complex
+transform $V$ also into a completely real-valued form. For each complex
 conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
-two eigenvectors in $V$ could be replaced by the vectors in $\hat{V}$ (cf.
-\cref{ellipse}). The subsequent theorem (\cref{chad}) shows a more general way: The
-matrix $V$ from \cref{jordan} is transformed into a real matrix $A$
-and, what is more, the start vector $s$ can be replaced by an arbitrary column
-vector $y$ with all non-zero entries.
+two eigenvectors in $V$ could be replaced by two real-valued vectors. But the
+subsequent theorem (\cref{chad}) shows a more general way: The matrix $V$ from
+\cref{jordan} is transformed into a real matrix $A$ and, what is more, the start
+vector $s$ can be replaced by an arbitrary column vector $y$ with all non-zero
+entries.
 
 \begin{prop}\label{chad}
 Let $W = V \cdot J \cdot V^{-1}$ be the (real) Jordan decomposition of the
 transition matrix $W$ and $s$ the corresponding start vector. Then for all
 column vectors $y$ of size $N$ with all non-zero entries, there exists a square
-matrix $A$ of size $N \times N$ such that for all integer $t \ge 0$ we have: \[
-f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
+matrix $A$ of size $N \times N$ such that for all $t \ge 0$ we have:
+\[ f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
 \end{prop}
 
 \begin{proof}
@@ -871,8 +684,9 @@ sums, too.
 
 In the following, we use the column vectors $y = \big[ y_1 \cdots y_N
 \big]^\top$ with all non-zero entries, $x = \big[ x_1 \cdots x_N \big]^\top$
-with $x = V^{-1} \cdot s$, and $b = \big[ b_1 \cdots b_N \big]^\top$. From $b$,
-we construct the following upper triangular Toeplitz matrix
+with $x = V^{-1} \cdot s$ (cf. \cref{eigen}), and $b = \big[ b_1 \cdots b_N
+\big]^\top$. From $b$, we construct the following upper triangular Toeplitz
+matrix
 \[ B = \left[ \begin{array}{*{4}{c}}
   b_N & \cdots & b_2 & b_1\\
   0 & \ddots & & b_2\\
@@ -915,6 +729,156 @@ similar to the diagonal matrix $D = \left[ \begin{array}{cc}
 U^{-1}$. The above-mentioned commutation property~(a) analogously holds for real
 Jordan blocks. This completes the proof.
 \end{proof}
+
+\subsection{Long-Term Behavior}\label{ellipse}
+
+Let us now investigate the long-term behavior of an LRNN (run in output generating
+mode) by understanding it as an (autonomous) \emph{dynamic system} \citep{CK14,Str15}.
+We will see (in \cref{infty}) that the network dynamics may be reduced to a
+very small number of dimensions/neurons in the long run. They determine the behavior for $t
+\to \infty$. Nevertheless, for smaller $t$, the use of many neurons is important
+for computing short-term predictions.
+
+\begin{prop}\label{exponential}
+In none of the $N$ dimensions $f(t) = W^t \cdot s$ grows faster than a
+polynomial and only single-exponential in $t$.
+\end{prop}
+
+\begin{proof}
+Let $f_k(t)$ denote the value of the $k$-th dimension of $f(t)$, $\lambda$ be
+the eigenvalue of $W$ with maximal absolute value and $m$ be the maximal (geometric)
+multiplicity of the eigenvalues of the transition matrix $W$. Then, from
+\cref{jordan}, we can easily deduce \[ |f_k(t)| = O(t^m\,|\lambda|^t) \]
+as asymptotic behavior for large $t$.
+\end{proof}
+
+In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
+single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
+multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
+\cref{approx}). For this, the overall transition matrix $W$ may have (a) a
+spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
+absolute value $1$. Nevertheless, it is interesting to investigate a special
+case, namely a \emph{pure random reservoir} where both conditions do not hold:
+
+\begin{prop}\label{infty}
+Consider an LRNN solely consisting of a random reservoir whose transition matrix
+$W^\mathrm{res}$ (a)~is completely real-valued, (b)~has (according to
+\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$
+with unit spectral radius, and thus (c)~all eigenvalues are distinct (which is almost
+always, i.e., with probability close to $1$, true for random matrices), together
+with a completely real-valued random start vector $s$ with unit norm. Then,
+almost all terms $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$
+because for all eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have
+$\lim\limits_{t \to \infty} {\lambda_k}^t = 0$. Although a general real matrix
+can have more than two complex eigenvalues which are on the unit circle, for a
+pure random reservoir as considered here, almost always only the (largest)
+eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute values $1$.
+In consequence, we have one of the following cases:
+\begin{enumerate}
+  \item $\lambda_1 = +1$. In this case, the network activity contracts to one
+	point, i.e., to a \emph{singularity}: $\lim\limits_{t \to \infty}
+	f(t) = x_1\,v_1$
+  \item $\lambda_1 = -1$. For large $t$ it holds that $f(t) \approx
+	x_1\,(-1)^t\,v_1$. This means we have an \emph{oscillation} in this
+	case. The dynamic system alternates between the two points $\pm x_1\,v_1$.
+  \item $\lambda_1$ and $\lambda_2$ are two (properly) complex eigenvalues with
+	absolute value $1$. Since $W^\mathrm{res}$ is a real-valued matrix, the two
+	eigenvalues as well as the corresponding eigenvectors $v_1$ and $v_2$
+	are complex conjugate with respect to each other. Thus, for large $t$, we
+	have an \emph{ellipse} trajectory
+	\[
+		f(t) \approx x_1\,{\lambda_1}^t\,v_1 + x_2\,{\lambda_2}^t\,v_2
+		= \tilde{V} \cdot \tilde{D}^t \cdot \tilde{x}
+	\]
+	where $\tilde{V} = \big[ v_1\;v_2 \big]$, $\tilde{D} = \left[
+	\begin{array}{cc} \lambda_1 & 0 \\ 0 & \lambda_2 \end{array} \right]$,
+	and $\tilde{x} = \left[ \begin{array}{c} x_1 \\ x_2 \end{array}
+	\right]$.
+\end{enumerate}
+\end{prop}
+
+We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely
+real-valued (cf.~\cref{real}), which states the ellipse rotation. The rotation
+speed can be derived from the eigenvalue $\lambda_1$. In each step of length
+$\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$ is the
+angular frequency which can be determined from the equation $\lambda_1 =
+|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$. The two-dimensional ellipse trajectory can be stated by
+two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) ~~ b\,\sin(\omega\,t)
+\big]^\top$ with $a,b > 0$. Applying the addition theorems of trigonometry, we
+get:
+\begin{eqnarray*}
+	f(t+\tau) & = &
+	\left[ \begin{array}{c} a\,\cos\!\big(\omega\,(t+\tau)\big) \\ b\,\sin\!\big(\omega\,(t+\tau)\big) \end{array} \right]\\ & = &
+	\left[ \begin{array}{c}
+		a\,\big(\!\cos(\omega\,t) \cos(\omega\,\tau) - \sin(\omega\,t) \sin(\omega\,\tau) \big) \\
+		b\,\big(\!\sin(\omega\,t) \cos(\omega\,\tau) + \cos(\omega\,t) \sin(\omega\,\tau) \big)
+	\end{array} \right] \\ & = &
+	\underbrace{\left[ \begin{array}{cc}
+		\cos(\omega\,\tau) & -a/b \sin(\omega\,\tau) \\
+		b/a \sin(\omega\,\tau) & \cos(\omega\,\tau)
+	\end{array} \right]}_{\displaystyle\hat{D}}\,\cdot\,f(t)
+\end{eqnarray*}
+From this, we can read off the desired ellipse rotation matrix $\hat{D}$ as
+indicated above. Due to \cref{chad}, there exists a (two-dimensional)
+transformation matrix $A$ and a start vector $y$ such that
+\begin{equation}\label{twodim}
+	f(t) \approx A \cdot \hat{D}^t \cdot y
+\end{equation}
+for large $t$. Every LRNN with many neurons can thus be approximated by a simple
+network with at most two neurons. The output values lie on an ellipse in
+general, thus in only two dimensions. Nonetheless, in the beginning, i.e., for
+small $t$, the dynamics of the system is not that regular (cf. \cref{ell}). But
+although \cref{infty} states only the asymptotic behavior of random LRNNs with
+unit spectral radius, interestingly the network dynamics converges relatively
+fast to the final ellipse trajectory: The (Euclidean) distance between the
+actual value $f(t)$ (according to \cref{form}) and its approximation by the
+final ellipse trajectory (\cref{twodim}) is almost zero already after a few
+hundred steps (cf. \cref{asymptot}). Of course this depends on the eigenvalue
+distribution of the transition matrix \citep{TV10}. So the long-term behavior
+may be different for transition matrices other than pure random reservoirs.
+
+\begin{figure}[t]
+  \centering
+    (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum}} \hfill
+    (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse}} \\[5mm]
+    (c) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/wave}}
+  \caption{Dynamic system behavior of a pure random reservoir with unit spectral
+	radius, with $N^\mathrm{res} = 100$ neurons:
+    (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
+	complex conjugate eigenvalue pairs in the complex plane.
+    (b)~Visualization of $f(t)$ by planar projection. In the long run, we get an
+	ellipse trajectory, thus only two dimensions (cf. \cref{twodim}).
+    (c)~Projected to one (arbitrary) dimension, we have pure sinusoids with one
+	single angular frequency for large $t$, sampled in large steps.}
+  \label{ell}
+\end{figure}
+
+\begin{figure}
+ \centering
+ \includegraphics[width=0.7\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
+  \caption{Asymptotic behavior of pure random reservoirs with unit spectral radius:
+	The (Euclidean) distance between the actual value $f(t)$
+	(according to \cref{form}) and its approximation by the final ellipse
+	trajectory (\cref{twodim}) is almost zero already after a few hundred
+	steps. The figure shows the distances for $N^\mathrm{res}=100$ (solid/blue), $N^\mathrm{res}=500$
+	(dashed/red), and $N^\mathrm{res}=1000$ (dotted/black) random reservoir neurons,
+	starting with a random vector of unit length, averaged over 1000 trials.}
+  \label{asymptot}
+\end{figure}
+
+The long-term behavior of LRNNs is related to that of ESNs. For the latter,
+usually the activation function is $\tanh$ and the spectral radius is smaller
+than $1$. Then reservoirs with zero input collapse because of $|\!\tanh(z)| \le
+|z|$ for all $z \in \mathbb{R}$ but the convergence may be rather slow,
+nonetheless it guarantees contractivity and hence for any fixed input (not just
+the origin) the system converges to a unique fixed point. This leads
+to the so-called \emph{echo state property} \citep{MJ13}: Any random initial
+state of a reservoir is forgotten such that, after a washout period, the current
+network state is a function of the driving input. In contrast to ESNs, LRNNs
+have linear activation and a spectral radius of exactly~$1$ (cf. \cref{thedef}).
+But as we have just shown, there is a similar effect in the long run: The
+network activity reduces to at most two dimensions which are independent from
+the initial state of the network.
 
 \section{Learning LRNNs}\label{learn}
 
