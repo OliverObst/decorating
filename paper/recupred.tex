@@ -1,17 +1,16 @@
 % !TeX spellcheck = en_US
 
-\documentclass[twoside,11pt]{article}
+\documentclass[preprint,12pt,times,authoryear]{elsarticle}
+%\documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
-\usepackage[abbrvbib,preprint]{jmlr2e}
 
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref} % hyperlinks
   \hypersetup{hidelinks}
-\pdfminorversion=7
 
 \usepackage[capitalize,noabbrev]{cleveref}
   \creflabelformat{equation}{#2#1#3}
@@ -34,26 +33,30 @@
 \sloppy
 \frenchspacing
 
-%\jmlrheading{1}{2023}{PAGES}{04/23}{PUBLISHED}{meila00a}{Marina Meil\u{a} and Michael I. Jordan}
-\ShortHeadings{The Power of Linear Recurrent Neural Networks}{Stolzenburg, Litz, Michael, Obst}
-\firstpageno{1}
-
+\journal{Neural Networks}
 \begin{document}
 
+\begin{frontmatter}
 \title{The Power of Linear Recurrent Neural Networks}
-\author{\name Frieder Stolzenburg \email fstolzenburg@hs-harz.de\\ %\orcid 0000-0002-4037-2445
-	\name Sandra Litz\\ %\email litz\_sandra@web.de} \orcid 0009-0000-8147-4424
-	\addr Department of Automation and Computer Sciences,
-	Harz University of Applied Sciences,
-	38855 Wernigerode, Germany
-\AND	
-	\name Olivia Michael\\ %\email olivia\_michael@hotmail.com \orcid 0000-0002-5719-2299
-	\name Oliver Obst \email o.obst@westernsydney.edu.au\\ %\orcid 0000-0002-8284-2062
-	\addr Centre for Research in Mathematics and Data Science,
-	Western Sydney University,
-	Penrith NSW 2751, Australia}
-\editor{}
-\maketitle
+
+\author[1]{Frieder Stolzenburg\corref{cor}} \ead{fstolzenburg@hs-harz.de} %\orcid 0000-0002-4037-2445}
+\author[1]{Sandra Litz} \ead{litz\_sandra@web.de} %\orcid{0009-0000-8147-4424}
+\author[2]{Olivia Michael} \ead{olivia\_michael@hotmail.com} %\orcid{0000-0002-5719-2299}
+\author[2]{Oliver Obst} \ead{o.obst@westernsydney.edu.au} %\orcid{0000-0002-8284-2062}
+\cortext[cor]{Corresponding author}
+
+\affiliation[1]{organization={Department of Automation and Computer Sciences, Harz University of Applied Sciences},
+            addressline={Friedrichstr. 57-59}, 
+            city={38855 Wernigerode},
+            %postcode={}, 
+            %state={},
+            country={Germany}}
+\affiliation[2]{organization={Centre for Research in Mathematics and Data Science, Western Sydney University},
+            %addressline={Locked Bag 1797}, 
+            city={Penrith},
+            state={NSW 2751},
+            %postcode={2751}, 
+            country={Australia}}
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
@@ -72,15 +75,47 @@ demonstrate this by several experiments, among them multiple superimposed
 oscillators (MSO), robotic soccer, and predicting stock prices. LRNNs outperform
 the previous state-of-the-art for the MSO task with a minimal number of units.
 
-\smallskip
-\begin{keywords}
-recurrent neural network; linear activation; time-series analysis; prediction;
-dimensionality reduction; approximation theorem; ellipse trajectories.
-\end{keywords}
+%\smallskip
+%\begin{keywords}
+%recurrent neural network; linear activation; time-series analysis; prediction;
+%dimensionality reduction; approximation theorem; ellipse trajectories.
+%\end{keywords}
 
-\smallskip
-\noindent\textbf{MSC class:} 15A06 \;$\cdot$\; \textbf{ACM class:} I.2.6%
+%\smallskip
+%\noindent\textbf{MSC class:} 15A06 
+68T05: Learning and adaptive systems
+62M10: Time series, auto-correlation, regression, etc.
+62M15: Spectral analysis
+62M20: Prediction; filtering
+62M30: Spatial processes
+62M40: Random fields; image analysis
+62M45: Neural nets and related approaches\;$\cdot$\; \textbf{ACM class:} I.2.6%
 \end{abstract}
+
+%%%Graphical abstract
+%\begin{graphicalabstract}
+%%\includegraphics{grabs}
+%\end{graphicalabstract}
+
+%%Research highlights
+\begin{highlights}
+\item Research highlight 1
+\item Research highlight 2
+\end{highlights}
+
+\begin{keyword}
+%% keywords here, in the form: keyword \sep keyword
+
+%% PACS codes here, in the form: \PACS code \sep code
+%Physics and Astronomy Classification Scheme
+
+%% MSC codes here, in the form: \MSC code \sep code
+%% or \MSC[2008] code \sep code (2000 is the default)
+\end{keyword}
+
+\end{frontmatter}
+
+%% \linenumbers
 
 \section{Introduction}
 
@@ -837,7 +872,7 @@ hundred steps (cf. \cref{asymptot}). Of course this depends on the eigenvalue
 distribution of the transition matrix \citep{TV10}. So the long-term behavior
 may be different for transition matrices other than pure random reservoirs.
 
-\begin{figure}[t]
+\begin{figure}
   \centering
     (a) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/spectrum}} \hfill
     (b) \raisebox{-55mm}{\includegraphics[scale=0.4]{fig/ellipse}} \\[5mm]
@@ -1632,7 +1667,7 @@ concentrate on the relevant components for the ball trajectory (cf.
 original time series representation of a game. The complete learning procedure
 runs in less than a minute on standard hardware.
 
-\begin{figure}[htb]
+\begin{figure}
   \centering
   \includegraphics[width=0.8\columnwidth]{fig/game6}
   \caption{Ball trajectory of RoboCup 2D soccer simulation game \#6
@@ -1641,8 +1676,8 @@ runs in less than a minute on standard hardware.
 	original trajectory of the ball during play is shown (dotted/black). The
 	game can be replayed by an LRNN with $N = 500+46 = 546$ neurons with high
 	accuracy (solid/blue). The reduced network with $N = 354$ reservoir
-	neurons still mimics the trajectory with only small error (dashed/red).
-	\label{game}}
+	neurons still mimics the trajectory with only small error (dashed/red).}
+	\label{game}
 \end{figure}
 
 \cref{multi} shows how we can learn from multiple time series at once. This is
@@ -1830,7 +1865,8 @@ networks \citep{GBC16}. Last but not least, other machine learning tasks besides
 prediction shall be addressed in more detail, including classification and
 reinforcement learning~\citep{SB18,PGL17}.
 
-\acks{%
+\section*{Acknowledgments}
+
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
 Kai Steckhan, Flora Stolzenburg, and Ruben Zilibowitz, as well as several
 anonymous referees for helpful discussions
@@ -1843,8 +1879,9 @@ Australia-Germany Joint Research Cooperation Scheme within the project
 D\underline{at}a M\underline{in}in\underline{g}} (Decorating).
 A first short and preliminary version of this paper was presented at the conference
 \emph{Cognitive Computing} in Hannover \citep{SMO18}. It received the prize for the
-most technologically feasible poster contribution.}
+most technologically feasible poster contribution.
 
+\bibliographystyle{elsarticle-harv}
 \bibliography{recupred}
 
 \end{document}
