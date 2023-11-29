@@ -1,4 +1,4 @@
-\begin{tikzpicture}[scale=0.15]
+\begin{tikzpicture}[scale=0.13]
 \tikzstyle{every node}+=[inner sep=0pt]
 \draw [blue] (5,-7) node {$x_1$};
 \draw [red] (28,-8) node {$x_2$};
