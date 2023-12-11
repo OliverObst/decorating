@@ -46,16 +46,16 @@
 \cortext[cor]{Corresponding author}
 
 \affiliation[1]{organization={Faculty of Automation and Computer Science, Harz University of Applied Sciences},
-            addressline={Friedrichstr.~57-59}, 
+            addressline={Friedrichstr.~57-59},
             city={38855~Wernigerode},
-            %postcode={}, 
+            %postcode={},
             %state={},
             country={Germany}}
 \affiliation[2]{organization={Centre for Research in Mathematics and Data Science, Western Sydney University},
-            %addressline={Locked Bag 1797}, 
+            %addressline={Locked Bag 1797},
             city={Penrith~NSW~2751},
             %state={NSW},
-            %postcode={2751}, 
+            %postcode={2751},
             country={Australia}}
 
 \begin{abstract}
@@ -81,11 +81,11 @@ the previous state-of-the-art for the MSO task with a minimal number of units.
 %%\includegraphics{grabs}
 %\end{graphicalabstract}
 
-%%Research highlights
-\begin{highlights}
-\item Research highlight 1
-\item Research highlight 2
-\end{highlights}
+%%%Research highlights
+%\begin{highlights}
+%\item Research highlight 1
+%\item Research highlight 2
+%\end{highlights}
 
 \begin{keyword}
 recurrent neural network; linear activation; time-series analysis; prediction;
@@ -484,7 +484,7 @@ this later (in \cref{continued}).
   \label{examples}
 \end{figure}
 
-\begin{remk}\label{rem}
+\begin{prop}\label{rem}
 LRNNs are well suited to represent differential equations and to solve them
 numerically. To see this, consider the homogeneous linear differential equation
 \begin{equation}
@@ -492,37 +492,22 @@ numerically. To see this, consider the homogeneous linear differential equation
 \end{equation}
 where $c_k \in \mathbb{R}$ are constant coefficients with $c_n \neq 0$,
 $x^{(k)}(t)$ is the $k$-th derivative of the function $x$ with respect to time
-$t$, and $n>0$. For a function $x$ and its first derivative $\dot{x}$ with
-respect to time $t$, we have
-\begin{equation}
-  \dot{x}(t) = \lim\limits_{\tau \to 0} \frac{x(t+\tau)-x(t)}{\tau}
-	\quad\text{and hence}\quad
-  x(t+\tau) \approx x(t) + \tau\,\dot{x}(t) \label{limit}
-\end{equation}
-for small time steps $\tau>0$. If we consider the difference of \cref{diff}
-between the times $t+\tau$ and $t$ divided by $\tau$ we obtain by applying
-\cref{limit} to $x^{(k)}(t)$ for $k \ge 0$:
-\begin{eqnarray*}
-  0 & = & \frac{\displaystyle\sum_{k=0}^n c_k\,x^{(k)}(t+\tau)-\sum_{k=0}^n c_k\,x^{(k)}(t)}{\tau}\\
-    & = & \sum_{k=0}^{n-1} c_k \frac{x^{(k)}(t+\tau)-x^{(k)}(t)}{\tau} + c_n \frac{x^{(n)}(t+\tau)-x^{(n)}(t)}{\tau}\\
-    & \approx & \sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t) + \frac{c_n}{\tau} \left(x^{(n)}(t+\tau)-x^{(n)}(t)\right)
-\end{eqnarray*}
-This is equivalent to:
-\[
-	x^{(n)}(t+\tau)
-	\approx x^{(n)}(t) - \frac{\tau}{c_n}\,\sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t)
-\]
-Therefore, we can solve differential equations approximately by LRNNs with
-start vector $s$, which should satisfy \cref{diff}, and the following transition
-matrix:
-\[ W = \left[ \begin{array}{*{5}{c}}
+$t$, and $n>0$. It can be solved approximately by LRNNs with start vector $s$
+satisfying \cref{diff} and the following transition matrix:
+\begin{equation} \label{mat}
+  W = \left[ \begin{array}{*{5}{c}}
 	1 & \tau & 0 & \cdots & 0\\
 	0 & 1 & \tau & \ddots & 0\\
 	\vdots & \ddots & \ddots & \ddots & 0\\
 	0 & \cdots & 0 & 1 & \tau\\
 	0 & -\tau \frac{c_0}{c_n} & \cdots & -\tau \frac{c_{n-2}}{c_n} & 1\!-\!\tau \frac{c_{n-1}}{c_n}
-\end{array} \right] \]
-\end{remk}
+      \end{array} \right]
+\end{equation}
+\end{prop}
+
+\begin{proof}
+See \ref{proof:rem}.
+\end{proof}
 
 \begin{exmp}\label{exp}
 The exponential function $\exp(t) = e^t$ can be defined by the differential
@@ -694,59 +679,7 @@ matrix $A$ of size $N \times N$ such that for all $t \ge 0$ we have:
 \end{prop}
 
 \begin{proof}
-We first prove the case where the Jordan matrix $J$ only contains ordinary
-Jordan blocks as in \cref{jordan}, i.e., possibly with complex eigenvalues
-on the diagonal. Since $J$ is a direct sum of Jordan blocks, it suffices to
-consider the case where $J$ is a single Jordan block because, as the Jordan
-matrix $J$, the matrices $A$ and also $B$ (see below) can be obtained as direct
-sums, too.
-
-In the following, we use the column vectors $y = \big[ y_1 \cdots y_N
-\big]^\top$ with all non-zero entries, $x = \big[ x_1 \cdots x_N \big]^\top$
-with $x = V^{-1} \cdot s$ (cf. \cref{eigen}), and $b = \big[ b_1 \cdots b_N
-\big]^\top$. From $b$, we construct the following upper triangular Toeplitz
-matrix
-\[ B = \left[ \begin{array}{*{4}{c}}
-  b_N & \cdots & b_2 & b_1\\
-  0 & \ddots & & b_2\\
-  \vdots & \ddots & \ddots & \vdots\\
-  0 & \cdots & 0 & b_N
-\end{array} \right] \]
-which commutes with the Jordan block $J$ \cite[Sect.~3.2.4]{HJ13}, i.e., it
-holds that (a)~$J \cdot B = B \cdot J$. We define $B$ and hence $b$ by the
-equation (b)~$x = B \cdot y$ which is equivalent to:
-
-\[ \left[ \begin{array}{*{4}{c}}
-  y_N & \cdots & y_2 & y_1\\
-  0 & \ddots & & y_2\\
-  \vdots & \ddots & \ddots & \vdots\\
-  0 & \cdots & 0 & y_N
-\end{array} \right] \cdot b = \left[ \begin{array}{c}
-  x_1\\[7pt] x_2\\ \vdots\\ x_N
-\end{array} \right] \]
-Since the main diagonal of the left matrix contains no $0$s because $y_N \neq 0$
-by precondition, there always exists a solution for $b$ \cite[Sect.~0.9.3]{HJ13}.
-Then $A = V \cdot B$ does the job:
-\[ f(t) = W^t \cdot s
-	\overset{\text{\cref{jordan}}}{=} V \cdot J^t \cdot V^{-1} \cdot s
-	= V \cdot J^t \cdot x
-	\overset{\text{(b)}}{=} V \cdot J^t \cdot B \cdot y
-	\overset{\text{(a)}}{=} V \cdot B \cdot J^t \cdot y
-	= A \cdot J^t \cdot y
-\]
-
-The generalization to the real Jordan decomposition is straightforward by
-applying the fact that for complex conjugate eigenvalue pairs $\lambda$ and
-$\overline{\lambda}$ the matrix $M$ from above in a real Jordan block is
-similar to the diagonal matrix $D = \left[ \begin{array}{cc}
-	\lambda & 0\\
-	0 & \overline{\lambda}
-\end{array} \right]$ via $U = \left[ \begin{array}{cc}
-	-\mathfrak{i} & -\mathfrak{i}\\
-	1 & -1
-\end{array} \right]$ \citep[Sect.~3.4.1]{HJ13}, i.e., $M = U \cdot D \cdot
-U^{-1}$. The above-mentioned commutation property~(a) analogously holds for real
-Jordan blocks. This completes the proof.
+See \ref{proof:chad}.
 \end{proof}
 
 \subsection{Long-Term Behavior}\label{ellipse}
@@ -1015,45 +948,16 @@ series of function values $f(t_0),\dots,f(t_n)$ be given. Then there is an
 LRNN with the following properties:
 \begin{enumerate}
   \item It runs exactly through all given $n+1$ function values, i.e., it approximates $f(t)$.
-  \item It can effectively be learned by the LRNN learning procedure (\cref{output}).
+  \item It can effectively be learned by the LRNN learning procedure (\cref{output}) employing
+	\begin{equation}\label{ineq}
+	  N^\mathrm{res} \ge n-N^\mathrm{in\,out}
+	\end{equation}
+	reservoir neurons.
 \end{enumerate}
 \end{prop}
 
 \begin{proof}
-First, we take the series of function values $f(t_0),\dots,f(t_n)$ and identify
-them with the time series $S(0),\dots,S(n)$. After applying the LRNN learning
-procedure, the LRNN runs through all given values, because by construction the
-upper part $\big[ S(0) \cdots S(n-1) \big]$ of the matrix $X$ (cf. \cref{Xin})
-and the matrix $Y^\mathrm{out}$ (cf. \cref{Yout}) consist of the series of
-function values of $f$, provided that the linear
-matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
-least one solution.
-
-Since \cref{linear} is equivalent to simultaneously solving the equations $y_k =
-w_k \cdot X$, for $1 \le k \le N$ where $y_1,\dots,y_N$ and $w_1,\dots,w_N$
-denote the row vectors of the matrices $Y^\mathrm{out}$ and $W^\mathrm{out}$,
-respectively, the latter is the case if the rank of the coefficient matrix $X$
-is equal to the rank of the augmented matrix $M_k = \big[ X ~~ y_k \big]^\top$
-for every $k$. This leads to the equation $\mathrm{rank}(X) =
-\min(N^\mathrm{in\,out}+N^\mathrm{res},n) = \mathrm{rank}(M_k) =
-\min(N^\mathrm{in\,out}+N^\mathrm{res}+1,n)$. From this, it follows that
-\begin{equation}\label{ineq}
-	N^\mathrm{res} \ge n-N^\mathrm{in\,out}
-\end{equation}
-reservoir neurons have to be employed to guarantee at least one solution for the
-$w_k$, provided that the rank of the matrix $X$ is maximal. For the latter, we
-consider two cases:
-\begin{itemize}
-  \item If the rank of the upper part of the matrix $X$ (see above) is not
-	maximal, then this does not cause any problems. We only have to replace
-	$N^\mathrm{in\,out}$ by the actual rank of the upper part of the matrix
-	$X$ in \cref{ineq}.
-  \item The rank of the lower part $\big[ R(0) \cdots R(n-1) \big]$ of the
-	matrix $X$ almost always has maximal rank, because we employ a random
-	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
-	which completes the proof.
-	\vspace*{-5ex} %\qedhere
-\end{itemize}
+See \ref{proof:approx}.
 \end{proof}
 
 Therefore, at least in theory, any time-dependent function $f(t)$ can be
@@ -1115,14 +1019,15 @@ approximated with a (general) recurrent network arbitrarily well in probability
 \citep{Ham00}.
 
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
-function $f(x)$ from the (possibly multi-dimensional) input $x$. Nevertheless,
+function $f(x)$ from the (possibly multi-dimensional) input $x$. Only linearly
+separable functions can be represented. Nevertheless, %%%
 they can approximate any (possibly nonlinear) function over time $f(t)$, as
 \cref{approx} shows. Another important difference between LRNNs and
 nonlinearly activated feedforward neural networks is that LRNNs can learn
 the function $f(t)$ efficiently. No gradient-descent method like backpropagation is
 required; we just have to solve a linear equation system. Hence learning is as
 easy as learning a single-layer perceptron, which however is restricted in
-expressibility because only linearly separable functions can be represented.
+expressibility because
 \end{remk}
 
 \begin{remk}
@@ -1140,7 +1045,7 @@ introduced in \cref{reduce}.
 \subsection{Network Size Reduction}\label{reduce}
 
 To approximate a function exactly for sure, we need a large number
-$N^\mathrm{res}$ of reservoir neurons in \cref{approx}. It is certainly a
+$N^\mathrm{res}$ of reservoir neurons (cf. \cref{approx,ineq}). It is certainly a
 good idea to lower this number. One could do this by simply taking a smaller
 number of reservoir neurons, but then a good approximation cannot be guaranteed.
 In what follows, we therefore reduce the dimensionality of the transition matrix $W$ in a
@@ -1308,7 +1213,7 @@ increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
 
-\begin{prop}\label{complexity}
+\begin{remk}\label{complexity}
 In both learning steps, it is possible to employ any of the many available fast
 and constructive algorithms for linear regression and eigendecomposition
 \citep{DDH07}. Therefore, the time complexity is just $O(N^3)$ for both output
@@ -1318,7 +1223,7 @@ time, the asymptotic complexity is even a bit better. In practice, however, the
 complexity depends on the bit length of numbers in floating point arithmetic,
 of course, and may be worse hence. The size of the learned network is in $O(N)$
 (cf. \cref{reduce}).
-\end{prop}
+\end{remk}
 
 Note that, in contrast, feedforward networks with three threshold neurons
 already are NP-hard to train \citep{BR92}. This results from the fact
@@ -1486,7 +1391,7 @@ example~\#1 in \cref{sideways}) or are rather small (cf. example~\#12), then
 LRNNs do not perform quite so well.
 	
 \begin{sidewaystable}
-  \centering\small
+  \centering\footnotesize
   \begin{tabular}{c*{8}{p{8mm}}cccc@{\,+\,}cccc}
      \toprule
 	\# & \multicolumn{8}{l}{frequencies} & Baseline & ARIMA & ESN & \multicolumn{3}{c}{LSTM} & \multicolumn{2}{c}{LRNN}\\
@@ -1559,7 +1464,7 @@ including possibly repeated network generation and network size reduction ran in
 only a few minutes on standard hardware.
 
 \begin{table}[t]
-  \centering
+  \centering\footnotesize
   \sisetup{table-number-alignment = center, %
 	table-figures-integer = 3, table-figures-decimal = 1, table-figures-exponent = 0, %
 	table-space-text-post = \% }%
@@ -1613,7 +1518,7 @@ players for all time points during the so-called \enquote{play-on}
 mode.
 
 \begin{table}
-\centering
+\centering\footnotesize
 \sisetup{table-number-alignment = center,  % group-digits = false,
 	      table-figures-integer = 1, table-figures-decimal = 5, table-figures-exponent = 0}%
 \begin{tabular}[b]{cSScc}
@@ -1763,49 +1668,49 @@ only in the short run.
 
 \begin{table}
 \footnotesize
-\begin{tabular}{l@{ }crcccccc}
+\begin{tabular}{l@{ }crccccc}
 \toprule
-\multicolumn{2}{c}{DAX member} & \head{mean} & Baseline & ARIMA & ESN & LSTM & \multicolumn{2}{l}{LRNN}\\
-name & stock & \head{training} & RMSE & RMSE & RMSE & RMSE & $N$ & RMSE\\ \midrule
-Adidas & ADS.DE & 280.8500 & \textbf{0.0554} & 0.0554 & 0.0784 & 0.1162 & 2 & 0.0569\\
-Airbus & AIR.DE & 99.6260 & 0.0618 & 0.1070 & 0.0583 & 0.2293 & 2 & \textbf{0.0500}\\
-Allianz & ALV.DE & 188.3300 & 0.0252 & 0.0241 & \textbf{0.0199} & 0.0916 & 2 & 0.0503\\
-BASF & BAS.DE & 59.9500 & 0.0438 & \textbf{0.0262} & 0.0739 & 0.1218 & 2 & 0.0433\\
-Bayer & BAYN.DE & 47.8990 & 0.0414 & 0.0409 & 0.0626 & 0.1027 & 1 & \textbf{0.0350}\\
-BMW St & BMW.DE & 72.4980 & 0.0706 & \textbf{0.0706} & 0.0744 & 0.1509 & 11 & 0.0787\\
-Brenntag & BNR.DE & 71.4050 & \textbf{0.0544} & 0.0938 & 0.0664 & 0.1162 & 2 & 0.0969\\
-Continental & CON.DE & 110.3400 & 0.0518 & \textbf{0.0518} & 0.0803 & 0.2540 & 2 & 0.1918\\
-Covestro & COV1.DE & 50.1070 & \textbf{0.0488} & 0.0488 & 0.0564 & 0.1612 & 1 & 0.0609\\
-Deutsche Börse & DB1.DE & 135.9100 & 0.0307 & 0.0307 & \textbf{0.0249} & 0.0814 & 1 & 0.0347\\
-Deutsche Bank & DBK.DE & 10.0720 & 0.0442 & 0.0442 & \textbf{0.0229} & 0.1794 & 1 & 0.0599\\
-Delivery Hero & DHER.DE & 116.7200 & 0.1119 & 0.1040 & 0.1148 & 0.2226 & 3 & \textbf{0.0798}\\
-Deutsche Post & DPW.DE & 46.5780 & 0.0487 & 0.0379 & \textbf{0.0369} & 0.1822 & 1 & 0.0549\\
-Deutsche Telekom & DTE.DE & 15.5660 & 0.0279 & 0.0279 & 0.0619 & 0.1209 & 2 & \textbf{0.0224}\\
-Deutsche Wohnen SE & DWNI.DE & 45.8590 & 0.2410 & 0.2410 & 0.2468 & \textbf{0.1706} & 1 & 0.2589\\
-Siemens Energy & ENR.DE & 26.2940 & 0.0457 & 0.0457 & 0.0364 & 0.2212 & 9 & \textbf{0.0349}\\
-E.ON & EOAN.DE & 9.0860 & 0.0646 & 0.0646 & 0.0666 & 0.4041 & 1 & \textbf{0.0389}\\
-Fresenius Medical Care & FME.DE & 63.4290 & 0.0831 & 0.0842 & 0.0916 & 0.1279 & 1 & \textbf{0.0738}\\
-Fresenius & FRE.DE & 38.8670 & 0.1256 & 0.1256 & 0.1560 & 0.1399 & 2 & \textbf{0.1228}\\
-HeidelbergCement & HEI.DE & 64.7440 & 0.0504 & \textbf{0.0259} & 0.0708 & 0.1171 & 2 & 0.0912\\
-Henkel Vz & HEN3.DE & 84.8720 & 0.0476 & 0.0476 & 0.0328 & 0.1479 & 2 & \textbf{0.0237}\\
-HelloFresh & HFG.DE & 71.3430 & 0.1236 & 0.1236 & 0.1241 & 0.3065 & 2 & \textbf{0.1220}\\
-Infineon & IFX.DE & 32.8380 & 0.1035 & 0.1029 & 0.1623 & 0.3574 & 1 & \textbf{0.0705}\\
-Linde PLC & LIN.DE & 229.9400 & 0.1077 & \textbf{0.0710} & 0.1134 & 0.1803 & 1 & 0.0909\\
-Merck KGaA & MRK.DE & 153.7900 & 0.1293 & 0.0826 & \textbf{0.0332} & 0.2156 & 1 & 0.0361\\
-MTU Aero Engines & MTX.DE & 198.4500 & \textbf{0.0598} & 0.0600 & 0.1085 & 0.2046 & 2 & 0.0652\\
-Münchener Rück & MUV2.DE & 225.1500 & 0.0257 & \textbf{0.0256} & 0.0430 & 0.1276 & 1 & 0.0421\\
-Porsche Vz & PAH3.DE & 73.8450 & \textbf{0.0690} & 0.1116 & 0.0920 & 0.1710 & 2 & 0.1188\\
-Puma & PUM.DE & 91.3340 & 0.0894 & 0.0887 & 0.0783 & 0.1737 & 1 & \textbf{0.0531}\\
-Qiagen & QIA.DE & 42.4940 & 0.0660 & 0.0660 & 0.0810 & 0.1311 & 2 & \textbf{0.0225}\\
-RWE & RWE.DE & 31.5540 & 0.0460 & 0.0460 & 0.0805 & 0.1202 & 2 & \textbf{0.0276}\\
-SAP & SAP.DE & 110.8400 & 0.0398 & \textbf{0.0398} & 0.0459 & 0.1200 & 2 & 0.0442\\
-Siemens Healthineers & SHL.DE & 47.7620 & 0.1057 & 0.0561 & 0.0975 & 0.1898 & 1 & \textbf{0.0328}\\
-Siemens & SIE.DE & 127.4800 & 0.0561 & \textbf{0.0354} & 0.0758 & 0.1276 & 2 & 0.0996\\
-Sartorius Vz & SRT3.DE & 445.1700 & 0.0676 & 0.0676 & 0.0591 & 0.2400 & 1 & \textbf{0.0463}\\
-Symrise & SY1.DE & 108.7900 & 0.1032 & 0.1032 & 0.0893 & 0.1055 & 1 & \textbf{0.0755}\\
-Vonovia & VNA.DE & 52.4410 & 0.0714 & 0.0801 & 0.0662 & 0.1222 & 1 & \textbf{0.0593}\\
-Volkswagen Vz & VOW3.DE & 177.7200 & \textbf{0.0615} & 0.0615 & 0.1207 & 0.1521 & 2 & 0.1181\\
-Zalando & ZAL.DE & 89.9610 & 0.0656 & 0.0656 & 0.1139 & 0.2111 & 2 & \textbf{0.0600}\\
+\multicolumn{2}{c}{DAX member} & Baseline & ARIMA & ESN & LSTM & \multicolumn{2}{l}{LRNN}\\
+name & stock & RMSE & RMSE & RMSE & RMSE & $N$ & RMSE\\ \midrule
+Adidas & ADS.DE & \textbf{0.0554} & 0.0554 & 0.0784 & 0.1162 & 2 & 0.0569\\
+Airbus & AIR.DE & 0.0618 & 0.1070 & 0.0583 & 0.2293 & 2 & \textbf{0.0500}\\
+Allianz & ALV.DE & 0.0252 & 0.0241 & \textbf{0.0199} & 0.0916 & 2 & 0.0503\\
+BASF & BAS.DE & 0.0438 & \textbf{0.0262} & 0.0739 & 0.1218 & 2 & 0.0433\\
+Bayer & BAYN.DE & 0.0414 & 0.0409 & 0.0626 & 0.1027 & 1 & \textbf{0.0350}\\
+BMW St & BMW.DE & 0.0706 & \textbf{0.0706} & 0.0744 & 0.1509 & 11 & 0.0787\\
+Brenntag & BNR.DE & \textbf{0.0544} & 0.0938 & 0.0664 & 0.1162 & 2 & 0.0969\\
+Continental & CON.DE & 0.0518 & \textbf{0.0518} & 0.0803 & 0.2540 & 2 & 0.1918\\
+Covestro & COV1.DE & \textbf{0.0488} & 0.0488 & 0.0564 & 0.1612 & 1 & 0.0609\\
+Deutsche Börse & DB1.DE & 0.0307 & 0.0307 & \textbf{0.0249} & 0.0814 & 1 & 0.0347\\
+Deutsche Bank & DBK.DE & 0.0442 & 0.0442 & \textbf{0.0229} & 0.1794 & 1 & 0.0599\\
+Delivery Hero & DHER.DE & 0.1119 & 0.1040 & 0.1148 & 0.2226 & 3 & \textbf{0.0798}\\
+Deutsche Post & DPW.DE & 0.0487 & 0.0379 & \textbf{0.0369} & 0.1822 & 1 & 0.0549\\
+Deutsche Telekom & DTE.DE & 0.0279 & 0.0279 & 0.0619 & 0.1209 & 2 & \textbf{0.0224}\\
+Deutsche Wohnen SE & DWNI.DE & 0.2410 & 0.2410 & 0.2468 & \textbf{0.1706} & 1 & 0.2589\\
+Siemens Energy & ENR.DE & 0.0457 & 0.0457 & 0.0364 & 0.2212 & 9 & \textbf{0.0349}\\
+E.ON & EOAN.DE & 0.0646 & 0.0646 & 0.0666 & 0.4041 & 1 & \textbf{0.0389}\\
+Fresenius Medical Care & FME.DE & 0.0831 & 0.0842 & 0.0916 & 0.1279 & 1 & \textbf{0.0738}\\
+Fresenius & FRE.DE & 0.1256 & 0.1256 & 0.1560 & 0.1399 & 2 & \textbf{0.1228}\\
+HeidelbergCement & HEI.DE & 0.0504 & \textbf{0.0259} & 0.0708 & 0.1171 & 2 & 0.0912\\
+Henkel Vz & HEN3.DE & 0.0476 & 0.0476 & 0.0328 & 0.1479 & 2 & \textbf{0.0237}\\
+HelloFresh & HFG.DE & 0.1236 & 0.1236 & 0.1241 & 0.3065 & 2 & \textbf{0.1220}\\
+Infineon & IFX.DE & 0.1035 & 0.1029 & 0.1623 & 0.3574 & 1 & \textbf{0.0705}\\
+Linde PLC & LIN.DE & 0.1077 & \textbf{0.0710} & 0.1134 & 0.1803 & 1 & 0.0909\\
+Merck KGaA & MRK.DE & 0.1293 & 0.0826 & \textbf{0.0332} & 0.2156 & 1 & 0.0361\\
+MTU Aero Engines & MTX.DE & \textbf{0.0598} & 0.0600 & 0.1085 & 0.2046 & 2 & 0.0652\\
+Münchener Rück & MUV2.DE & 0.0257 & \textbf{0.0256} & 0.0430 & 0.1276 & 1 & 0.0421\\
+Porsche Vz & PAH3.DE & \textbf{0.0690} & 0.1116 & 0.0920 & 0.1710 & 2 & 0.1188\\
+Puma & PUM.DE & 0.0894 & 0.0887 & 0.0783 & 0.1737 & 1 & \textbf{0.0531}\\
+Qiagen & QIA.DE & 0.0660 & 0.0660 & 0.0810 & 0.1311 & 2 & \textbf{0.0225}\\
+RWE & RWE.DE & 0.0460 & 0.0460 & 0.0805 & 0.1202 & 2 & \textbf{0.0276}\\
+SAP & SAP.DE & 0.0398 & \textbf{0.0398} & 0.0459 & 0.1200 & 2 & 0.0442\\
+Siemens Healthineers & SHL.DE & 0.1057 & 0.0561 & 0.0975 & 0.1898 & 1 & \textbf{0.0328}\\
+Siemens & SIE.DE & 0.0561 & \textbf{0.0354} & 0.0758 & 0.1276 & 2 & 0.0996\\
+Sartorius Vz & SRT3.DE & 0.0676 & 0.0676 & 0.0591 & 0.2400 & 1 & \textbf{0.0463}\\
+Symrise & SY1.DE & 0.1032 & 0.1032 & 0.0893 & 0.1055 & 1 & \textbf{0.0755}\\
+Vonovia & VNA.DE & 0.0714 & 0.0801 & 0.0662 & 0.1222 & 1 & \textbf{0.0593}\\
+Volkswagen Vz & VOW3.DE & \textbf{0.0615} & 0.0615 & 0.1207 & 0.1521 & 2 & 0.1181\\
+Zalando & ZAL.DE & 0.0656 & 0.0656 & 0.1139 & 0.2111 & 2 & \textbf{0.0600}\\
 \bottomrule
 \end{tabular}
 \caption{Evaluation results for all stocks in the DAX existing at least 300
@@ -1870,6 +1775,123 @@ most technologically feasible poster contribution.
 
 \bibliographystyle{elsarticle-harv}
 \bibliography{recupred}
+
+\appendix
+
+\section{Proof of \cref{rem}}\label{proof:rem}
+
+\noindent For a function $x$ and its first derivative $\dot{x}$ with
+respect to time $t$, we have
+\[
+  \dot{x}(t) = \lim\limits_{\tau \to 0} \frac{x(t+\tau)-x(t)}{\tau}
+	\quad\text{and hence}\quad
+  x(t+\tau) \approx x(t) + \tau\,\dot{x}(t)
+\]
+for small time steps $\tau>0$. We can apply this to $x^{(k)}(t)$ for $k \ge 0$
+in the difference of \cref{diff} between the times $t+\tau$ and $t$ divided by
+$\tau$ and obtain:
+\begin{eqnarray*}
+  0 & = & \frac{\displaystyle\sum_{k=0}^n c_k\,x^{(k)}(t+\tau)-\sum_{k=0}^n c_k\,x^{(k)}(t)}{\tau}\\
+    & = & \sum_{k=0}^{n-1} c_k \frac{x^{(k)}(t+\tau)-x^{(k)}(t)}{\tau} + c_n \frac{x^{(n)}(t+\tau)-x^{(n)}(t)}{\tau}\\
+    & \approx & \sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t) + \frac{c_n}{\tau} \left(x^{(n)}(t+\tau)-x^{(n)}(t)\right)
+\end{eqnarray*}
+This is equivalent to:
+\[
+	x^{(n)}(t+\tau)
+	\approx x^{(n)}(t) - \frac{\tau}{c_n}\,\sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t)
+\]
+From this, we can read off the desired transition matrix $W$ from \cref{mat}.
+Together with a start vector $s$ satisfying \cref{diff}, we can thus solve
+differential equations approximately by LRNNs.
+
+\section{Proof of \cref{chad}}\label{proof:chad}
+
+We first prove the case where the Jordan matrix $J$ only contains ordinary
+Jordan blocks as in \cref{jordan}, i.e., possibly with complex eigenvalues
+on the diagonal. Since $J$ is a direct sum of Jordan blocks, it suffices to
+consider the case where $J$ is a single Jordan block because, as the Jordan
+matrix $J$, the matrices $A$ and also $B$ (see below) can be obtained as direct
+sums, too.
+
+In the following, we use the column vectors $y = \big[ y_1 \cdots y_N
+\big]^\top$ with all non-zero entries, $x = \big[ x_1 \cdots x_N \big]^\top$
+with $x = V^{-1} \cdot s$ (cf. \cref{eigen}), and $b = \big[ b_1 \cdots b_N
+\big]^\top$. From $b$, we construct the following upper triangular Toeplitz
+matrix
+\[ B = \left[ \begin{array}{*{4}{c}}
+  b_N & \cdots & b_2 & b_1\\
+  0 & \ddots & & b_2\\
+  \vdots & \ddots & \ddots & \vdots\\
+  0 & \cdots & 0 & b_N
+\end{array} \right] \]
+which commutes with the Jordan block $J$ \cite[Sect.~3.2.4]{HJ13}, i.e., it
+holds that (a)~$J \cdot B = B \cdot J$. We define $B$ and hence $b$ by the
+equation (b)~$x = B \cdot y$ which is equivalent to:
+
+\[ \left[ \begin{array}{*{4}{c}}
+  y_N & \cdots & y_2 & y_1\\
+  0 & \ddots & & y_2\\
+  \vdots & \ddots & \ddots & \vdots\\
+  0 & \cdots & 0 & y_N
+\end{array} \right] \cdot b = \left[ \begin{array}{c}
+  x_1\\[7pt] x_2\\ \vdots\\ x_N
+\end{array} \right] \]
+Since the main diagonal of the left matrix contains no $0$s because $y_N \neq 0$
+by precondition, there always exists a solution for $b$ \cite[Sect.~0.9.3]{HJ13}.
+Then $A = V \cdot B$ does the job:
+\[ f(t) = W^t \cdot s
+	\overset{\text{\cref{jordan}}}{=} V \cdot J^t \cdot V^{-1} \cdot s
+	= V \cdot J^t \cdot x
+	\overset{\text{(b)}}{=} V \cdot J^t \cdot B \cdot y
+	\overset{\text{(a)}}{=} V \cdot B \cdot J^t \cdot y
+	= A \cdot J^t \cdot y
+\]
+
+The generalization to the real Jordan decomposition is straightforward by
+applying the fact that for complex conjugate eigenvalue pairs $\lambda$ and
+$\overline{\lambda}$ the matrix $M$ from above in a real Jordan block is
+similar to the diagonal matrix $D = \left[ \begin{array}{cc}
+	\lambda & 0\\
+	0 & \overline{\lambda}
+\end{array} \right]$ via $U = \left[ \begin{array}{cc}
+	-\mathfrak{i} & -\mathfrak{i}\\
+	1 & -1
+\end{array} \right]$ \citep[Sect.~3.4.1]{HJ13}, i.e., $M = U \cdot D \cdot
+U^{-1}$. The above-mentioned commutation property~(a) analogously holds for real
+Jordan blocks. This completes the proof.
+
+\section{Proof of \cref{approx}}\label{proof:approx}
+
+First, we take the series of function values $f(t_0),\dots,f(t_n)$ and identify
+them with the time series $S(0),\dots,S(n)$. After applying the LRNN learning
+procedure, the LRNN runs through all given values, because by construction the
+upper part $\big[ S(0) \cdots S(n-1) \big]$ of the matrix $X$ (cf. \cref{Xin})
+and the matrix $Y^\mathrm{out}$ (cf. \cref{Yout}) consist of the series of
+function values of $f$, provided that the linear
+matrix equation $Y^\mathrm{out} = W^\mathrm{out} \cdot X$ (\cref{linear}) has at
+least one solution.
+
+Since \cref{linear} is equivalent to simultaneously solving the equations $y_k =
+w_k \cdot X$, for $1 \le k \le N$ where $y_1,\dots,y_N$ and $w_1,\dots,w_N$
+denote the row vectors of the matrices $Y^\mathrm{out}$ and $W^\mathrm{out}$,
+respectively, the latter is the case if the rank of the coefficient matrix $X$
+is equal to the rank of the augmented matrix $M_k = \big[ X ~~ y_k \big]^\top$
+for every $k$. This leads to the equation $\mathrm{rank}(X) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res},n) = \mathrm{rank}(M_k) =
+\min(N^\mathrm{in\,out}+N^\mathrm{res}+1,n)$. From this, it follows that, as
+desired, $N^\mathrm{res} \ge n-N^\mathrm{in\,out}$ reservoir neurons have to be
+employed to guarantee at least one solution for the $w_k$, provided that the
+rank of the matrix $X$ is maximal. For the latter, we consider two cases:
+\begin{itemize}
+  \item If the rank of the upper part of the matrix $X$ (see above) is not
+	maximal, then this does not cause any problems. We only have to replace
+	$N^\mathrm{in\,out}$ by the actual rank of the upper part of the matrix
+	$X$ in \cref{ineq}.
+  \item The rank of the lower part $\big[ R(0) \cdots R(n-1) \big]$ of the
+	matrix $X$ almost always has maximal rank, because we employ a random
+	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
+	which completes the proof.
+\end{itemize}
 
 \end{document}
 
