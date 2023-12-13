@@ -1005,7 +1005,6 @@ but additionally the reservoir state time series $R$ into account, then exactly
 the given input and reservoir weights are learned if \cref{ineq} holds. Only
 with nonlinear activation there is a learning effect.
 
-\begin{remk}
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
 network with a linear output layer and at least one hidden layer activated by a
@@ -1018,16 +1017,18 @@ also holds for them \citep{MNM02}. Any measurable function can be
 approximated with a (general) recurrent network arbitrarily well in probability
 \citep{Ham00}.
 
+\begin{remk}[generalization to nonlinear activation]
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(x)$ from the (possibly multi-dimensional) input $x$. Only linearly
-separable functions can be represented. Nevertheless, %%%
-they can approximate any (possibly nonlinear) function over time $f(t)$, as
-\cref{approx} shows. Another important difference between LRNNs and
-nonlinearly activated feedforward neural networks is that LRNNs can learn
-the function $f(t)$ efficiently. No gradient-descent method like backpropagation is
-required; we just have to solve a linear equation system. Hence learning is as
-easy as learning a single-layer perceptron, which however is restricted in
-expressibility because
+separable functions can be represented. Nevertheless, the LRNN learning
+procedure (cf. \cref{output}) and \cref{approx} can be generalized in a
+straightforward manner to nonlinear, invertable activation functions $g$ as
+follows: Clearly, $g$ has to be applied component-wise to \cref{Res} while
+running the input through the reservoir and to \cref{linear}. The solution of
+the resulting equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ is
+then $W^\mathrm{out} = g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence LRNN learning is
+as easy as learning a single-layer perceptron. We can approximate any (possibly
+nonlinear) function over time $f(t)$ efficiently. 
 \end{remk}
 
 \begin{remk}
