@@ -40,8 +40,8 @@
 \title{The Power of Linear Recurrent Neural Networks}
 
 \author[1]{Frieder Stolzenburg\corref{cor}} \ead{fstolzenburg@hs-harz.de} %\orcid 0000-0002-4037-2445}
-\author[1]{Sandra Litz} \ead{litz\_sandra@web.de} %\orcid{0009-0000-8147-4424}
-\author[2]{Olivia Michael} \ead{olivia\_michael@hotmail.com} %\orcid{0000-0002-5719-2299}
+\author[1]{Sandra Litz} %\ead{litz\_sandra@web.de} %\orcid{0009-0000-8147-4424}
+\author[2]{Olivia Michael} %\ead{olivia\_michael@hotmail.com} %\orcid{0000-0002-5719-2299}
 \author[2]{Oliver Obst} \ead{o.obst@westernsydney.edu.au} %\orcid{0000-0002-8284-2062}
 \cortext[cor]{Corresponding author}
 
@@ -1022,13 +1022,13 @@ Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(x)$ from the (possibly multi-dimensional) input $x$. Only linearly
 separable functions can be represented. Nevertheless, the LRNN learning
 procedure (cf. \cref{output}) and \cref{approx} can be generalized in a
-straightforward manner to nonlinear, invertable activation functions $g$ as
-follows: Clearly, $g$ has to be applied component-wise to \cref{Res} while
-running the input through the reservoir and to \cref{linear}. The solution of
-the resulting equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ is
-then $W^\mathrm{out} = g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence LRNN learning is
-as easy as learning a single-layer perceptron. We can approximate any (possibly
-nonlinear) function over time $f(t)$ efficiently. 
+straightforward manner to nonlinear, invertable activation functions $g$.
+For this, $g$ has to be applied component-wise to \cref{Res} while running the
+input through the reservoir and to \cref{linear}. The solution of the resulting
+equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ is then just
+$W^\mathrm{out} = g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence, LRNN learning is as
+easy as learning a single-layer perceptron an allows us to approximate any
+(possibly nonlinear) function over time $f(t)$ efficiently. 
 \end{remk}
 
 \begin{remk}
