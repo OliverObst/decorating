@@ -11,8 +11,9 @@ from darts import TimeSeries
 from darts.models import AutoARIMA
 from darts.metrics.metrics import mse, rmse
 import matplotlib.pyplot as plt
+import time
 
-N = 1
+N = 20
 results = np.zeros((N,5))
 
 def plot_predicted_actual(data, prediction, name = None, filename = None):
@@ -34,6 +35,7 @@ def plot_predicted_actual(data, prediction, name = None, filename = None):
         
     return plt
 
+total_time = 0
 
 for n in range(N):
     filename = f"../data/signal{n+1:02d}.csv"
@@ -47,10 +49,15 @@ for n in range(N):
     train_val, test = series.split_before(250)
     train, val = train_val.split_before(200)
 
+    start_time = time.time()
+
     model_arima = AutoARIMA()
     model_arima.fit(train_val)
     yhat = model_arima.predict(len(test))
 
+    end_time = time.time()
+    total_time = total_time + (end_time - start_time)
+    
     p = plot_predicted_actual(test.values(copy=True), yhat.values(copy=True),
                               name = None, filename = f"signal{n+1:02d}.png")
     p.close()
@@ -60,5 +67,9 @@ for n in range(N):
     results[n,2] = test.mean(axis=0).values()[0][0]
     results[n,3] = mse(test, yhat, intersect = True)
     results[n,4] = rmse(test, yhat, intersect = True)
+
+
+print(f"Average execution time: {total_time/20} seconds")
+    
 
 #np.savetxt('results-mso8-arima.csv', results, delimiter=',', fmt='%i,%.8f,%.8f,%.8f,%.8f')
