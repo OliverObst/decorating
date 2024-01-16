@@ -12,7 +12,8 @@ from darts.dataprocessing.transformers import Scaler
 from darts.models import RNNModel
 from darts.metrics.metrics import mse, rmse, mape
 import matplotlib.pyplot as plt
-
+import time
+import os
 
 def plot_predicted_actual(data, prediction, name = None, filename = None):
     title = 'MSO8'
@@ -37,12 +38,16 @@ def plot_predicted_actual(data, prediction, name = None, filename = None):
 N = 21
 results = np.zeros((N,8))
 
-for n in range(0,1):
+total_time = 0
+
+for n in range(0,N):
     filename = f"../data/signal{n:02d}.csv"
     print("Using " + filename)
     data = np.genfromtxt(filename, delimiter=',')
     data = data.reshape((len(data), 1))
 
+    start_time = time.time()    
+    
     series = TimeSeries.from_values(data)
     series, _ = series.split_before(300)
 
@@ -88,15 +93,22 @@ for n in range(0,1):
                          series=val_transformed[-parms['input_chunk_length']:])
     yh = transformer.inverse_transform(yhat)
 
-    p = plot_predicted_actual(test.values(copy=True), yh.values(copy=True),
-                              name = 'LSTM', filename = f"signal{n+1:02d}.png")
-    p.close()
+#    p = plot_predicted_actual(test.values(copy=True), yh.values(copy=True),
+#                              name = 'LSTM', filename = f"signal{n+1:02d}.png")
+#    p.close()
     
     outputs = np.zeros((len(test),2))
     outputs[:,0] = test.values(copy=True)[:,0]
     outputs[:,1] = yh.values(copy=True)[:,0]
-    fname = f"RESULTS-20230425/outputs-{n:02d}.csv"
-    np.savetxt(fname, outputs, fmt='%.8f', delimiter=',', header='true,predicted')
+
+    end_time = time.time()
+    total_time = total_time + (end_time - start_time)
+
+    parentdir = "RESULTS-20240116/"
+    os.makedirs(parentdir, exist_ok = True)
+
+    fname = f"outputs-{n:02d}.csv"
+    np.savetxt(parentdir + fname, outputs, fmt='%.8f', delimiter=',', header='true,predicted')
     
     results[n,0] = n+1
     results[n,1] = train_transformed.mean(axis=0).values(0)[0][0]
@@ -107,4 +119,5 @@ for n in range(0,1):
     results[n,6] = parms['optimizer_kwargs']['lr']
     results[n,7] = rmse(test_transformed, yhat, intersect = True)
 
-np.savetxt('results-mso8-lstm-0.csv', results, delimiter=',', fmt='%i,%.8f,%.8f,%.8f,%i,%i,%.8f,%.8f')
+print(f"Average execution time: {total_time / N} seconds")                
+np.savetxt(parentdir + 'results-mso8-lstm-0.csv', results, delimiter=',', fmt='%i,%.8f,%.8f,%.8f,%i,%i,%.8f,%.8f')
