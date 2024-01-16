@@ -22,6 +22,7 @@ for k=1:n
   testdat(k,:) = alldat(trainlen+(1:testlen));
   alpha(k,:) = csvread(strcat('alpha',num2str(k,'%.2d'),'.csv'));
 endfor
+% original example from k et al 2012
 alldat = csvread('signal00.csv');
 traindat(n+1,:) = alldat(1:trainlen); % data from start 
 testdat(n+1,:) = alldat(trainlen+(1:testlen));
