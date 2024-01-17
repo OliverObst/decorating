@@ -1382,8 +1382,7 @@ time series, including a simple baseline:
 all other approaches on this benchmark by far. The reason for this is certainly
 the network size reduction procedure (cf. \cref{reduce}), unique in our approach,
 because it exactly selects the relevant components of the network: Each complex
-conjugate
-eigenvalue pair corresponds to one of the frequencies $\alpha_1,\dots,\alpha_8$.
+conjugate eigenvalue pair corresponds to one of the frequencies $\alpha_1,\dots,\alpha_8$.
 In general, an LRNN with $2K$ neurons suffices to represent a signal, which
 might be a musical harmony \citep{Sto17b}, consisting of $K$ sinusoids (cf.
 \cref{ellipse}). It can be learned by the LRNN learning procedure with network
@@ -1391,12 +1390,13 @@ size reduction. However, if several frequencies are close to each other (cf.
 example~\#1 in \cref{sideways}) or are rather small (cf. example~\#12), then
 LRNNs do not perform quite so well.
 
+LRNN are also advantageous considering the time required to train a well performing model: On average, this takes less than 3 s per series, excluding file access. The ARIMA experiments were fastest (0.35 s / series), and ESN took 1.24 s / series. LRNN extend the ESN approach with our approach, and take 2.97 s on average, this time includes the repeated reservoir generations in our approach. LSTM including hyper parameter selection took 125.4 s / series.% (all run on an Intel i9-10940X, 3.3GHz, 128GB RAM).
 %%% RESULTS (times)
 % ARIMA - MSO8 on signal01..signal20: (R implementation), very fast: 0.35s / series on average (excl. file access), just the model
 %            in python fast not as fast, 3.2s / series excl file access 
 % ESN - MSO8 on signal00..signal20: (python implementation): 124.43s / 100 series -> 1.24s / series on average (excl file access).
 % LSTM - MSO8 on signal00..20 : 125.43 s / series on average, including hyperparameter selection, excl file access
-% LRNN - MSO8 on signal01..20 : 3.02 s / series on average, excl file access (averaged over 20 runs)
+% LRNN - MSO8 on signal01..20 : 2.97 s / series on average, excl file access (averaged over 100 runs)
 
 	
 \begin{sidewaystable}
