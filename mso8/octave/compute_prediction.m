@@ -5,7 +5,7 @@ addpath('../../lrnn/');
 trainlen = 200;
 evallen = 50;
 testlen = 50;
-trials = 1;
+trials = 100; % check paper for no of trials
 
 % read in mso8 data
 n = 20; % number of files
@@ -15,16 +15,19 @@ n = 20; % number of files
 Nres = -1;
 theta = 0.5;
 result = zeros(n+1,5);
+loopTimes = zeros(trials,n); % Array to store times for each 'i' loop
 
-% prediction
-for k=21:21
+% prediction 1..n
+for k=1:n
   k#
   In = traindat(k,:);
   Eval = restdat(k,1:evallen); % validation data;
   Test = restdat(k,evallen+1:end); % test data
 
   Err = +Inf; % best validation error so far
+  
   for t=1:trials
+    loopTimeStart = tic; % Start timing for the current 'i' loop    
     [Outx,Erry,Ax,Jx,Yx,Wx,Xx,Lambdax,Multix] = predict(In,evallen+testlen,Nres,theta);
     Errx = rmse(Eval,Outx(trainlen+(1:evallen))); % actual validation error
     if Errx<Err
@@ -38,6 +41,8 @@ for k=21:21
       Lambda = Lambdax;
       Multi = Multix;
     endif 
+    looptimes(t,k) = toc(loopTimeStart); % Store time taken for the current 'i' loop
+    printf("Time for loop k = %d: %f seconds (%d reps)\n", k, looptimes(t,k));
   endfor
 
   trainerr = result(k,1) = rmse(In,Out(1:trainlen)) % training error
@@ -69,4 +74,6 @@ for k=21:21
 #endfor
 
 endfor
-save('mso8_prediction.mat', 'traindat', 'restdat', 'Out')
+save('mso8_prediction_100.mat', 'traindat', 'restdat', 'Out')
+save('mso8_result_100.mat', 'result')
+save('mso8_looptimes_100.mat', 'looptimes')
