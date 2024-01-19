@@ -1,7 +1,8 @@
 % !TeX spellcheck = en_US
 
-\documentclass[preprint,12pt,times,authoryear]{elsarticle}
+\documentclass[preprint,nopreprintline,12pt,times,authoryear]{elsarticle}
 %\documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
+\journal{Neural Networks} % if no nopreprintline option
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
@@ -33,7 +34,6 @@
 \sloppy
 \frenchspacing
 
-\journal{Neural Networks}
 \begin{document}
 
 \begin{frontmatter}
@@ -60,9 +60,9 @@
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
-how autoregressive linear, i.e., linearly activated recurrent neural networks (LRNNs) can
-approximate any time-dependent function $f(t)$ given by a number of function
-values. The approximation can effectively be learned by simply solving a linear
+how autoregressive linear, i.e., linearly activated recurrent neural networks
+(LRNNs) can approximate any time-dependent function $f(t)$. The approximation
+can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
 and this is probably the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
@@ -72,14 +72,9 @@ learn network weights but also the network architecture. LRNNs have interesting
 properties: They end up in ellipse trajectories in the long run and allow the
 prediction of further values and compact representations of functions. We
 demonstrate this by several experiments, among them multiple superimposed
-oscillators (MSO), robotic soccer, and predicting stock prices. LRNNs outperform
+oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs outperform
 the previous state-of-the-art for the MSO task with a minimal number of units.
 \end{abstract}
-
-%%%Graphical abstract
-%\begin{graphicalabstract}
-%%\includegraphics{grabs}
-%\end{graphicalabstract}
 
 %%%Research highlights
 %\begin{highlights}
@@ -101,7 +96,7 @@ dimensionality reduction; approximation theorem; ellipse trajectories.
 
 \end{frontmatter}
 
-%% \linenumbers
+%\linenumbers
 
 \section{Introduction}
 
