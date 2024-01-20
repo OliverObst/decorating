@@ -244,10 +244,10 @@ step by analyzing the network transition matrix (cf. \cref{reduce}).
 
 An \emph{autoregressive model} is a representation of a type of random process
 \citep{Aka69}. It specifies that the output variable or a vector thereof depends
-linearly on its own previous values and on a stochastic term (white noise). In
+linearly on its own predecessor values and on a stochastic term (white noise). In
 consequence, the model is in the form of a stochastic differential equation as in
 general (physical) dynamic systems \citep{CK14}. An LRNN is also linearly
-activated, but its output does not only depend on its own previous values and
+activated, but its output does not only depend on its own predecessor values and
 possibly white noise but on the complete state of the possibly big reservoir
 whose dynamics is explicitly dealt with. In addition, the size of the network
 might be reduced in the subsequent process. We will continue the comparison
@@ -828,9 +828,9 @@ the initial state of the network.
 
 Functions can be learned and approximated by LRNNs in two steps: First, as for
 ESNs \citep{JH04}, we only learn the output weights $W^\mathrm{out}$ (cf.
-\cref{output}); all other connections remain unchanged. The input weights
+\cref{output}). The input weights
 $W^\mathrm{in}$ and reservoir weights $W^\mathrm{res}$ are arbitrary random
-values that are not changed (cf. \cref{thedef}). Nevertheless, in order to
+values and remain unchanged (cf. \cref{thedef}). Nevertheless, in order to
 obtain better numerical stability during the computation, they are adjusted as
 follows:
 \begin{itemize}
@@ -853,8 +853,8 @@ follows:
 	connectivity has nearly no influence on the best reachable performance
 	\citep{KLB12}.
 \end{itemize}
-Second, if possible, we reduce the network size (cf. \cref{reduce});
-this often leads to better generalization and avoids overfitting. Thus, in
+Second, if possible, we reduce the network size (cf. \cref{reduce}).
+This often leads to better generalization and avoids overfitting. Thus, in
 contrast to many other approaches, the network architecture is changed during
 the learning process. In contrast to other approaches, we do not do this by
 incremental derivation from the original network but in only one step.
@@ -887,9 +887,9 @@ Therefore, we compose another matrix
 	Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]
 \end{equation}
 consisting of the next values of the time series $S$ to be predicted
-where the first value $S(0)$ clearly has to be omitted because it cannot be
-predicted. We compute $Y^\mathrm{out}(t) = S(t+\tau)$ from $X(t)$ by assuming a
-linear dependency:
+where the first value $S(0)$ clearly has to be omitted because it has no
+predecessor value. We compute $Y^\mathrm{out}(t) = S(t+\tau)$ from $X(t)$ by
+assuming a linear dependency:
 \begin{equation}\label{linear}
 	Y^\mathrm{out} = W^\mathrm{out} \cdot X
 \end{equation}
@@ -1011,7 +1011,7 @@ easy as learning a single-layer perceptron and allows us to approximate any
 (possibly nonlinear) function over time $f(t)$ efficiently. 
 \end{remk}
 
-\cref{approx} is thus related to the \emph{universal approximation theorem} for
+\cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
 network with a linear output layer and at least one hidden layer activated by a
 nonlinear, sigmoidal function can approximate any continuous function on a
@@ -1069,8 +1069,8 @@ constant because it is part of the start vector~$y$. Then it follows from
 \cref{infty} that for large $t$ the contribution of a Jordan component
 vanishes if $\|v\| \approx 0$ and/or $|\lambda| \ll 1$.
 
-In consequence, we can omit all Jordan components causing only small errors,
-until a given threshold is exceeded. The error $E$ of a network can be estimated by the
+In consequence, we omit all Jordan components causing only small errors, until a
+given threshold is exceeded. The error $E$ of a network can be estimated by the
 root-mean-square error (RMSE) normalized to the number of all sample components
 between input $x$ and predicted output $y$:
   \[ \mathrm{RMSE}(x,y) = \sqrt{\frac{1}{n} \sum_{t=1}^n \big\|x(t)-y(t)\big\|^2} \]
@@ -1101,7 +1101,7 @@ general.
 network size reduction. It has been implemented by the authors in Octave. Note
 that, although the Jordan matrix $J$ (cf. \cref{jordan}) may
 contain eigenvalues with multiplicity greater than $1$, Octave does not always
-calculate exactly identical eigenvalues in this case. Therefore, we cluster the
+calculate exactly identical eigenvalues then. Therefore, we cluster the
 computed eigenvalues as follows: If the distance in the complex plane between
 eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
@@ -1115,19 +1115,19 @@ available under the following link:
 \begin{figure}\footnotesize
 \newcommand{\commt}[1]{\%~#1\\}%
 \begin{algorithmic}[1]\State
-	\commt{$d$-dimensional function, given sampled, as time series, and start vector}
+	\commt{$d$-dimensional function $f$, given sampled, as time series $S$, and start vector $s$}
 	$S = \big[ f(0) \cdots f(n) \big]$\\
 	$s = \left[ \begin{array}{c} S(0) \\ r \end{array} \right]$ where
 		$r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot
 		\big[ \underbrace{1 \cdots 1}_{N^\mathrm{res} \text{~times}} \big]^\top$\newline
 	\\
-	\commt{random initialization of reservoir and input weights}
-	$W^\mathrm{in} = \mathrm{randn}(N,d)$\\
+	\commt{random initialization of input and reservoir weights}
+	$W^\mathrm{in} = \mathrm{randn}(N^\mathrm{res},d)$\\
 	$W^\mathrm{res} = \mathrm{randn}(N^\mathrm{res},N^\mathrm{res})$
 		normalized to unit spectral radius\newline
 	\\
 	\commt{learn output weights by linear regression}
-	$X = \left[W^t \cdot s\right]_{t=0,\dots,n}$\\
+	$X = \left[W^t \cdot s\right]_{t=0,\dots,n}$ \text{~\% run in input receiving mode}\\
 	$Y^\mathrm{out} = \big[ S(1)\ \cdots\ S(n) \big]$\\
 	$W^\mathrm{out} = Y^\mathrm{out}/X$\newline
 	\\
@@ -1141,8 +1141,8 @@ available under the following link:
 	\quad where $K = \#$\,Jordan components in $J$\newline
 	\\
 	\commt{network size reduction (with binary search)}
-	$L = 1$\\
-	$R = K$\\
+	$L = 1$ \text{~\% left index border}\\
+	$R = K$ \text{~\% right index border}\\
 	while ($L \neq R$)\\
 	\quad $M = \left\lfloor\frac{L+R}{2}\right\rfloor$\\
 	\quad if $\mathrm{Error}(J_{\langle 1,\dots,M \rangle}) < \theta$\\
@@ -1154,7 +1154,7 @@ available under the following link:
 	\commt{\quad compute error for Jordan matrix reduced to indexed components}
 	\quad reduce $J$ to components indexed by $I$\\
 	\quad $y = \big[ 1 \cdots 1 \big]^\top$\\
-	\quad $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$\\
+	\quad $Y = \left[J^t \cdot y\right]_{t=0,\dots,n}$ \text{~\% run in output generating mode}\\
 	\quad $A = X/Y$ with rows restricted to input/output dimensions\\
 	return\big($\mathrm{RMSE}(S,A \cdot Y)$\big)
 \end{algorithmic}
@@ -1200,7 +1200,7 @@ size reduction.
 Note that the spectral radius of the reservoir weights matrix $W^\mathrm{res}$
 remains $1$ all the time (cf. \cref{thedef}). However, after learning the output
 weights $W^\mathrm{out}$, the spectral radius of the overall transition matrix
-$W$ (according to \cref{matrix}) of size $n+1$ and hence of the matrix $J$ may
+$W$ (according to \cref{matrix}) and hence of the matrix $J$ may
 be greater than $1$ if the function $f(t)$ to be modeled is exponentially
 increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 
@@ -1502,7 +1502,7 @@ only a few minutes on standard hardware.
 	puzzles \citep{RK11,GW13} in 1000 trials for different settings:
 	(a)~with fixed reservoir size $N^\mathrm{res}=3,4,5$; (b)~with network size
 	reduction starting with $N^\mathrm{res}=7$ reservoir neurons; (c)~same
-	procedure but in addition always the previous series value is used as clue.}
+	procedure but in addition always the previous time series value is used as clue.}
   \label{table}
 \end{table}
 
