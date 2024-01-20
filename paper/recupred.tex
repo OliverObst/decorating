@@ -105,7 +105,7 @@ cascade of multiple layers of nonlinear processing units for feature extraction
 and transformation \citep{DY14}. The tremendous success of deep learning in
 diverse fields of artificial intelligence, such as computer vision and natural
 language processing, seems to depend on a bunch of ingredients: artificial,
-possibly recurrent neural networks (RNNs), with nonlinearly activated neurons,
+possibly recurrent neural networks (RNNs) with nonlinearly activated neurons,
 convolutional layers, and iterative training methods like backpropagation
 \citep{GBC16}. But which of these components are really essential for machine
 learning tasks such as time-series analysis?
@@ -136,7 +136,7 @@ which allows network size reduction; no backpropagation or gradient-descent
 method is needed. We then discuss results and experiments (\cref{result}),
 before we end up with conclusions (\cref{conclude}).
 
-Interestingly, several results for LRNNs we present here can be achieved by
+Interestingly, many results for LRNNs we present here can be achieved by
 applying linear algebra and matrix analysis. Nonetheless, to the best of our
 knowledge, the main contributions of this article have not been presented
 before, namely that LRNNs can effectively be learned by a simple procedure and,
@@ -154,7 +154,7 @@ and the ESN community.
 
 Echo state networks (ESNs) \citep{JH04,Jae07} play a significant role in RNN
 research as they provide an architecture and supervised learning principle for
-RNNs. They do so by driving a random, large, fixed RNN, called \emph{reservoir}
+RNNs. They do this by driving a random, large, fixed RNN, called \emph{reservoir}
 in this context, with the input signal which then induces in each neuron within
 this reservoir network a nonlinear response signal. They combine a desired
 output signal by a trainable linear combination of all response signals,
@@ -168,8 +168,8 @@ networks on complex and difficult sequence modeling problems which may contain
 long-term data dependencies. This can also be done with LRNNs (cf. MSO
 benchmark, \cref{mso}).
 \citet{Tin18} considers the effect of weight changes in linear symmetric ESNs on
-(Fisher) memory of the network. Furthermore, from a solely theoretical point of view,
-\citet{CW+16} investigate the asymptotic performance of linear ESNs.
+(Fisher) memory of the network. Furthermore, \citet{CW+16} investigate the
+asymptotic performance of linear ESNs from a solely theoretical point of view.
 
 \subsection{Recurrent Neural Networks}
 
@@ -191,12 +191,12 @@ short-term} refers to the fact that LSTM is a model for the short-term memory
 which can last for a long period of time. An LSTM is well-suited to classify,
 process and predict time series given time lags of unknown size. They were
 developed to deal with the exploding and vanishing gradient problem when
-training traditional RNNs (see above). A common LSTM unit is composed of a cell,
+training traditional RNNs. A common LSTM unit is composed of a cell,
 an input gate, an output gate, and a forget gate. Each unit type is activated in
 a different manner, whereas in this paper we consider completely linearly
 activated RNNs.
 
-\citet{OTC15} suggest to use the \enquote{NoBackTrack} algorithm in RNNs to
+\citet{OTC15} suggest the NoBackTrack algorithm in RNNs to
 train its parameters. This algorithm works in an online, memoryless setting
 which therefore requires no backpropagation through time. It is also scalable,
 thus avoiding the large computational and memory cost of maintaining the full
@@ -212,7 +212,7 @@ The key idea of the SFM is to decompose the memory states into different
 frequency states. In doing so, they can explicitly learn the dependencies of
 both the low and high frequency patterns. As we will see (cf. \cref{mso}),
 RNNs in general can easily learn time series that have a constant frequency
-spectrum which may be obtained also by Fourier analysis.
+spectrum, which may be obtained also by Fourier analysis.
 
 \citet{VKE19} propose a memory cell for recurrent neural networks that maintains
 information across long windows of time using relatively few resources, called
@@ -224,7 +224,7 @@ solved by LRNNs (cf. \cref{rem}).
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
-employing linear autoencoder for sequences. In both cases, backpropagation is
+employing a linear autoencoder for sequences. In both cases, backpropagation is
 employed, which is not needed for LRNNs whose network size is reduced
 significantly in addition (cf. \cref{reduce}), thus we address the topic of
 architecture learning.
@@ -251,7 +251,7 @@ activated, but its output does not only depend on its own previous values and
 possibly white noise but on the complete state of the possibly big reservoir
 whose dynamics is explicitly dealt with. In addition, the size of the network
 might be reduced in the subsequent process. We will continue the comparison
-between autoregression and LRNNs later (cf. \cref{output}) and mainly consider
+between autoregression and LRNNs later (cf. \cref{output}), as we mainly consider
 autoregressive tasks in the following.
 
 A popular choice in this context is the autoregressive integrated moving average
@@ -263,7 +263,8 @@ have $f(t) = c_1 f(t-1) + \dots + c_p f(t-p) + e_t$ where $c_1,\dots,c_p$ are
 Gaussian white noise. In the moving average process MA($q$), the value $q$
 specifies the number of past residuals considered for prediction. An underlying
 trend of the time series is modeled by using a drift, i.e., a constant that extends
-the term. This procedure is particularly well-suited for stationary time series.
+the term. This procedure is particularly well-suited for stationary time series,
+i.e., whose properties do not vary with time.
 Many time series, however, exhibit non-stationary behavior and thus require a
 transformation to make them stationary. This is achieved by investigating the
 derivatives of the series, with the order of this process given by the parameter
@@ -272,7 +273,7 @@ $d$.
 Autoregressive frameworks are common in current machine-learning applications
 like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
 by next word prediction \citep{BM+20}. The model applied in this context,
-however, is very complex (175 billion parameters and more) and non-linear.
+however, is very complex (175 billion parameters and even much more) and non-linear.
 Related to autoregression is autoencoding of sequences. For this, \citet{PS14}
 show that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citet{Spe06} gives an
@@ -290,7 +291,7 @@ processed stepwise by the network.
 
 \begin{defn}[time series]
 A \emph{time series} is a series of data points in $d$ dimensions
-$S(0),\dots,S(n) \in \mathbb{R}^d$ where $d \ge 1$ and $n \ge 0$.
+$S(0),\dots,S(n) \in \mathbb{R}^d$ with $d \ge 1$ and $n \ge 0$.
 \end{defn}
 
 \begin{defn}[recurrent neural network]
@@ -353,14 +354,14 @@ follows:
 \begin{equation}\label{recur}
 	x_i(t+\tau) = g\big(w_{i1}\,x_1(t) +\dots+ w_{ik}\,x_k(t)\big)
 \end{equation}
-This has to be done simultaneously for all neurons of the network. Here $g$ is a
-(real-valued) \emph{activation function}. Although we will not make use of it,
+This has to be done simultaneously for all neurons of the network. $g$ is called
+\emph{activation function}. Although we will not make use of it,
 $g$ may be different for different parts of the network.
 Usually, a nonlinear, bounded, strictly increasing sigmoidal function $g$ is
 used, e.g., the logistic function, the hyperbolic tangent ($\tanh$), or the
 softplus function \citep[Sect.~3.10]{GBC16}. In the following, we employ simply
-the (linear) identity function and can still approximate arbitrary
-time-dependent functions (cf. \cref{approx}).
+the (linear) identity function, i.e., with $g(x)=x$ for all $x$, and can still
+approximate arbitrary time-dependent functions (cf. \cref{approx}).
 
 \begin{defn}[linear recurrent neural network]\label{thedef}
 A \emph{linear recurrent network} (LRNN) is an RNN with the
@@ -379,8 +380,8 @@ following properties:
   \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
 	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
 	value of all its eigenvalues. Note that the spectral radius of the
-	overall transition matrix $W$ may still be greater than $1$ if required
-	by the application (cf. \cref{continued}).
+	overall transition matrix $W$ (cf. \cref{matrix}) may still be greater
+	than $1$ if required by the application (cf. \cref{continued}).
   \item There is no distinction between input and output but only one (joint)
 	group of $N^\mathrm{in\,out} = N^\mathrm{in}=N^\mathrm{out}=d$ input/output neurons. They may
 	be arbitrarily connected like the reservoir neurons. We thus can imagine
@@ -423,7 +424,7 @@ Consequently, starting at $t=0$ with time step $\tau=1$, we have:
 	2\,t + 1$ (cf. first row of the transition matrix $W$).
 \end{itemize}
 Thus, in the neuron $x_1$, the function $f(t)$ is computed. It is the only
-input/output neuron.
+input/output neuron in this case.
 \end{exmp}
 
 \begin{exmp}\label{fibonacci}
@@ -454,7 +455,7 @@ for the Fibonacci series, revealing its exponential growth, known as
 	\text{~(golden ratio) and~} \lambda_2 = 1-\lambda_1
 \end{equation}
 Interestingly, $\lambda_1$ and $\lambda_2$ are the eigenvalues of the transition
-matrix $W$. Furthermore, Binet's formula can be used to create another LRNN to
+matrix $W$. Moreover, Binet's formula can be used to create another LRNN to
 calculate the Fibonacci series (cf. \cref{examples}\,c). We will come back to
 this later (in \cref{continued}).
 \end{exmp}
@@ -577,7 +578,7 @@ are always real. For this, we consider the Jordan block powers from \cref{power}
 	we have $\binom{t}{k} = 0$.
   \item For real matrices $W$, there are always complex conjugate eigenvalue
 	pairs $\lambda$ and $\overline{\lambda}$ and corresponding complex
-	coefficients $c$ and $\overline{c}$ (resulting from the vectors $u$ in
+	coefficients $c$ and $\overline{c}$ (resulting from the respective matrix $u$ and vector $v$ in
 	\cref{jordan}). With $c = |c|\,e^{\mathfrak{i}\psi}$ and
 	$\lambda = |\lambda|\,e^{\mathfrak{i}\omega}$, we get $c\,\lambda^t +
 	\overline{c}\,\overline{\lambda}{}^t = |c|\,|\lambda|^t \cos(\omega
@@ -587,7 +588,7 @@ are always real. For this, we consider the Jordan block powers from \cref{power}
 	in a special way, namely by replacing $\lambda^t$ by $|\lambda|^t \cos(\pi t)$.
 	Both terms coincide for integer $t$, but only the latter is real-valued
 	for all $t \in \mathbb{R}$. The powers of positive real eigenvalues
-	$\lambda$ are always positive and real and hence need no further consideration.
+	$\lambda$ are always positive and real and hence need no special consideration.
 \end{itemize}
 \end{remk}
 
@@ -631,7 +632,7 @@ transformed as follows:
 	\mathfrak{i}\lambda_\Im$ and $\overline{\lambda} = \lambda_\Re - \mathfrak{i}\lambda_\Im$
 	with $\lambda_\Re,\lambda_\Im \in \mathbb{R}$, the
 	direct sum of the corresponding Jordan blocks $J_m(\lambda)$ and
-	$J_m(\overline{\lambda})$ is replaced by a real Jordan block:
+	$J_m(\overline{\lambda})$ is replaced by one real Jordan block:
 	\[
 	  \left[ \begin{array}{*{5}{c}}
 		M & I & O & \cdots & O\\
@@ -692,11 +693,7 @@ polynomial and only single-exponential in $t$.
 \end{prop}
 
 \begin{proof}
-Let $f_k(t)$ denote the value of the $k$-th dimension of $f(t)$, $\lambda$ be
-the eigenvalue of $W$ with maximal absolute value and $m$ be the maximal (geometric)
-multiplicity of the eigenvalues of the transition matrix $W$. Then, from
-\cref{jordan}, we can easily deduce \[ |f_k(t)| = O(t^m\,|\lambda|^t) \]
-as asymptotic behavior for large $t$.
+See \ref{proof:exponential}.
 \end{proof}
 
 In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
@@ -744,12 +741,12 @@ In consequence, we have one of the following cases:
 \end{enumerate}
 \end{prop}
 
-We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely
-real-valued (cf.~\cref{real}), which states the ellipse rotation. The rotation
+We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely real-valued
+(cf.~\cref{real}) which states the ellipse rotation. Furthermore, the rotation
 speed can be derived from the eigenvalue $\lambda_1$. In each step of length
 $\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$ is the
 angular frequency which can be determined from the equation $\lambda_1 =
-|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$. The two-dimensional ellipse trajectory
+|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$ (cf. \cref{general}). The two-dimensional ellipse trajectory
 can be stated by two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) ~~
 b\,\sin(\omega\,t) \big]^\top$ where $a,b > 0$ are half the width and height of
 the ellipse. Applying the addition theorems of trigonometry, we get:
@@ -1002,7 +999,7 @@ with nonlinear activation there is a learning effect.
 
 \begin{remk}[generalization to nonlinear activation]
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
-function $f(x)$ from the (possibly multi-dimensional) input $x$. Only linearly
+function $f(s)$ from the possibly multi-dimensional (start) input $s$. Only linearly
 separable functions can be represented. Nevertheless, the LRNN learning
 procedure (cf. \cref{output}) and \cref{approx} can be generalized in a
 straightforward manner to nonlinear, invertable activation functions $g$.
@@ -1809,7 +1806,7 @@ This is equivalent to:
 	x^{(n)}(t+\tau)
 	\approx x^{(n)}(t) - \frac{\tau}{c_n}\,\sum_{k=0}^{n-1} c_k\,x^{(k+1)}(t)
 \]
-From this, we can read off the desired transition matrix $W$ from \cref{mat}.
+From this, we can read off the desired transition matrix $W$ of size $(n+1) \times (n+1)$ from \cref{mat}.
 Together with a start vector $s$ satisfying \cref{diff}, we can thus solve
 differential equations approximately by LRNNs.
 
@@ -1858,7 +1855,7 @@ Then $A = V \cdot B$ does the job:
 
 The generalization to the real Jordan decomposition is straightforward by
 applying the fact that for complex conjugate eigenvalue pairs $\lambda$ and
-$\overline{\lambda}$ the matrix $M$ from above in a real Jordan block is
+$\overline{\lambda}$ the matrix $M$ in a real Jordan block (cf. \cref{real}) is
 similar to the diagonal matrix $D = \left[ \begin{array}{cc}
 	\lambda & 0\\
 	0 & \overline{\lambda}
@@ -1868,6 +1865,14 @@ similar to the diagonal matrix $D = \left[ \begin{array}{cc}
 \end{array} \right]$ \citep[Sect.~3.4.1]{HJ13}, i.e., $M = U \cdot D \cdot
 U^{-1}$. The above-mentioned commutation property~(a) analogously holds for real
 Jordan blocks. This completes the proof.
+
+\section{Proof of \cref{exponential}}\label{proof:exponential}
+
+Let $f_k(t)$ denote the value of the $k$-th dimension of $f(t)$, $\lambda$ be
+the eigenvalue of $W$ with maximal absolute value and $m$ be the maximal (geometric)
+multiplicity of the eigenvalues of the transition matrix $W$. Then, from
+\cref{jordan}, we can easily deduce \[ |f_k(t)| = O(t^m\,|\lambda|^t) \]
+as asymptotic behavior for large $t$.
 
 \section{Proof of \cref{approx}}\label{proof:approx}
 
