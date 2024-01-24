@@ -67,8 +67,7 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks
 (LRNNs) can approximate any time-dependent function $f(t)$. The approximation
 can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-and this is probably \todo[inline]{skip probably?} 
-the main contribution of this article, the size of an
+and this is the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
@@ -1388,15 +1387,15 @@ example~\#1 in \cref{sideways}) or are rather small (cf. example~\#12), then
 LRNNs do not perform quite so well.
 
 LRNNs are also advantageous considering the time required to train a well
-performing model with less than 3 s per series for training and testing on average: \\
+performing model with less than 3\,s per series for training and testing on average: \\
 
 \noindent \begin{tabular}{cccccc}
 \toprule
 & Arima (R) & Arima (Python)  & ESN & LSTM & LRNN\\ \midrule
-Train + test time & 0.35s & 3.2 s & 1.24 s & 125.43 s & 2.97 s \\ \bottomrule
+Train + test time & 0.35\,s & 3.2\,s & 1.24\,s & 125.43\,s & 2.97\,s \\ \bottomrule
 \end{tabular}
 
-~\\
+\vspace*{2ex}\noindent
 The ARIMA experiments with an R implementation are fastest (0.35\,s
 per series) but often perform even worse than our baseline. Interestingly, an
 ARIMA implementation in Python turns out to be much slower (3.20\,s per series).
@@ -1775,9 +1774,8 @@ reservoir computing~\citep{Mea90,IL+11,LL17}. Neuromorphic computing refers to
 new hardware that mimics the functioning of the human brain, and neuromorphic
 hardware results from the exploration of unconventional physical substrates
 and nonlinear phenomena. Future work shall include improving predictive and
-memory capacity of LRNNs -- analyzed for small networks by \citet{Mar17} and to
-some extent also by \citet{CW+16} -- taking inspiration from convolutional
-networks \citep{GBC16}. Last but not least, other machine learning tasks besides
+memory capacity of LRNNs, analyzed for small networks by \citet{Mar17} and to
+some extent also by \citet{CW+16}. Last but not least, other machine learning tasks besides
 prediction shall be addressed in more detail, including classification and
 reinforcement learning~\citep{SB18,PGL17}.
 
