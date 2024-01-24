@@ -28,6 +28,9 @@
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
 
+\usepackage{todonotes}
+%\usepackage[disable]{todonotes}
+
 % to format tab head differently from numeric body columns
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
 
@@ -64,7 +67,8 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks
 (LRNNs) can approximate any time-dependent function $f(t)$. The approximation
 can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-and this is probably the main contribution of this article, the size of an
+and this is probably \todo[inline]{skip probably?} 
+the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
@@ -272,8 +276,8 @@ $d$.
 
 Autoregressive frameworks are common in current machine-learning applications
 like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
-by next word prediction \citep{BM+20}. The model applied in this context,
-however, is very complex (175 billion parameters and even much more) and non-linear.
+by next word prediction \citep{BM+20}. The models applied in this context,
+however, are very complex (175 billion parameters and even much more) and non-linear.
 Related to autoregression is autoencoding of sequences. For this, \citet{PS14}
 show that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citet{Spe06} gives an
@@ -283,11 +287,11 @@ related to the approximation theorem for LRNNs (cf. \cref{approx}).
 \section{Linear Recurrent Neural Networks}\label{define}
 
 RNNs often host several types of neurons, each activated in a different manner
-\citep{Elm90,HS97}. In contrast to this, we here simply understand a homogeneous
-interconnected group of standard neurons as a (recurrent) neural network which may have
+\citep{Elm90,HS97}. In contrast, we understand a homogeneous
+interconnected group of standard neurons simply as a (recurrent) neural network here, which may have
 arbitrary loops, akin to biological neuronal networks. We adopt a \emph{discrete
-time model}, i.e., input and output can be represented by a time series and is
-processed stepwise by the network.
+time model}, that is, the input and output are represented by a time series and are
+processed synchronously and stepwise by the network.
 
 \begin{defn}[time series]
 A \emph{time series} is a series of data points in $d$ dimensions
@@ -1384,15 +1388,24 @@ example~\#1 in \cref{sideways}) or are rather small (cf. example~\#12), then
 LRNNs do not perform quite so well.
 
 LRNNs are also advantageous considering the time required to train a well
-performing model: On average, this takes less than 3\,s per series, excluding
-file access. The ARIMA experiments with an R implementation are fastest (0.35\,s
+performing model with less than 3 s per series for training and testing on average: \\
+
+\noindent \begin{tabular}{cccccc}
+\toprule
+& Arima (R) & Arima (Python)  & ESN & LSTM & LRNN\\ \midrule
+Train + test time & 0.35s & 3.2 s & 1.24 s & 125.43 s & 2.97 s \\ \bottomrule
+\end{tabular}
+
+~\\
+The ARIMA experiments with an R implementation are fastest (0.35\,s
 per series) but often perform even worse than our baseline. Interestingly, an
 ARIMA implementation in Python turns out to be much slower (3.20\,s per series).
 ESN learning takes 1.24\,s per series. LRNNs more or less extend the ESN
-approach and take 2.97\,s per series on average with our approach, this time
-includes repeated reservoir generations. LSTM learning including hyper parameter
+approach and take 2.97\,s per series on average with our approach, 
+including required repeated reservoir generations. LSTM learning including hyperparameter
 selection takes 125.4\,s per series. All experiments are run on an Intel
 i9-10940X, 3.3\,GHz CPU, and 128\,GB RAM.
+
 
 %%% RESULTS (times)
 % ARIMA - MSO8 on signal01..signal20: (R implementation), very fast: 0.35s / series on average (excl. file access), just the model
