@@ -111,8 +111,7 @@ Cumul = cumsum(Multi);
 k1 = 1;
 k2 = K;
 while (k1<k2)
-  #k = idivide(k1+k2,2); % binary search
-  k = floor((k1+k2)/2); % binary search
+  k = fix((k1+k2)/2); % binary search
   NN = Cumul(k);
   JJ = J(1:NN,1:NN);
   YY = compute(JJ,start(NN),n);
