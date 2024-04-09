@@ -1,0 +1,11 @@
+.saves
+.Rhistory
+*~
+recupred.aux
+recupred.bbl
+recupred.blg
+recupred.log
+recupred.out
+recupred.pdf
+recupred.spl
+*.synctex.gz

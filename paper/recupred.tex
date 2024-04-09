@@ -1,8 +1,6 @@
 % !TeX spellcheck = en_US
 
-\documentclass[preprint,12pt,times,authoryear]{elsarticle}%nopreprintline,
-%\documentclass[final,1p,times,twocolumn,authoryear]{elsarticle}
-\journal{Neural Networks} % if no nopreprintline option
+\documentclass{rsproca_new}
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
@@ -37,29 +35,28 @@
 \sloppy
 \frenchspacing
 
+\titlehead{Research}
 \begin{document}
 
-\begin{frontmatter}
 \title{The Power of Linear Recurrent Neural Networks}
 
-\author[1]{Frieder Stolzenburg\corref{cor}} \ead{fstolzenburg@hs-harz.de} %\orcid 0000-0002-4037-2445}
-\author[1]{Sandra Litz} %\ead{litz\_sandra@web.de} %\orcid{0009-0000-8147-4424}
-\author[2]{Olivia Michael} %\ead{olivia\_michael@hotmail.com} %\orcid{0000-0002-5719-2299}
-\author[2]{Oliver Obst} \ead{o.obst@westernsydney.edu.au} %\orcid{0000-0002-8284-2062}
-\cortext[cor]{Corresponding author}
+\author{Frieder Stolzenburg$^{1}$, Sandra Litz$^{1}$, Olivia Michael$^{2}$, and Oliver Obst$^{2}$}
 
-\affiliation[1]{organization={Faculty of Automation and Computer Science, Harz University of Applied Sciences},
-            addressline={Friedrichstr.~57-59},
-            city={38855~Wernigerode},
-            %postcode={},
-            %state={},
-            country={Germany}}
-\affiliation[2]{organization={Centre for Research in Mathematics and Data Science, Western Sydney University},
-            %addressline={Locked Bag 1797},
-            city={Penrith~NSW~2751},
-            %state={NSW},
-            %postcode={2751},
-            country={Australia}}
+% Frieder: fstolzenburg@hs-harz.de orcid 0000-0002-4037-2445
+% Sandra: litz\_sandra@web.de orcid 0009-0000-8147-4424
+% Olivia: olivia\_michael@hotmail.com  orcid 0000-0002-5719-2299
+% Oliver: o.obst@westernsydney.edu.au  orcid 0000-0002-8284-2062
+
+\address{$^{1}$Faculty of Automation and Computer Science, Harz University of Applied Sciences,\\
+         Friedrichstr.~57-59, 38855~Wernigerode, Germany\\
+         $^{2}$Centre for Research in Mathematics and Data Science, Western Sydney University,\\
+         Locked Bag 1797, Penrith~NSW~2751, Australia}
+
+\keywords{recurrent neural network, linear activation, time-series analysis, prediction,
+dimensionality reduction, approximation theorem, ellipse trajectories}
+
+
+\corres{Frieder Stolzenburg\\ \email{fstolzenburg@hs-harz.de}}
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
@@ -79,25 +76,22 @@ oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs o
 the previous state-of-the-art for the MSO task with a minimal number of units.
 \end{abstract}
 
+%\rsbreak
 %%%Research highlights
 %\begin{highlights}
 %\item Research highlight 1
 %\item Research highlight 2
 %\end{highlights}
 
-\begin{keyword}
-recurrent neural network; linear activation; time-series analysis; prediction;
-dimensionality reduction; approximation theorem; ellipse trajectories.
+%\begin{keyword}
 
-\MSC[2010] 15A06 %Linear equations
-\sep 62M10 %Time series, auto-correlation, regression, etc.
-\sep 62M45 %Neural nets and related approaches
-\sep 68T05 %Learning and adaptive systems
+%\MSC[2010] 15A06 %Linear equations
+%\sep 62M10 %Time series, auto-correlation, regression, etc.
+%\sep 62M45 %Neural nets and related approaches
+%\sep 68T05 %Learning and adaptive systems
 
-\emph{ACM class:} I.2.6 %Artificial Intelligence - Learning
-\end{keyword}
-
-\end{frontmatter}
+%\emph{ACM class:} I.2.6 %Artificial Intelligence - Learning
+%\end{keyword}
 
 %\linenumbers
 
