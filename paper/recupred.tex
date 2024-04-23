@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
-
-\documentclass{rsproca_new}
+\documentclass[openacc]{rsproca_new}
+\titlehead{Research}
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
@@ -26,7 +26,7 @@
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
 
-\usepackage{todonotes}
+%\usepackage{todonotes}
 %\usepackage[disable]{todonotes}
 
 % to format tab head differently from numeric body columns
@@ -35,7 +35,6 @@
 \sloppy
 \frenchspacing
 
-\titlehead{Research}
 \begin{document}
 
 \title{The Power of Linear Recurrent Neural Networks}
@@ -56,7 +55,8 @@
 dimensionality reduction, approximation theorem, ellipse trajectories}
 
 
-\corres{Frieder Stolzenburg\\ \email{fstolzenburg@hs-harz.de}}
+\corres{Frieder Stolzenburg\\
+  \email{fstolzenburg@hs-harz.de}}
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
@@ -68,7 +68,7 @@ and this is the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
-learn network weights but also the network architecture. LRNNs have interesting
+learn network weights but also the network architecture. \absbreak LRNNs have interesting
 properties: They end up in ellipse trajectories in the long run and allow the
 prediction of further values and compact representations of functions. We
 demonstrate this by several experiments, among them multiple superimposed
@@ -76,7 +76,8 @@ oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs o
 the previous state-of-the-art for the MSO task with a minimal number of units.
 \end{abstract}
 
-%\rsbreak
+\rsbreak
+
 %%%Research highlights
 %\begin{highlights}
 %\item Research highlight 1
