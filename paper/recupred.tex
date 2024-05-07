@@ -4,7 +4,6 @@
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
-
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
@@ -21,16 +20,20 @@
 
 % other packages
 \usepackage{algorithmicx}
-\usepackage{csquotes,natbib,url}
+\usepackage[numbers]{natbib}
+\usepackage{csquotes,url}%natbib,
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
+\usepackage{comment}
 
 %\usepackage{todonotes}
 %\usepackage[disable]{todonotes}
 
 % to format tab head differently from numeric body columns
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
+%\newcommand{\citep}[1]{\cite{#1}}
+%\newcommand{\citet}[1]{\cite{#1}}
 
 \sloppy
 \frenchspacing
@@ -68,12 +71,12 @@ and this is the main contribution of this article, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
-learn network weights but also the network architecture. \absbreak LRNNs have interesting
+learn network weights but also the network architecture.  LRNNs have interesting
 properties: They end up in ellipse trajectories in the long run and allow the
 prediction of further values and compact representations of functions. We
 demonstrate this by several experiments, among them multiple superimposed
 oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs outperform
-the previous state-of-the-art for the MSO task with a minimal number of units.
+the previous state-of-the-art for the MSO task with a minimal number of units.  \absbreak
 \end{abstract}
 
 \rsbreak
@@ -97,54 +100,53 @@ the previous state-of-the-art for the MSO task with a minimal number of units.
 %\linenumbers
 
 \section{Introduction}
-
-Deep learning in general means a class of machine learning algorithms that use a
-cascade of multiple layers of nonlinear processing units for feature extraction
-and transformation \citep{DY14}. The tremendous success of deep learning in
-diverse fields of artificial intelligence, such as computer vision and natural
-language processing, seems to depend on a bunch of ingredients: artificial,
-possibly recurrent neural networks (RNNs) with nonlinearly activated neurons,
-convolutional layers, and iterative training methods like backpropagation
-\citep{GBC16}. But which of these components are really essential for machine
+Deep learning generally refers to a class of machine learning algorithms that use a 
+cascade of multiple layers of nonlinear processing units for feature extraction 
+and transformation \citep{DY14}. The tremendous success of deep learning in 
+diverse fields of artificial intelligence, such as computer vision and natural 
+language processing, appears to depend on several key components: artificial, 
+possibly recurrent neural networks (RNNs) with nonlinearly activated neurons, 
+convolutional layers, and iterative training methods like backpropagation 
+\citep{GBC16}. However, which of these components are truly essential for machine 
 learning tasks such as time-series analysis?
 
-Research in time series analysis and hence modeling dynamics of complex systems
-has a long tradition and is still highly active due to its crucial role in many
-real-world applications \citep{LBE15} like weather forecast, stock quotations,
-comprehension of trajectories of objects and agents, or solving number puzzles
-\citep{RK11,GW13}. The analysis of time series allows, among others, data
-compression, i.e., compact representation of time series, e.g., by a function
-$f(t)$, and prediction of further values.
+Research in time-series analysis and hence the modeling dynamics of complex systems 
+has a long tradition and remains highly active due to its crucial role in many 
+real-world applications \citep{LBE15}, such as weather forecasts, stock quotations, 
+comprehension of trajectories of objects and agents, and solving number puzzles 
+\citep{RK11,GW13}. Among other benefits, the analysis of time series enables data 
+compression, i.e., the compact representation of time series, for example, by a function 
+$f(t)$, and prediction of future values.
 
-Numerous research addresses these topics by RNNs, in particular variants of
-networks with long short-term memory (LSTM) \citep{HS97}. In the following, we
-consider an alternative, simple but very powerful type of RNNs: linear
-recurrent neural networks (LRNNs). Thus we only use linear activation, which
-allows us to minimize the network size in one step, namely by inspecting the
-eigenvalues of the network transition matrix (cf. \cref{reduce}). Therefore, in
-contrast to other approaches, we do not only learn network weights but also the
-network architecture.
+Numerous studies address these topics using RNNs, particularly variants of 
+networks with long short-term memory (LSTM) \citep{HS97}. Recent works in this area also aim to enhance the performance of RNNs, for example, HiPPO \citep{GDE+20} and structured state spaces \citep{GGR22}, which learn representations of signals over time.
 
-The rest of this paper is structured as follows: First, we briefly review related
-works (\cref{related}). We then formally introduce LRNNs as a special and simple
-kind of RNNs together with their properties, including the general network
-dynamics and their long-term behavior (\cref{define}). Afterwards, learning
-LRNNs is explained (\cref{learn}). It is a relatively straightforward procedure
-which allows network size reduction; no backpropagation or gradient-descent
-method is needed. We then discuss results and experiments (\cref{result}),
-before we end up with conclusions (\cref{conclude}).
+In the following, we consider an alternative, yet simple but very powerful type of RNNs: linear 
+recurrent neural networks (LRNNs). We utilize linear activation, which 
+allows us to minimize the network size in one step by inspecting the 
+eigenvalues of the network transition matrix (cf. \cref{reduce}). 
+Unlike other approaches, we do not only learn network weights but also the 
+network architecture itself. LRNNs are a computationally efficient complement to more 
+demanding approaches, suitable for scenarios where simplicity and rapid deployment are crucial.
 
-Interestingly, many results for LRNNs we present here can be achieved by
-applying linear algebra and matrix analysis. Nonetheless, to the best of our
-knowledge, the main contributions of this article have not been presented
-before, namely that LRNNs can effectively be learned by a simple procedure and,
-even more, their size can be reduced significantly in one step (cf.
-\cref{learn}). In addition, the empirical evaluations of, in particular, the MSO
-benchmark and stock price prediction (cf. \cref{mso,stock}) with LRNNs and other
-approaches, e.g., LSTM networks, demonstrate the usefulness of our approach. We
-therefore hope that several interested communities can profit from this work,
-such as the neural engineering community, the time series prediction community,
-and the ESN community.
+The rest of this paper is structured as follows: First, we briefly review related 
+works (\cref{related}). We then formally introduce LRNNs as a special and simple 
+kind of RNN together with their properties, including the general network 
+dynamics and their long-term behavior (\cref{define}). Afterwards, learning 
+LRNNs is explained (\cref{learn}). It is a relatively straightforward procedure 
+which allows for network size reduction; no backpropagation or gradient-descent 
+method is needed. We then discuss results and experiments (\cref{result}), 
+before concluding with our findings (\cref{conclude}).
+
+Interestingly, many results for LRNNs presented here can be achieved by 
+applying linear algebra and matrix analysis. Our theoretical contributions 
+facilitate a highly efficient learning process, previously unexplored in the literature. 
+Our approach allows for significant reductions in network size directly after initial training 
+(cf. \cref{learn}). In addition, the empirical evaluations, particularly of the MSO 
+benchmark and stock price prediction (cf. \cref{mso,stock}) with LRNNs and other 
+approaches, such as LSTM networks, demonstrate the practical applicability of our approach. We 
+are confident that this work will serve as a valuable resource across various domains, including 
+neural engineering, time series prediction, and echo state networks.
 
 \section{Related Works}\label{related}
 
@@ -158,33 +160,33 @@ this reservoir network a nonlinear response signal. They combine a desired
 output signal by a trainable linear combination of all response signals,
 allowing dimensionality reduction by so-called \emph{conceptors} \citep{Jae14,Jae17}.
 
-\citet{XYH07} propose a variant of ESNs that work with several independent
-(decoupled) smaller networks. ESN-style (random) initialization has been shown
+One variant of ESNs combines several independent
+(decoupled) smaller networks \citep{XYH07}. ESN-style (random) initialization has been shown
 effective for training RNNs with Hessian-free optimization~\citep{MS11}. The
 latter paper addresses the problem of how to effectively train recurrent neural
 networks on complex and difficult sequence modeling problems which may contain
 long-term data dependencies. This can also be done with LRNNs (cf. MSO
 benchmark, \cref{mso}).
-\citet{Tin18} considers the effect of weight changes in linear symmetric ESNs on
-(Fisher) memory of the network. Furthermore, \citet{CW+16} investigate the
+Previous work in \citep{Tin18} considers the effect of weight changes in linear symmetric ESNs on
+(Fisher) memory of the network. Furthermore, work in \citep{CW+16} investigates the
 asymptotic performance of linear ESNs from a solely theoretical point of view.
 
 \subsection{Recurrent Neural Networks}
 
-Simple RNNs are proposed by \citet{Elm90}. By allowing them to accept sequences
+Simple RNNs have been proposed originally in \citep{Elm90}. By allowing them to accept sequences
 as inputs and outputs rather than individual observations, RNNs extend the
 standard feedforward multilayer perceptron networks. As shown in many sequence
 modeling tasks, data points such as video frames, audio snippets, and sentence
 segments are usually highly related in time. This results in RNNs being used as
 the indispensable tools for modeling such temporal dependencies. Linear RNNs and
-some of their properties (like short-term memory) are already investigated by
-\citet{WLS94}. Unfortunately, however, it can be a struggle to train RNNs to
+some of their properties (like short-term memory) are already investigated in
+\citep{WLS94}. Unfortunately, however, it can be a struggle to train RNNs to
 capture long-term dependencies \citep{BSF94,PMB13}. This is due to the
 gradients vanishing or exploding during backpropagation which in turn makes the
 gradient-based optimization difficult.
 
-Nowadays, probably the most prominent and dominant type of RNNs are long
-short-term memory (LSTM) networks introduced by \citet{HS97}. The expression \enquote{long
+As a next step,  long short-term memory (LSTM) networks \citep{HS97} became 
+a prominent and dominant type of RNN. The expression \enquote{long
 short-term} refers to the fact that LSTM is a model for the short-term memory
 which can last for a long period of time. An LSTM is well-suited to classify,
 process and predict time series given time lags of unknown size. They were
@@ -194,8 +196,8 @@ an input gate, an output gate, and a forget gate. Each unit type is activated in
 a different manner, whereas in this paper we consider completely linearly
 activated RNNs.
 
-\citet{OTC15} suggest the NoBackTrack algorithm in RNNs to
-train its parameters. This algorithm works in an online, memoryless setting
+The NoBackTrack algorithm \citep{OTC15} trains RNN parameters in an online, 
+memoryless setting
 which therefore requires no backpropagation through time. It is also scalable,
 thus avoiding the large computational and memory cost of maintaining the full
 gradient of the current state with respect to the parameters, but it still uses
@@ -204,21 +206,19 @@ related works, in this paper we present a method working with linearly activated
 RNNs that does not require backpropagation or similar procedures in the learning
 phase.
 
-\citet{HQ17} propose a novel state-frequency memory (SFM) RNN,
-which aims to model the frequency patterns of the temporal sequences.
+State-frequency memory (SFM) RNN \citep{HQ17}  
+aim to model the frequency patterns of the temporal sequences.
 The key idea of the SFM is to decompose the memory states into different
 frequency states. In doing so, they can explicitly learn the dependencies of
 both the low and high frequency patterns. As we will see (cf. \cref{mso}),
 RNNs in general can easily learn time series that have a constant frequency
 spectrum, which may be obtained also by Fourier analysis.
 
-\citet{VKE19} propose a memory cell for recurrent neural networks that maintains
-information across long windows of time using relatively few resources, called
-Legendre memory unit (LMU). It is derived from the linear transfer function for
+The Legendre memory unit (LMU) \citep{VKE19}  is a memory cell for recurrent neural networks that maintains information across long windows of time using relatively few resources. It is derived from the linear transfer function for
 a continuous-time history of its input signal across a sliding window,
 approximated by coupled differential equations, which can implicitly also be
 solved by LRNNs (cf. \cref{rem}).
-\citet{CSB21} propose an approach to address memorization challenges in RNNs
+Work in \citep{CSB21} proposes an approach to address memorization challenges in RNNs
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
@@ -228,12 +228,12 @@ significantly in addition (cf. \cref{reduce}), thus we address the topic of
 architecture learning.
 
 Architecture learning, in particular the pruning of neural networks, has been
-studied extensively in the literature. An early survey on pruning algorithms
-for neural networks is given by \citet{Ree93}. In more recent work,
-\citet{LAT19} present a method that prunes irrelevant connections between
+studied extensively in the literature, with an early survey on pruning algorithms
+for neural networks in \citep{Ree93}. More recent work \citep{LAT19} presents 
+a method that prunes irrelevant connections between
 neurons for a given task prior to training and is applicable to a variety of
 modern neural network models, resulting in sparse networks. Furthermore,
-\citet{MM+19} propose a method that estimates the contribution of a neuron to
+\citep{MM+19} propose a method that estimates the contribution of a neuron to
 the final loss and iteratively removes those with smaller scores. In contrast to
 this, for LRNNs, the network architecture and hence its size is reduced in one
 step by analyzing the network transition matrix (cf. \cref{reduce}).
@@ -272,9 +272,9 @@ Autoregressive frameworks are common in current machine-learning applications
 like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
 by next word prediction \citep{BM+20}. The models applied in this context,
 however, are very complex (175 billion parameters and even much more) and non-linear.
-Related to autoregression is autoencoding of sequences. For this, \citet{PS14}
-show that linear autoencoders can be used for pre-training of RNNs, while we
-establish completely linear RNNs here. Furthermore, \citet{Spe06} gives an
+Related to autoregression is autoencoding of sequences. It has been shown in \citep{PS14}
+that linear autoencoders can be used for pre-training of RNNs, while we
+establish completely linear RNNs here. Furthermore, \citep{Spe06} gives an
 exact closed-form solution for the weights of the linear autoencoder, which is
 related to the approximation theorem for LRNNs (cf. \cref{approx}).
 
@@ -459,15 +459,18 @@ this later (in \cref{continued}).
 \end{exmp}
 
 \begin{figure}
-  \begin{minipage}[t]{0.3\textwidth}
+  \begin{minipage}[t]{0.32\textwidth}
+  \vspace{0pt}
 	(a) \input{fig/example.tikz}
   \end{minipage}
 	\hfill
-  \begin{minipage}[t]{0.3\textwidth}
-	(b) \input{fig/fibonacci.tikz}
+  \begin{minipage}[t]{0.32\textwidth}
+  \vspace{0pt}
+  	(b) \input{fig/fibonacci.tikz}
   \end{minipage}
 	\hfill
-  \begin{minipage}[t]{0.34\textwidth}
+  \begin{minipage}[t]{0.32\textwidth}
+  \vspace{0pt}
 	(c) \input{fig/reduced.tikz}
   \end{minipage}
   \caption{LRNNs for (a) $f(t) = t^2$ and (b\,+\,c) the Fibonacci series
@@ -565,6 +568,7 @@ to right is constant, with:
 \end{equation}
 \end{prop}
 
+\begin{comment}
 \begin{remk}\label{general}
 Although the parameter $t$ is discrete, i.e., a nonnegative integer number, the
 values of $f(t) = W^t \cdot s$ can also be computed for $t \in \mathbb{R}$ and
@@ -589,6 +593,7 @@ are always real. For this, we consider the Jordan block powers from \cref{power}
 	$\lambda$ are always positive and real and hence need no special consideration.
 \end{itemize}
 \end{remk}
+\end{comment}
 
 A Jordan decomposition exists for every square matrix $W$ \citep[Theorem~3.1.11]{HJ13}.
 But if $W$ has $N$ distinct eigenvectors, there is a simpler decomposition,
@@ -781,9 +786,9 @@ may be different for transition matrices other than pure random reservoirs.
 
 \begin{figure}
   \centering
-    (a) \raisebox{-55mm}{\includegraphics[scale=0.37]{fig/spectrum}} \hfill
-    (b) \raisebox{-55mm}{\includegraphics[scale=0.37]{fig/ellipse}} \\[5mm]
-    (c) \raisebox{-55mm}{\includegraphics[scale=0.37]{fig/wave}}
+    (a) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/spectrum}} \hfill
+    (b) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/ellipse}} \hfill
+    (c) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/wave}}
   \caption{Dynamic system behavior of a pure random reservoir with unit spectral
 	radius, with $N^\mathrm{res} = 100$ neurons:
     (a)~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
@@ -984,7 +989,7 @@ reliable than the one with given, i.e., predefined random input and reservoir
 weights and unit spectral radius for the reservoir (cf. \cref{output}).
 
 The topic of learning all weights in the matrix $W$ is investigated
-by \citet{PDW13} for ESNs with nonlinear activation function in the reservoir.
+In \citep{PDW13} for ESNs with nonlinear activation function in the reservoir.
 However, for LRNNs, the given input and reservoir weights $W^\mathrm{in}$ and
 $W^\mathrm{res}$ together with the learned output weights $W^\mathrm{out}$
 already provide the best approximation of the function $f(t)$. There is no need
@@ -995,6 +1000,7 @@ but additionally the reservoir state time series $R$ into account, then exactly
 the given input and reservoir weights are learned if \cref{ineq} holds. Only
 with nonlinear activation there is a learning effect.
 
+\begin{comment}
 \begin{remk}[generalization to nonlinear activation]
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(s)$ from the possibly multi-dimensional (start) input $s$. Only linearly
@@ -1008,6 +1014,7 @@ $W^\mathrm{out} = g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence, LRNN learning is as
 easy as learning a single-layer perceptron and allows us to approximate any
 (possibly nonlinear) function over time $f(t)$ efficiently. 
 \end{remk}
+\end{comment}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
@@ -1021,6 +1028,7 @@ also holds for them \citep{MNM02}. Any measurable function can be
 approximated with a (general) recurrent network arbitrarily well in probability
 \citep{Ham00}.
 
+\begin{comment}
 \begin{remk}
 Any time series $S(0),\dots,S(n)$ can be generated by employing a backward shift
 matrix, i.e., a binary matrix with $1$s on the subdiagonal and $0$s elsewhere
@@ -1032,6 +1040,7 @@ the eigenvalue spectrum of the backward shift matrix is empty, whereas that of
 the learned $W$ is not, which is important for network size reduction
 introduced in \cref{reduce}.
 \end{remk}
+\end{comment}
 
 \subsection{Network Size Reduction}\label{reduce}
 
@@ -1105,10 +1114,9 @@ eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
 of single linkage clustering \citep{GR69}. The complete implementation of the
 learning procedure together with some case studies (cf. \cref{result}) is
-available under the following link:
-\begin{center}
-	\url{http://github.com/OliverObst/decorating/}
-\end{center}
+publicly available 
+	\url{http://github.com/OliverObst/decorating/}.
+
 
 \begin{figure}\footnotesize
 \newcommand{\commt}[1]{\%~#1\\}%
@@ -1203,7 +1211,7 @@ be greater than $1$ if the function $f(t)$ to be modeled is exponentially
 increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
-
+\begin{comment}
 \begin{remk}\label{complexity}
 In both learning steps, it is possible to employ any of the many available fast
 and constructive algorithms for linear regression and eigendecomposition
@@ -1215,6 +1223,7 @@ complexity depends on the bit length of numbers in floating point arithmetic,
 of course, and may be worse hence. The size of the learned network is in $O(N)$
 (cf. \cref{reduce}).
 \end{remk}
+\end{comment}
 
 Note that, in contrast, feedforward networks with three threshold neurons
 already are NP-hard to train \citep{BR92}. This results from the fact
@@ -1226,6 +1235,7 @@ overall time complexity of the whole learning procedure because it is not
 embedded in a time-consuming iterative learning procedure (like backpropagation)
 as in other state-of-the-art methods.
 
+\begin{comment}
 \begin{remk}
 We observe that most of the results presented in this paper still
 hold if the transition matrix $W$ contains complex numbers. This means in
@@ -1235,6 +1245,7 @@ Nonetheless, the long-term behavior of networks with a random complex transition
 matrix $W$ differs from the one described in \cref{ellipse} because then
 there are no longer pairs of complex conjugate eigenvalues.
 \end{remk}
+\end{comment}
 
 \section{Experiments}\label{result}
 
@@ -1254,15 +1265,29 @@ by our LRNN learning procedure (cf. \cref{learn})?
 \end{exmp}
 
 \begin{figure}
-	\centering
-	\includegraphics[width=0.55\textwidth]{fig/parasin2}
-	\caption{Graphs for \cref{quest}: a parabola and a sinusoid.
+	\centering	
+        \hfill %
+                 \includegraphics[width=0.45\textwidth]{fig/parasin2}
+        \hfill %
+	\includegraphics[width=0.45\textwidth]{fig/accuracy}
+	\hfill
+	\caption{\textbf{Left}: Graphs for \cref{quest}: a parabola and a sinusoid.
 	The question is: which one is which? Both can be learned and
 	distinguished by LRNNs from the visually similar positive parts of the
 	respective graphs, i.e., function values for $t \in [0, 1]$. In this
 	interval, all values of the parabola (solid/blue) are greater than or equal
-	to those of the sinusoid (dashed/red).}
-	\label{parasin}
+	to those of the sinusoid (dashed/red).
+	\textbf{Right}: For \cref{quest}, how often LRNNs of minimal size are
+	learned after network size reduction, i.e., with $N_1 = 3$ neurons for
+	the parabola and $N_2 = 2$ neurons for the sinusoid? The diagram shows
+	the success rate of the learning procedure in this regard as a function
+	of the number of reservoir neurons $N^\mathrm{res}$ before network size
+	reduction (for 100 trials). Networks of minimal size are learned
+	starting already with $N^\mathrm{res} = 40$ reservoir neurons in about
+	77\% (parabola, solid/blue) or 99\% (sinusoid, dashed/red) of the
+	trials.}
+    \label{parasin}
+	\label{dimens}
 \end{figure}
 
 To investigate this, we sample both graphs for $t \in [0,1]$ with time step
@@ -1282,17 +1307,6 @@ to \cref{eigen} but only a Jordan decomposition according to \cref{jordan}.
 
 \begin{figure}
 	\centering
-	\includegraphics[width=0.55\textwidth]{fig/accuracy}
-	\caption{For \cref{quest}, how often LRNNs of minimal size are
-	learned after network size reduction, i.e., with $N_1 = 3$ neurons for
-	the parabola and $N_2 = 2$ neurons for the sinusoid? The diagram shows
-	the success rate of the learning procedure in this regard as a function
-	of the number of reservoir neurons $N^\mathrm{res}$ before network size
-	reduction (for 100 trials). Networks of minimal size are learned
-	starting already with $N^\mathrm{res} = 40$ reservoir neurons in about
-	77\% (parabola, solid/blue) or 99\% (sinusoid, dashed/red) of the
-	trials.}
-	\label{dimens}
 \end{figure}
 
 \subsection{Multiple Superimposed Oscillators}\label{mso}
@@ -1312,30 +1326,31 @@ sinusoids. We concentrate here solely on the most complex case $K=8$
 because in contrast to other approaches it is still easy to learn for LRNNs.
 Applying the LRNN learning procedure with precision threshold $\theta = 0.5$,
 we arrive at LRNNs with only $N=16$ reservoir neurons and an RMSE less than
-$10^{-5}$ (cf. \cref{signal}), if we start with a large enough reservoir (cf.
-\cref{mso8}). Since two neurons are required for each frequency (cf.
+$10^{-5}$ (cf. \cref{signal} left), if we start with a large enough reservoir (cf.
+\cref{mso8} right). Since two neurons are required for each frequency (cf.
 \cref{ellipse}), $2K=16$ is the minimal reservoir size. Thus LRNNs outperform
 the previous state-of-the-art for the
-MSO task with a minimal number of units. \citet{KLB12} report $N^\mathrm{res} =
+MSO task with a minimal number of units. Previous results \citep{KLB12} report $N^\mathrm{res} =
 68$ as the optimal reservoir size for ESNs, but in contrast to our approach,
 this number is not further reduced.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.65\textwidth]{fig/mso8_prediction_1}
-  \caption{The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[height=5cm]{fig/mso8_prediction_2}
+  \end{minipage}\hfill
+  \begin{minipage}{0.48\textwidth}
+    \centering
+    \includegraphics[height=5cm]{fig/mso8}
+  \end{minipage}
+  \caption{\textbf{Left}: The signal $S(t)$ of $K=8$ multiple superimposed oscillators (for $1
 	\le t \le 300$ and time step $\tau=1$) does not have a simple periodic
 	structure (small figure). LRNN learning leads to minimal networks with
 	only $N=16=2K$ reservoir neurons, i.e., two for each frequency in the
 	signal, with RMSE less than $10^{-5}$ (dashed line). Other methods do
-	not perform so well on the MSO benchmark (cf. dotted lines).}
-  \label{signal}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.56\textwidth]{fig/mso8}%
-  \caption{Experimental results for the MSO benchmark ($K=8$). The diagram shows the
+	not perform so well on the MSO benchmark (cf. dotted lines).
+	\textbf{Right}: Experimental results for the MSO benchmark ($K=8$). The diagram shows the
 	success rate (from 100 trials): from an initial reservoir size of $N^\mathrm{res}$
 	neurons, how often is the minimal LRNN with size
 	$N=16$ learned? The two curves are for different lengths $T$ of the time series
@@ -1343,10 +1358,11 @@ this number is not further reduced.
 	minimal-size LRNN is learned in at least 96\% of the trials if
 	$N^\mathrm{res} \ge 70$. For these minimal LRNNs, the RMSE is smaller
 	than $10^{-5}$. As one can see, for $T=130$ (dashed/red) the given
-	information does not always suffice and leads to overfitting.}
+	information does not always suffice and leads to overfitting.	}
+  \label{signal}
   \label{mso8}
 \end{figure}
-
+    
 For a more systematic evaluation, we generalize the MSO benchmark (\cref{exmp})
 by considering $20$ times $K=8$ random frequencies $\alpha_1,\dots,\alpha_8$
 uniformly distributed on the interval $[0,1]$. We take the first $250$ time
@@ -1358,7 +1374,7 @@ time series, including a simple baseline:
 
 \begin{itemize}
   \item Baseline: Constantly predict the arithmetic mean of the training data.
-  \item ARIMA: We use the AutoARIMA package from \citet{HK08}.
+  \item ARIMA: We use the AutoARIMA package \citep{HK08}.
   \item ESN: For this, we adapt the simple sparse ESN demo by Mantas
 	Luko\v{s}evi\v{c}ius from \url{http://mantas.info/code/simple_esn/}.
 	We also use ReservoirPy~\citep{TPDH20}.
@@ -1410,6 +1426,7 @@ i9-10940X, 3.3\,GHz CPU, and 128\,GB RAM.
 
 	
 \begin{sidewaystable}
+%\begin{table}
   \centering\footnotesize
   \begin{tabular}{c*{8}{p{8mm}}cccc@{\,+\,}cccc}
      \toprule
@@ -1444,13 +1461,14 @@ neural network is given. For LRNNs, the network size $N$ after network size
 reduction is shown.}
 \label{sideways}
 \end{sidewaystable}
+%\end{table}
 
 \subsection{Solving Number Puzzles}
 
 \begin{exmp}
 Number series tests are a popular type of intelligence test. The function
 represented by a number series can often be learned also by artificial neural
-networks, in particular RNNs. \citet{GW13} list 20 number puzzles \citep[cf.][]{RK11}.
+networks, in particular RNNs. In \citep{GW13}, 20 number puzzles are listed \citep[cf.][]{RK11}.
 Among them are the series:
 
 \[ \begin{array}{c@{\,=\,}lc@{\,=\,}l}
@@ -1527,7 +1545,7 @@ application of machine learning. A \emph{soccer simulation} game lasts 10\,mins 
 divided into 6000 time steps where the length of each cycle is 100\,ms. Logfiles
 contain information about the game, in particular about the current positions of
 all players and the ball including velocity and orientation for each cycle.
-\citet{MO+19} describe a research dataset using some of the released binaries of
+Michael et al.~\citep{MO+19} describe a research dataset using some of the released binaries of
 the RoboCup 2D soccer simulation league \citep{CDF+03,GFG16} from 2016 and 2017
 \citep{MO+18}. In our experiments we evaluated ten games of the
 top-five teams (available from \url{http://bitbucket.org/oliverobst/robocupsimdata}),
@@ -1572,23 +1590,10 @@ ones (Euclidean distance) -- over the whole length of the game (cf.
 \cref{game}). Network size reduction leads to significantly less neurons
 compared to the original number $N = 46+500 = 546$ -- on average 29.2\% if we
 concentrate on the relevant components for the ball trajectory (cf.
-\cref{robocup}). Note that the size of the learned network is in $O(N)$ (cf.
-\cref{complexity}). Thus the LRNN model is definitely smaller than the
+\cref{robocup}). Note that the size of the learned network is in $O(N)$. % (cf. \cref{complexity}). 
+Thus the LRNN model is definitely smaller than the
 original time series representation of a game. The complete learning procedure
 runs in less than a minute on standard hardware.
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.8\columnwidth]{fig/game6}
-  \caption{Ball trajectory of RoboCup 2D soccer simulation game \#6
-	(\emph{Oxsy}~0 versus \emph{Gliders}~2016) on a pitch of size
-	$105\,\mathrm{m} \times 68\,\mathrm{m}$. For all time steps, the
-	original trajectory of the ball during play is shown (dotted/black). The
-	game can be replayed by an LRNN with $N = 500+46 = 546$ neurons with high
-	accuracy (solid/blue). The reduced network with $N = 354$ reservoir
-	neurons still mimics the trajectory with only small error (dashed/red).}
-	\label{game}
-\end{figure}
 
 \cref{multi} shows how we can learn from multiple time series at once. This is
 also helpful here because by this procedure we can investigate the overall
@@ -1606,16 +1611,24 @@ line.
 
 \begin{figure}
 \centering
+\includegraphics[width=0.43\columnwidth]{fig/game6} % 30.48x20.32
 \hfill %
-\includegraphics[width=0.34\columnwidth]{fig/goalie}     % 3450x4373
+\includegraphics[width=0.2\columnwidth]{fig/goalie}     % 3450x4373. (23)
 \hfill %
-\includegraphics[width=0.57\columnwidth]{fig/goalievisits} % 5717x4437
-\hfill %
-\caption{Left: Trajectory of the FRA-UNIted goalkeeper in front of the goal
+\includegraphics[width=0.35\columnwidth]{fig/goalievisits} % 5717x4437 (38)
+\caption{Left: Ball trajectory of RoboCup 2D soccer simulation game \#6
+	(\emph{Oxsy}~0 versus \emph{Gliders}~2016) on a pitch of size
+	$105\,\mathrm{m} \times 68\,\mathrm{m}$. For all time steps, the
+	original trajectory of the ball during play is shown (dotted/black). The
+	game can be replayed by an LRNN with $N = 500+46 = 546$ neurons with high
+	accuracy (solid/blue). The reduced network with $N = 354$ reservoir
+	neurons still mimics the trajectory with only small error (dashed/red).
+Middle: Trajectory of the FRA-UNIted goalkeeper in front of the goal
 during games at the RoboCup Japan Open 2020. Right: Dots (in blue) mark positions
 that were visited more than three times (larger dots: more visits, 0.5\,m resolution),
 information that can be derived from predictions, highlighting three larger,
 frequently visited regions in front of the goal.}
+\label{game}
 \label{frankfurt}
 \end{figure}
 
@@ -1625,7 +1638,7 @@ Stock price prediction is a topic that receives a considerable amount of
 attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
-\citet{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
+The work in \citep{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
 closing stock prices 2016--2019. The stock price time series (consisting of
 $762$ data points each) are split into training and testing data, with the first
 80\% of each series for training and the final 20\% for evaluation. For a
@@ -1666,7 +1679,7 @@ As one can see in \cref{dax}, LRNNs outperform the other approaches in the
 majority of all cases, namely for 19~of~39 stocks, where the resulting network
 size $N$ after size reduction often is rather small. However, the overall
 performance for all approaches often is not much better than the baseline (see
-also \cref{stockfig}). In line with that, the review by \citet{SIZ19} shows that
+also \cref{stockfig}). In line with that, the review in \citep{SIZ19} shows that
 predicting stock prices remains a challenging problem, especially for a longer
 timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
@@ -1769,8 +1782,8 @@ reservoir computing~\citep{Mea90,IL+11,LL17}. Neuromorphic computing refers to
 new hardware that mimics the functioning of the human brain, and neuromorphic
 hardware results from the exploration of unconventional physical substrates
 and nonlinear phenomena. Future work shall include improving predictive and
-memory capacity of LRNNs, analyzed for small networks by \citet{Mar17} and to
-some extent also by \citet{CW+16}. Last but not least, other machine learning tasks besides
+memory capacity of LRNNs, analyzed for small networks \citep{Mar17} and to
+some extent also in \citep{CW+16}. Last but not least, other machine learning tasks besides
 prediction shall be addressed in more detail, including classification and
 reinforcement learning~\citep{SB18,PGL17}.
 
