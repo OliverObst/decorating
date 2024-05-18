@@ -23,9 +23,9 @@ xd = [1 2 3]';
 % unknown
 
 % f = fibonacci(5) % fibonacci series
-Wf = [1 1;
-      1 0];
-xf = [1 1]';
+Wf = [0 1;
+      1 1];
+xf = [0 1]';
 
 % g = 2.^(2.^(0:3)) % double exponential
 % not possible with LRNNs
