@@ -755,7 +755,7 @@ b\,\sin(\omega\,t) \big]^\top$ where $a,b > 0$ are half the width and height of
 the ellipse. Applying the addition theorems of trigonometry, we get:
 \begin{eqnarray*}
 	f(t+\tau) & = &
-	\left[ \begin{array}{c} a\,\cos\!\big(\omega\,(t+\tau)\big) \\ b\,\sin\!\big(\omega\,(t+\tau)\big) \end{array} \right]\\ & = &
+	\left[ \begin{array}{c} a\,\cos\!\big(\omega\,(t+\tau)\big) \\ b\,\sin\!\big(\omega\,(t+\tau)\big) \end{array} \right]  = 
 	\left[ \begin{array}{c}
 		a\,\big(\!\cos(\omega\,t) \cos(\omega\,\tau) - \sin(\omega\,t) \sin(\omega\,\tau) \big) \\
 		b\,\big(\!\sin(\omega\,t) \cos(\omega\,\tau) + \cos(\omega\,t) \sin(\omega\,\tau) \big)
@@ -957,7 +957,7 @@ See \ref{proof:approx}.
 
 Therefore, at least in theory, any time-dependent function $f(t)$ can be
 interpolated, i.e., exactly approximated on the given function values and
-continued on input other than nonnegative integer numbers (cf. \cref{general}),
+continued on input other than nonnegative integer numbers, % (cf. \cref{general}),
 although clearly not every function can be implemented by LRNNs, in particular
 functions increasing faster than single-exponential (cf. \cref{exponential})
 like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
@@ -1370,8 +1370,9 @@ steps, i.e., $t=1,\dots,250$, as training data and the subsequent $50$ time
 steps as testing data and compare the performance of LRNNs with other approaches
 (cf. \cref{related}) with respect to their RSME on the testing data, partially
 using the Python library Darts \citep[see also \url{http://unit8co.github.io/darts/}]{HLPN+22}  for
-time series, including a simple baseline:
-
+time series, including a simple baseline 
+predicting the arithmetic mean of the training data, ARIMA \citep{HK08}, simple sparse ESN demo by Mantas Luko\v{s}evi\v{c}ius from \url{http://mantas.info/code/simple_esn/}, and LSTM forecasting model implemented in Darts with hyperparameter optimization.
+\if 0
 \begin{itemize}
   \item Baseline: Constantly predict the arithmetic mean of the training data.
   \item ARIMA: We use the AutoARIMA package \citep{HK08}.
@@ -1384,6 +1385,7 @@ time series, including a simple baseline:
   \item LRNN: Here we adopt validation data as above and choose the best model
 	with respect to the RMSE on the validation data from 100 trials.
 \end{itemize}
+\fi
 
 \cref{sideways} shows the evaluation results. As one can see, LRNNs outperform
 all other approaches on this benchmark by far. The reason for this is certainly
@@ -1548,10 +1550,11 @@ all players and the ball including velocity and orientation for each cycle.
 Michael et al.~\citep{MO+19} describe a research dataset using some of the released binaries of
 the RoboCup 2D soccer simulation league \citep{CDF+03,GFG16} from 2016 and 2017
 \citep{MO+18}. In our experiments we evaluated ten games of the
-top-five teams (available from \url{http://bitbucket.org/oliverobst/robocupsimdata}),
-considering only the $(x,y)$-coordinates of the ball and the altogether 22
-players for all time points during the so-called \enquote{play-on}
-mode.
+top-five teams (available from \url{http://bitbucket.org/oliverobst/robocupsimdata}), 
+considering only the $(x,y)$-coordinates of the ball and the 22 players.
+%considering only the $(x,y)$-coordinates of the ball and the altogether 22
+%players for all time points during the so-called \enquote{play-on}
+%mode.
 
 \begin{table}
 \centering\footnotesize
@@ -1602,7 +1605,7 @@ trajectories of the goalkeeper of the RoboCup simulation team FRA-UNIted during
 the seeding and the qualifying round of RoboCup Japan Open 2020 (see
 \url{http://bit.ly/japanopen2020ssim}). For learning one LRNN from this, we employ a
 reservoir with $N^\mathrm{res} = 1000$ neurons, adopt again a maximum threshold
-for the RMSE of $\theta = 1$\,m, and only use every $20^\text{th}$ step of each of the
+for the RMSE of $\theta = 1$\,m,\marginpar{???} and only use every $20^\text{th}$ step of each of the
 $7$ games. The overall trajectory of the FRA-UNIted goalkeeper can be learned
 easily then (cf. \cref{frankfurt}). From this, one may conclude that the
 goalkeeper takes up three basic positions in front of the goal, does not
