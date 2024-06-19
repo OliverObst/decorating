@@ -7,6 +7,8 @@
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
+\usepackage{xr}
+%\usepackage{xr-hyper} 
 \usepackage{hyperref} % hyperlinks
   \hypersetup{hidelinks}
 
@@ -34,6 +36,10 @@
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
 %\newcommand{\citep}[1]{\cite{#1}}
 %\newcommand{\citet}[1]{\cite{#1}}
+
+% External document reference
+\externaldocument{recupreda} 
+
 
 \sloppy
 \frenchspacing
@@ -296,7 +302,7 @@ $S(0),\dots,S(n) \in \mathbb{R}^d$ with $d \ge 1$ and $n \ge 0$.
 A \emph{recurrent neural network} (RNN) is a directed graph consisting of
 altogether $N$ nodes, called \emph{neurons}. $x(t)$ denotes the
 \emph{activation} of the neuron $x$ at (discrete) time $t$. We may distinguish
-three groups of neurons (cf. \cref{net}):
+three groups of neurons: % (cf. \cref{net}):
 \begin{itemize}
   \item $N^\mathrm{in}$ \emph{input} neurons (usually without incoming edges)
 	whose activation is given by an external source, e.g., a time series,
@@ -333,6 +339,7 @@ containing the following weight matrices:
 \end{itemize}
 \end{defn}
 
+\begin{comment}
 \begin{figure}
   \centering
   \input{fig/esn.tikz}
@@ -340,6 +347,7 @@ containing the following weight matrices:
 	trained and the hidden layer is also called reservoir.}
   \label{net}
 \end{figure}
+\end{comment}
 
 Let us now define the \emph{network activity}: The initial
 configuration of the neural network is given by a column vector $s$ with $N$
@@ -503,7 +511,7 @@ satisfying \cref{diff} and the following transition matrix:
 \end{prop}
 
 \begin{proof}
-See \ref{proof:rem}.
+See Appendix \ref{proof:rem}.
 \end{proof}
 
 \begin{exmp}\label{exp}
@@ -568,7 +576,7 @@ to right is constant, with:
 \end{equation}
 \end{prop}
 
-\begin{comment}
+%\begin{comment}
 \begin{remk}\label{general}
 Although the parameter $t$ is discrete, i.e., a nonnegative integer number, the
 values of $f(t) = W^t \cdot s$ can also be computed for $t \in \mathbb{R}$ and
@@ -593,7 +601,7 @@ are always real. For this, we consider the Jordan block powers from \cref{power}
 	$\lambda$ are always positive and real and hence need no special consideration.
 \end{itemize}
 \end{remk}
-\end{comment}
+%\end{comment}
 
 A Jordan decomposition exists for every square matrix $W$ \citep[Theorem~3.1.11]{HJ13}.
 But if $W$ has $N$ distinct eigenvectors, there is a simpler decomposition,
@@ -678,7 +686,7 @@ matrix $A$ of size $N \times N$ such that for all $t \ge 0$ we have:
 \end{prop}
 
 \begin{proof}
-See \ref{proof:chad}.
+See Appendix \ref{proof:chad}.
 \end{proof}
 
 \subsection{Long-Term Behavior}\label{ellipse}
@@ -696,7 +704,7 @@ polynomial and only single-exponential in $t$.
 \end{prop}
 
 \begin{proof}
-See \ref{proof:exponential}.
+See Appendix \ref{proof:exponential}.
 \end{proof}
 
 In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
@@ -744,6 +752,7 @@ In consequence, we have one of the following cases:
 \end{enumerate}
 \end{prop}
 
+%%% todo
 We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely real-valued
 (cf.~\cref{real}) which states the ellipse rotation. Furthermore, the rotation
 speed can be derived from the eigenvalue $\lambda_1$. In each step of length
@@ -802,7 +811,7 @@ may be different for transition matrices other than pure random reservoirs.
 
 \begin{figure}
  \centering
- \includegraphics[width=0.7\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
+ \includegraphics[width=0.6\textwidth]{fig/asymptot0} % asymptot1 for solid lines, 0 for dashed
   \caption{Asymptotic behavior of pure random reservoirs with unit spectral radius:
 	The (Euclidean) distance between the actual value $f(t)$
 	(according to \cref{form}) and its approximation by the final ellipse
@@ -952,7 +961,7 @@ LRNN with the following properties:
 \end{prop}
 
 \begin{proof}
-See \ref{proof:approx}.
+See Appendix \ref{proof:approx}.
 \end{proof}
 
 Therefore, at least in theory, any time-dependent function $f(t)$ can be
@@ -1605,7 +1614,7 @@ trajectories of the goalkeeper of the RoboCup simulation team FRA-UNIted during
 the seeding and the qualifying round of RoboCup Japan Open 2020 (see
 \url{http://bit.ly/japanopen2020ssim}). For learning one LRNN from this, we employ a
 reservoir with $N^\mathrm{res} = 1000$ neurons, adopt again a maximum threshold
-for the RMSE of $\theta = 1$\,m,\marginpar{???} and only use every $20^\text{th}$ step of each of the
+for the RMSE of $\theta = 1$\,m, and only use every $20^\text{th}$ step of each of the
 $7$ games. The overall trajectory of the FRA-UNIted goalkeeper can be learned
 easily then (cf. \cref{frankfurt}). From this, one may conclude that the
 goalkeeper takes up three basic positions in front of the goal, does not
@@ -1614,20 +1623,21 @@ line.
 
 \begin{figure}
 \centering
-\includegraphics[width=0.43\columnwidth]{fig/game6} % 30.48x20.32
+\includegraphics[width=0.54\columnwidth]{fig/game6} % 30.48x20.32
 \hfill %
-\includegraphics[width=0.2\columnwidth]{fig/goalie}     % 3450x4373. (23)
-\hfill %
-\includegraphics[width=0.35\columnwidth]{fig/goalievisits} % 5717x4437 (38)
+%\includegraphics[width=0.2\columnwidth]{fig/goalie}     % 3450x4373. (23)
+%\hfill %
+\includegraphics[width=0.43\columnwidth]{fig/goalievisits} % 5717x4437 (38)
 \caption{Left: Ball trajectory of RoboCup 2D soccer simulation game \#6
 	(\emph{Oxsy}~0 versus \emph{Gliders}~2016) on a pitch of size
-	$105\,\mathrm{m} \times 68\,\mathrm{m}$. For all time steps, the
+	$105\,\mathrm{m} \times 68\,\mathrm{m}$. For all 6000 time steps, the
 	original trajectory of the ball during play is shown (dotted/black). The
 	game can be replayed by an LRNN with $N = 500+46 = 546$ neurons with high
 	accuracy (solid/blue). The reduced network with $N = 354$ reservoir
 	neurons still mimics the trajectory with only small error (dashed/red).
-Middle: Trajectory of the FRA-UNIted goalkeeper in front of the goal
-during games at the RoboCup Japan Open 2020. Right: Dots (in blue) mark positions
+%Middle: Trajectory of the FRA-UNIted goalkeeper in front of the goal
+%during games at the RoboCup Japan Open 2020. 
+Right: Dots (in blue) mark positions
 that were visited more than three times (larger dots: more visits, 0.5\,m resolution),
 information that can be derived from predictions, highlighting three larger,
 frequently visited regions in front of the goal.}
@@ -1809,6 +1819,7 @@ most technologically feasible poster contribution.
 \bibliographystyle{RS}
 \bibliography{recupred}
 
+\if 0
 \appendix
 
 \section{Proof of \cref{rem}}\label{proof:rem}
@@ -1933,6 +1944,6 @@ rank of the matrix $X$ is maximal. For the latter, we consider two cases:
 	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
 	which completes the proof.
 \end{itemize}
-
+\fi 
 \end{document}
 
