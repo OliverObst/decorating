@@ -3,7 +3,7 @@
 \titlehead{Research}
 
 % versioning: long,proof
-\usepackage[none]{optional}
+\usepackage[long,proof]{optional}
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
@@ -879,6 +879,7 @@ entries (cf. \cref{chad}):
 	R(t_0) = r \text{~and~} R(t+\tau) =
 	\left[ W^\mathrm{in} ~~ W^\mathrm{res} \right] \cdot
 	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
+	= W^\mathrm{in} \cdot S(t) + W^\mathrm{res} \cdot R(t)
 \end{equation}
 We want to predict the next input value $S(t+\tau)$, given the current input and
 reservoir states $S(t)$ and $R(t)$. To achieve this, we comprise
