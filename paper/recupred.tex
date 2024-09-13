@@ -3,15 +3,13 @@
 \titlehead{Research}
 
 % versioning: long,proof
-\usepackage[long,proof]{optional}
+\usepackage[none]{optional}
 
 % mathematics
 \usepackage{amsmath,amssymb,amsthm}
 % language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
-\usepackage{xr}
-%\usepackage{xr-hyper} 
 \usepackage{hyperref} % hyperlinks
   \hypersetup{hidelinks}
 
@@ -36,11 +34,6 @@
 
 % to format tab head differently from numeric body columns
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
-%\newcommand{\citep}[1]{\cite{#1}}
-%\newcommand{\citet}[1]{\cite{#1}}
-
-% External document reference
-\externaldocument{recupreda} 
 
 \sloppy
 \frenchspacing
@@ -65,7 +58,7 @@
 dimensionality reduction, approximation theorem, ellipse trajectories}
 
 \corres{Frieder Stolzenburg\\
-  \email{fstolzenburg@hs-harz.de}}
+	\email{fstolzenburg@hs-harz.de}}
 
 \begin{abstract}
 Recurrent neural networks are a powerful means to cope with time series. We show
@@ -174,7 +167,7 @@ networks on complex and difficult sequence modeling problems which may contain
 long-term data dependencies. This can also be done with LRNNs (cf. MSO
 benchmark, \cref{mso}).
 Previous work in \citep{Tin18} considers the effect of weight changes in linear symmetric ESNs on
-(Fisher) memory of the network. Furthermore, work in \citep{CW+16} investigates the
+(Fisher) memory of the network. Furthermore, \citep{CW+16} investigates the
 asymptotic performance of linear ESNs from a solely theoretical point of view.
 
 \subsection{Recurrent Neural Networks}
@@ -224,7 +217,7 @@ The Legendre memory unit (LMU) \citep{VKE19}  is a memory cell for recurrent neu
 a continuous-time history of its input signal across a sliding window,
 approximated by coupled differential equations, which can implicitly also be
 solved by LRNNs (cf. \cref{rem}).
-Work in \citep{CSB21} proposes an approach to address memorization challenges in RNNs
+\citep{CSB21} proposes an approach to address memorization challenges in RNNs
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
@@ -715,16 +708,16 @@ case, namely a \emph{pure random reservoir} where both conditions do not hold:
 Consider an LRNN solely consisting of a random reservoir whose transition matrix
 $W^\mathrm{res}$ (a)~is completely real-valued, (b)~has (according to
 \cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$
-with unit spectral radius, and thus (c)~all eigenvalues are distinct (which is almost
-always, i.e., with probability close to $1$, true for random matrices), together
-with a completely real-valued random start vector $s$ with unit norm. Then,
-almost all terms $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large $t$
-because for all eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have
+with unit spectral radius, and thus (c)~all eigenvalues are distinct (which is
+almost always, i.e., with probability close to $1$, true for random matrices),
+together with a completely real-valued random start vector $s$ with unit norm.
+Then, almost all terms $x_k\,{\lambda_k}^t\,v_k$ in \cref{form} vanish for large
+$t$ because for all eigenvalues $\lambda_k$ with $|\lambda_k| < 1$ we have
 $\lim\limits_{t \to \infty} {\lambda_k}^t = 0$. Although a general real matrix
 can have more than two complex eigenvalues which are on the unit circle, for a
 pure random reservoir as considered here, almost always only the (largest)
-eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the absolute values $1$.
-In consequence, we have one of the following cases:
+eigenvalues $\lambda_1$ and possibly $\lambda_2$ have the (maximal) absolute
+values $1$. In consequence, we have one of the following cases:
 \begin{enumerate}
   \item $\lambda_1 = +1$. In this case, the network activity contracts to one
 	point, i.e., to a \emph{singularity}: $\lim\limits_{t \to \infty}
@@ -748,16 +741,16 @@ In consequence, we have one of the following cases:
 \end{enumerate}
 \end{prop}
 
-%%% todo
-We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely real-valued
-(cf.~\cref{real}) which states the ellipse rotation. Furthermore, the rotation
-speed can be derived from the eigenvalue $\lambda_1$. In each step of length
-$\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$ is the
-angular frequency which can be determined from the equation $\lambda_1 =
-|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$ (cf. \cref{general}). The two-dimensional ellipse trajectory
-can be stated by two (co)sinusoids: $f(t) = \big[ a\,\cos(\omega\,t) ~~
-b\,\sin(\omega\,t) \big]^\top$ where $a,b > 0$ are half the width and height of
-the ellipse. Applying the addition theorems of trigonometry, we get:
+We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely
+real-valued (cf.~\cref{real}) which states the ellipse rotation. Furthermore,
+the rotation speed can be derived from the eigenvalue $\lambda_1$. In each step
+of length $\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$
+is the angular frequency, which can be determined from the equation $\lambda_1 =
+|\lambda_1|\,e^{\mathfrak{i}\omega\tau}$ (cf. \cref{general}). The
+two-dimensional ellipse trajectory can be stated by two (co)sinusoids then:
+$f(t) = \big[ a\,\cos(\omega\,t) ~~ b\,\sin(\omega\,t) \big]^\top$ where $a,b >
+0$ are half the width and height of the ellipse. Applying the addition theorems
+of trigonometry, we get:
 \begin{eqnarray*}
 	f(t+\tau) & = &
 	\left[ \begin{array}{c} a\,\cos\!\big(\omega\,(t+\tau)\big) \\ b\,\sin\!\big(\omega\,(t+\tau)\big) \end{array} \right]  = 
@@ -829,8 +822,8 @@ state of a reservoir is forgotten such that, after a washout period, the current
 network state is a function of the driving input. In contrast to ESNs, LRNNs
 have linear activation and a spectral radius of exactly~$1$ (cf. \cref{thedef}).
 But as we have just shown, there is a similar effect in the long run: The
-network activity reduces to at most two dimensions -- independent from
-the initial state of the network.
+network activity reduces to at most two dimensions -- independent of the initial
+state of the network.
 
 \section{Learning LRNNs}\label{learn}
 
@@ -963,7 +956,7 @@ See \cref{proof:approx}.
 
 Therefore, at least in theory, any time-dependent function $f(t)$ can be
 interpolated, i.e., exactly approximated on the given function values and
-continued on input other than nonnegative integer numbers, % (cf. \cref{general}),
+continued on input other than nonnegative integer numbers (cf. \cref{general}),
 although clearly not every function can be implemented by LRNNs, in particular
 functions increasing faster than single-exponential (cf. \cref{exponential})
 like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
@@ -981,9 +974,11 @@ but the complete transition matrix $W$: For this, we employ a random reservoir
 state sequence matrix $\big[R(0) \cdots R(n) \big]$ with $N^\mathrm{res}$
 reservoir neurons, considered as additional input. If all elements of this
 matrix are random numbers, independently and identically distributed from the
-standard normal distribution, its rank is almost always maximal. We then just
-have to solve the linear matrix equation $Y = W \cdot X$ (cf. \cref{linear})
-with
+standard normal distribution, its rank is almost always maximal, because the
+original and the additional (random) inputs are throughout linearly independent
+of each other. This procedure therefore avoids the ill-conditioning of the
+matrix $X$. We then just have to solve the linear matrix equation $Y = W \cdot
+X$ (cf. \cref{linear}) with
 \[ Y = \left[ \begin{array}{ccc}
 	S(1) & \cdots & S(n)\\
 	R(1) & \cdots & R(n)
@@ -992,7 +987,9 @@ and $X$ as in \cref{Xin}. By this, the input and reservoir weights
 $W^\mathrm{in}$ and $W^\mathrm{res}$ are learned, not only the output weights
 $W^\mathrm{out}$. But our experiments indicate that this procedure is less
 reliable than the one with given, i.e., predefined random input and reservoir
-weights and unit spectral radius for the reservoir (cf. \cref{output}).
+weights and unit spectral radius for the reservoir (cf. \cref{output}), at least
+if the whole (and not only a part of) the reservoir is learned from additional
+(random) input.
 
 The topic of learning all weights in the matrix $W$ is investigated
 in \citep{PDW13} for ESNs with nonlinear activation function in the reservoir.
@@ -1208,7 +1205,8 @@ remains $1$ all the time (cf. \cref{thedef}). However, after learning the output
 weights $W^\mathrm{out}$, the spectral radius of the overall transition matrix
 $W$ (according to \cref{matrix}) and hence of the matrix $J$ may
 be greater than $1$ if the function $f(t)$ to be modeled is exponentially
-increasing. This obviously holds for the Fibonacci series ($\lambda_1>1$).
+increasing. This obviously holds for the Fibonacci series (because of
+$\lambda_1>1$).
 
 \subsection{Complexity and Generalization of the Procedure}
 
@@ -1361,23 +1359,15 @@ uniformly distributed on the interval $[0,1]$. We take the first $250$ time
 steps, i.e., $t=1,\dots,250$, as training data and the subsequent $50$ time
 steps as testing data and compare the performance of LRNNs with other approaches
 (cf. \cref{related}) with respect to their RSME on the testing data, partially
-using the Python library Darts \citep[see also \url{http://unit8co.github.io/darts/}]{HLPN+22}  for
-time series, including a simple baseline 
-predicting the arithmetic mean of the training data, ARIMA \citep{HK08}, simple sparse ESN demo by Mantas Luko\v{s}evi\v{c}ius from \url{http://mantas.info/code/simple_esn/}, and LSTM forecasting model implemented in Darts with hyperparameter optimization.
-\if 0
-\begin{itemize}
-  \item Baseline: Constantly predict the arithmetic mean of the training data.
-  \item ARIMA: We use the AutoARIMA package \citep{HK08}.
-  \item ESN: For this, we adapt the simple sparse ESN demo by Mantas
-	Luko\v{s}evi\v{c}ius from \url{http://mantas.info/code/simple_esn/}.
-	We also use ReservoirPy~\citep{TPDH20}.
-  \item LSTM: We employ the respective forecasting model implemented in Darts
-	with hyperparameter optimization taking the last $50$ time steps of the
-	training data for validation.
-  \item LRNN: Here we adopt validation data as above and choose the best model
-	with respect to the RMSE on the validation data from 100 trials.
-\end{itemize}
-\fi
+using the Python library Darts \citep[see also
+\url{http://unit8co.github.io/darts/}]{HLPN+22} for time series, including (a)~a
+simple baseline, namely predicting constantly the arithmetic mean of the
+training data, (b)~ARIMA using the AutoARIMA package \citep{HK08}, (c)~the
+simple sparse ESN demo by Mantas Luko\v{s}evi\v{c}ius from
+\url{http://mantas.info/code/simple_esn/} employing ReservoirPy~\citep{TPDH20},
+(d)~an LSTM forecasting model implemented in Darts with hyperparameter
+optimization, and (e)~LRNNs where we adopt validation data as above and choose
+the best model with respect to the RMSE on the validation data from 100 trials.
 
 \cref{sideways} shows the evaluation results. As one can see, LRNNs outperform
 all other approaches on this benchmark by far. The reason for this is certainly
@@ -1417,7 +1407,6 @@ i9-10940X, 3.3\,GHz CPU, and 128\,GB RAM.
 % LRNN - MSO8 on signal01..20 : 2.97 s / series on average, excl file access (averaged over 100 runs)
 	
 \begin{sidewaystable}
-%\begin{table}
   \centering
   \begin{tabular}{c*{8}{p{8mm}}cccc@{\,+\,}cccc}
      \toprule
@@ -1452,7 +1441,6 @@ neural network is given. For LRNNs, the network size $N$ after network size
 reduction is shown.}
 \label{sideways}
 \end{sidewaystable}
-%\end{table}
 
 \subsection{Solving Number Puzzles}
 
@@ -1521,9 +1509,10 @@ only a few minutes on standard hardware.
   \end{tabular}
   \caption{Percentages of correct predictions of the last element for 20 number
 	puzzles \citep{RK11,GW13} in 1000 trials for different settings:
-	(a)~with fixed reservoir size $N^\mathrm{res}=3,4,5$; (b)~with network size
-	reduction starting with $N^\mathrm{res}=7$ reservoir neurons; (c)~same
-	procedure but in addition always the previous time series value is used as clue.}
+	\textbf{(a)}~with fixed reservoir size $N^\mathrm{res}=3,4,5$;
+	\textbf{(b)}~with network size reduction starting with
+	$N^\mathrm{res}=7$ reservoir neurons; \textbf{(c)}~same procedure but in
+	addition always the previous time series value is used as clue.}
   \label{table}
 \end{table}
 
@@ -1580,10 +1569,10 @@ ones (Euclidean distance) -- over the whole length of the game (cf.
 \cref{game}~Left). Network size reduction leads to significantly less neurons
 compared to the original number $N = 46+500 = 546$ -- on average 29.2\% if we
 concentrate on the relevant components for the ball trajectory (cf.
-\cref{robocup}). Note that the size of the learned network is in $O(N)$. % (cf. \cref{complexity}). 
-Thus the LRNN model is definitely smaller than the
-original time series representation of a game. The complete learning procedure
-runs in less than a minute on standard hardware.
+\cref{robocup}). Note that the size of the learned network is in $O(N)$ (cf.
+\cref{complexity}). Thus the LRNN model is definitely smaller than the original
+time series representation of a game. The complete learning procedure runs in
+less than a minute on standard hardware.
 
 \cref{multi} shows how we can learn from multiple time series at once. This is
 also helpful here because by this procedure we can investigate the overall
@@ -1628,7 +1617,7 @@ Stock price prediction is a topic that receives a considerable amount of
 attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
-The work in \citep{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
+\citep{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
 closing stock prices 2016--2019. The stock price time series (consisting of
 $762$ data points each) are split into training and testing data, with the first
 80\% of each series for training and the final 20\% for evaluation. For a
@@ -1680,14 +1669,14 @@ only in the short run.
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.58\textwidth]{fig/stock_prediction_fme}
+  \includegraphics[width=0.5\textwidth]{fig/stock_prediction_fme}
   \caption{Stock price prediction for Fresenius Medical Care (FME.DE) with LRNNs
 	(dashed line) and other approaches. The overall performance for all
 	approaches often is not much better than the baseline (cf. \cref{dax}).}
   \label{stockfig}
 \end{figure}
 
-\begin{table}
+\begin{table}[b]
 \begin{tabular}{l@{ }crccccc}
 \toprule
 \multicolumn{2}{c}{DAX member} & Baseline & ARIMA & ESN & LSTM & \multicolumn{2}{l}{LRNN}\\
@@ -1795,7 +1784,6 @@ most technologically feasible poster contribution.
 \bibliographystyle{RS}
 \bibliography{recupred}
 
-%\if 0
 \opt{proof}{\newpage\appendix
 
 \section{Proof of \cref{rem}}\label{proof:rem}
@@ -1920,7 +1908,6 @@ rank of the matrix $X$ is maximal. For the latter, we consider two cases:
 	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
 	which completes the proof.
 \end{itemize}}
-%\fi
 
 \end{document}
 
