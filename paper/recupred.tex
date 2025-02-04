@@ -1,13 +1,10 @@
 % !TeX spellcheck = en_US
-\documentclass[openacc]{rsproca_new}
-\titlehead{Research}
+\documentclass[sn-mathphys-num]{sn-jnl}
 
 % versioning: long,proof
 \usepackage[none]{optional}
 
-% mathematics
 \usepackage{amsmath,amssymb,amsthm}
-% language and encoding
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref} % hyperlinks
@@ -22,6 +19,7 @@
 \newtheorem{remk}{Remark}
 
 % other packages
+\usepackage{microtype}
 \usepackage{algorithmicx}
 \usepackage[numbers]{natbib}
 \usepackage{csquotes,url}
@@ -29,10 +27,6 @@
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
 
-%\usepackage{todonotes}
-%\usepackage[disable]{todonotes}
-
-% to format tab head differently from numeric body columns
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
 
 \sloppy
@@ -42,26 +36,28 @@
 
 \title{The Power of Linear Recurrent Neural Networks}
 
-\author{Frieder Stolzenburg$^{1}$, Sandra Litz$^{1}$, Olivia Michael$^{2}$, and Oliver Obst$^{2}$}
+\author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
+\author[1]{\fnm{Sandra} \sur{Litz}}
+\author[2]{\fnm{Olivia} \sur{Michael}}
+\author[2]{\fnm{Oliver} \sur{Obst}}\email{o.obst@westernsydney.edu.au}
 
 % Frieder: fstolzenburg@hs-harz.de orcid 0000-0002-4037-2445
 % Sandra: litz\_sandra@web.de orcid 0009-0000-8147-4424
 % Olivia: olivia\_michael@hotmail.com  orcid 0000-0002-5719-2299
 % Oliver: o.obst@westernsydney.edu.au  orcid 0000-0002-8284-2062
 
-\address{$^{1}$Faculty of Automation and Computer Sciences, Harz University of Applied Sciences,\\
-         Friedrichstr.~57-59, 38855~Wernigerode, Germany\\
-         $^{2}$Centre for Research in Mathematics and Data Science, Western Sydney University,\\
-         Locked Bag 1797, Penrith~NSW~2751, Australia}
+\affil[1]{\orgdiv{Faculty of Automation and Computer Sciences}, 
+            \orgname{Harz University of Applied Sciences},
+            \orgaddress{\street{Friedrichstr.~57-59}, \postcode{38855}~\city{Wernigerode}, \country{Germany}}}
+
+\affil[2]{\orgdiv{Centre for Research in Mathematics and Data Science}, 
+            \orgname{Western Sydney University},
+             \orgaddress{\street{Locked Bag 1797}, \city{Penrith}~\state{NSW}~\postcode{2751}, \country{Australia}}}
 
 \keywords{recurrent neural network, linear activation, time-series analysis, prediction,
 dimensionality reduction, approximation theorem, ellipse trajectories}
 
-\corres{Frieder Stolzenburg\\
-	\email{fstolzenburg@hs-harz.de}}
-
-\begin{abstract}
-Recurrent neural networks are a powerful means to cope with time series. We show
+\abstract{Recurrent neural networks are a powerful means to cope with time series. We show
 how autoregressive linear, i.e., linearly activated recurrent neural networks
 (LRNNs) can approximate any time-dependent function $f(t)$. The approximation
 can effectively be learned by simply solving a linear
@@ -76,11 +72,9 @@ prediction of further values and compact representations of functions. We
 demonstrate this by several case studies, among them multiple superimposed
 oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs
 outperform the previous state-of-the-art for the MSO task with a minimal number
-of units.
-\absbreak
-\end{abstract}
+of units.}
 
-\rsbreak
+
 
 %\begin{keyword}
 
@@ -93,6 +87,7 @@ of units.
 %\end{keyword}
 
 %\linenumbers
+\maketitle
 
 \section{Introduction}
 Deep learning generally refers to a class of machine learning algorithms that use a 
@@ -1781,7 +1776,6 @@ A first short and preliminary version of this paper was presented at the confere
 \emph{Cognitive Computing} in Hannover \citep{SMO18}. It received the prize for the
 most technologically feasible poster contribution.
 
-\bibliographystyle{RS}
 \bibliography{recupred}
 
 \opt{proof}{\newpage\appendix

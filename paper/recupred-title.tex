@@ -1,0 +1,137 @@
+% !TeX spellcheck = en_US
+\documentclass[sn-mathphys-num]{sn-jnl}
+
+% versioning: long,proof
+\usepackage[none]{optional}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[american]{babel} % American English
+\usepackage[utf8x]{inputenc}
+\usepackage{hyperref} % hyperlinks
+  \hypersetup{hidelinks}
+
+\usepackage[capitalize,noabbrev]{cleveref}
+  \creflabelformat{equation}{#2#1#3}
+\theoremstyle{definition}
+\newtheorem{defn}{Definition}
+\newtheorem{exmp}{Example}
+\newtheorem{prop}{Property}
+\newtheorem{remk}{Remark}
+
+% other packages
+\usepackage{microtype}
+\usepackage{algorithmicx}
+\usepackage[numbers]{natbib}
+\usepackage{booktabs,graphicx,siunitx,tikz}
+
+\sloppy
+\frenchspacing
+
+\begin{document}
+
+\title{The Power of Linear Recurrent Neural Networks}
+
+\author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
+\author[1]{\fnm{Sandra} \sur{Litz}}
+\author[2]{\fnm{Olivia} \sur{Michael}}
+\author[2]{\fnm{Oliver} \sur{Obst}}
+% Frieder: fstolzenburg@hs-harz.de orcid 0000-0002-4037-2445
+% Sandra: litz\_sandra@web.de orcid 0009-0000-8147-4424
+% Olivia: olivia\_michael@hotmail.com  orcid 0000-0002-5719-2299
+% Oliver: o.obst@westernsydney.edu.au  orcid 0000-0002-8284-2062
+
+\affil[1]{\orgdiv{Faculty of Automation and Computer Sciences}, 
+            \orgname{Harz University of Applied Sciences},
+            \orgaddress{\street{Friedrichstr.~57-59}, \postcode{38855}~\city{Wernigerode}, \country{Germany}}}
+
+\affil[2]{\orgdiv{Centre for Research in Mathematics and Data Science}, 
+            \orgname{Western Sydney University},
+             \orgaddress{\street{Locked Bag 1797}, \city{Penrith}~\state{NSW}~\postcode{2751}, \country{Australia}}}
+
+\maketitle
+\enlargethispage{1cm}
+\thispagestyle{empty}
+
+\section*{Acknowledgements}
+
+We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
+Kai Steckhan, Flora Stolzenburg, and Ruben Zilibowitz, as well as several
+anonymous referees for helpful discussions
+and comments. 
+
+\section*{Funding}
+The research reported in this paper has been supported by the
+German Academic Exchange Service (DAAD) by funds of the German Federal Ministry
+of Education and Research (BMBF) in the Programmes for Project-Related Personal
+Exchange (PPP) under grant no.~57319564 and Universities Australia (UA) in the
+Australia-Germany Joint Research Cooperation Scheme within the project
+\emph{\underline{De}ep \underline{Co}nceptors for Tempo\underline{r}al
+D\underline{at}a M\underline{in}in\underline{g}} (Decorating).
+
+\section*{Disclosures}
+A first short and preliminary version of this paper was presented at the conference
+\emph{Cognitive Computing} in Hannover \citep{SMO18}. It received the prize for the
+most technologically feasible poster contribution.
+
+\begin{thebibliography}{73}
+\ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
+\ifx \binits  \undefined \def \binits#1{#1}\fi
+\ifx \bauthor  \undefined \def \bauthor#1{#1}\fi
+\ifx \batitle  \undefined \def \batitle#1{#1}\fi
+\ifx \bjtitle  \undefined \def \bjtitle#1{#1}\fi
+\ifx \bvolume  \undefined \def \bvolume#1{\textbf{#1}}\fi
+\ifx \byear  \undefined \def \byear#1{#1}\fi
+\ifx \bissue  \undefined \def \bissue#1{#1}\fi
+\ifx \bfpage  \undefined \def \bfpage#1{#1}\fi
+\ifx \blpage  \undefined \def \blpage #1{#1}\fi
+\ifx \burl  \undefined \def \burl#1{\textsf{#1}}\fi
+\ifx \doiurl  \undefined \def \doiurl#1{\url{https://doi.org/#1}}\fi
+\ifx \betal  \undefined \def \betal{\textit{et al.}}\fi
+\ifx \binstitute  \undefined \def \binstitute#1{#1}\fi
+\ifx \binstitutionaled  \undefined \def \binstitutionaled#1{#1}\fi
+\ifx \bctitle  \undefined \def \bctitle#1{#1}\fi
+\ifx \beditor  \undefined \def \beditor#1{#1}\fi
+\ifx \bpublisher  \undefined \def \bpublisher#1{#1}\fi
+\ifx \bbtitle  \undefined \def \bbtitle#1{#1}\fi
+\ifx \bedition  \undefined \def \bedition#1{#1}\fi
+\ifx \bseriesno  \undefined \def \bseriesno#1{#1}\fi
+\ifx \blocation  \undefined \def \blocation#1{#1}\fi
+\ifx \bsertitle  \undefined \def \bsertitle#1{#1}\fi
+\ifx \bsnm \undefined \def \bsnm#1{#1}\fi
+\ifx \bsuffix \undefined \def \bsuffix#1{#1}\fi
+\ifx \bparticle \undefined \def \bparticle#1{#1}\fi
+\ifx \barticle \undefined \def \barticle#1{#1}\fi
+\bibcommenthead
+\ifx \bconfdate \undefined \def \bconfdate #1{#1}\fi
+\ifx \botherref \undefined \def \botherref #1{#1}\fi
+\ifx \url \undefined \def \url#1{\textsf{#1}}\fi
+\ifx \bchapter \undefined \def \bchapter#1{#1}\fi
+\ifx \bbook \undefined \def \bbook#1{#1}\fi
+\ifx \bcomment \undefined \def \bcomment#1{#1}\fi
+\ifx \oauthor \undefined \def \oauthor#1{#1}\fi
+\ifx \citeauthoryear \undefined \def \citeauthoryear#1{#1}\fi
+\ifx \endbibitem  \undefined \def \endbibitem {}\fi
+\ifx \bconflocation  \undefined \def \bconflocation#1{#1}\fi
+\ifx \arxivurl  \undefined \def \arxivurl#1{\textsf{#1}}\fi
+\csname PreBibitemsHook\endcsname
+
+\bibitem[\protect\citeauthoryear{Stolzenburg et~al.}{2018}]{SMO18}
+\begin{bchapter}
+\bauthor{\bsnm{Stolzenburg}, \binits{F.}},
+\bauthor{\bsnm{Michael}, \binits{O.}},
+\bauthor{\bsnm{Obst}, \binits{O.}}:
+\bctitle{The power of linear recurrent neural networks}.
+In: \beditor{\bsnm{Brunner}, \binits{D.}},
+\beditor{\bsnm{Jaeger}, \binits{H.}},
+\beditor{\bsnm{Parkin}, \binits{S.}},
+\beditor{\bsnm{Pipa}, \binits{G.}} (eds.)
+\bbtitle{Cognitive Computing -- Merging Concepts with Hardware},
+\bconflocation{Hannover}
+(\byear{2018}).
+\burl{http://www.ai.rug.nl/minds/cogcompconf.html}
+\end{bchapter}
+\endbibitem
+\end{thebibliography}
+
+\end{document}
+
