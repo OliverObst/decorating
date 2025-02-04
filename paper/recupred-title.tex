@@ -1,6 +1,6 @@
 % !TeX spellcheck = en_US
 \documentclass[sn-mathphys-num]{sn-jnl}
-
+\usepackage{orcidlink}  
 % versioning: long,proof
 \usepackage[none]{optional}
 
@@ -31,10 +31,10 @@
 
 \title{The Power of Linear Recurrent Neural Networks}
 
-\author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
-\author[1]{\fnm{Sandra} \sur{Litz}}
-\author[2]{\fnm{Olivia} \sur{Michael}}
-\author[2]{\fnm{Oliver} \sur{Obst}}
+\author*[1]{\fnm{Frieder} \sur{Stolzenburg}\orcidlink{0000-0002-4037-2445}}\email{fstolzenburg@hs-harz.de}
+\author[1]{\fnm{Sandra} \sur{Litz}\orcidlink{0009-0000-8147-4424}}
+\author[2]{\fnm{Olivia} \sur{Michael}\orcidlink{0000-0002-5719-2299}}
+\author[2]{\fnm{Oliver} \sur{Obst}\orcidlink{0000-0002-8284-2062}}
 % Frieder: fstolzenburg@hs-harz.de orcid 0000-0002-4037-2445
 % Sandra: litz\_sandra@web.de orcid 0009-0000-8147-4424
 % Olivia: olivia\_michael@hotmail.com  orcid 0000-0002-5719-2299
@@ -74,6 +74,7 @@ A first short and preliminary version of this paper was presented at the confere
 most technologically feasible poster contribution.
 
 \begin{thebibliography}{73}
+\small
 \ifx \bisbn   \undefined \def \bisbn  #1{ISBN #1}\fi
 \ifx \binits  \undefined \def \binits#1{#1}\fi
 \ifx \bauthor  \undefined \def \bauthor#1{#1}\fi
