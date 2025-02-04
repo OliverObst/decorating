@@ -1,7 +1,7 @@
 % !TeX spellcheck = en_US
 \documentclass[sn-mathphys-num]{sn-jnl}
 
-% versioning: long,proof
+% versioning: long,proof,accepted
 \usepackage[none]{optional}
 
 \usepackage{amsmath,amssymb,amsthm}
@@ -36,6 +36,7 @@
 
 \title{The Power of Linear Recurrent Neural Networks}
 
+\opt{accepted}{
 \author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
 \author[1]{\fnm{Sandra} \sur{Litz}}
 \author[2]{\fnm{Olivia} \sur{Michael}}
@@ -53,6 +54,7 @@
 \affil[2]{\orgdiv{Centre for Research in Mathematics and Data Science}, 
             \orgname{Western Sydney University},
              \orgaddress{\street{Locked Bag 1797}, \city{Penrith}~\state{NSW}~\postcode{2751}, \country{Australia}}}
+}
 
 \keywords{recurrent neural network, linear activation, time-series analysis, prediction,
 dimensionality reduction, approximation theorem, ellipse trajectories}
@@ -1106,9 +1108,13 @@ calculate exactly identical eigenvalues then. Therefore, we cluster the
 computed eigenvalues as follows: If the distance in the complex plane between
 eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
-of single linkage clustering \citep{GR69}. The complete implementation of the
-learning procedure together with some case studies (cf. \cref{result}) is
-publicly available at \url{http://github.com/OliverObst/decorating/}.
+of single linkage clustering \citep{GR69}. \opt{accepted}{\def\showlink{}}
+The complete implementation of the learning procedure together with some case studies (cf. \cref{result}) 
+\ifdefined\showlink
+    is publicly available at \url{http://github.com/OliverObst/decorating/}.
+\else
+    will be made available upon acceptance.
+\fi
 
 \begin{figure}
 \newcommand{\commt}[1]{\%~#1\\}%
@@ -1520,12 +1526,10 @@ application of machine learning. A \emph{soccer simulation} game lasts 10\,mins 
 divided into 6000 time steps where the length of each cycle is 100\,ms. Logfiles
 contain information about the game, in particular about the current positions of
 all players and the ball including velocity and orientation for each cycle.
-\citep{MO+19} describes a research dataset using some of the released binaries of
-the RoboCup 2D soccer simulation league \citep{CDF+03,GFG16} from 2016 and 2017
-\citep{MO+18}. In our experiments we evaluated ten games of the
-top-five teams (available from \url{http://bitbucket.org/oliverobst/robocupsimdata}), 
-considering only the $(x,y)$-coordinates of the ball and the 22 players for all 
-time points during the so-called \enquote{play-on} mode.
+For our experiments we evaluated ten games of the
+top-five teams in a public research dataset \citep{MO+19} that contains recorded games 
+from the RoboCup 2D soccer simulation league \citep{CDF+03,GFG16} in 2016 and 2017 \citep{MO+18}\opt{accepted}{ (Data set available from \url{http://bitbucket.org/oliverobst/robocupsimdata})}.  We consider the $(x,y)$-coordinates of the ball and all 22 players for all time points during regular game play.
+%the so-called \enquote{play-on} mode.
 
 \begin{table}
 \centering
@@ -1760,6 +1764,7 @@ some extent also in \citep{CW+16}. Last but not least, other machine learning ta
 prediction shall be addressed in more detail, including classification and
 reinforcement learning~\citep{SB18,PGL17}.
 
+\opt{accepted}{%
 \section*{Acknowledgments}
 
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
@@ -1775,6 +1780,7 @@ D\underline{at}a M\underline{in}in\underline{g}} (Decorating).
 A first short and preliminary version of this paper was presented at the conference
 \emph{Cognitive Computing} in Hannover \citep{SMO18}. It received the prize for the
 most technologically feasible poster contribution.
+}
 
 \bibliography{recupred}
 
