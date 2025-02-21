@@ -1,8 +1,8 @@
 % !TeX spellcheck = en_US
 \documentclass[sn-mathphys-num]{sn-jnl}
 
-% versioning: long,proof,accepted
-\usepackage[none]{optional}
+% versioning: blind,long,proof,unblind
+\usepackage[blind,proof]{optional}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
@@ -36,7 +36,7 @@
 
 \title{The Power of Linear Recurrent Neural Networks}
 
-\opt{accepted}{
+\opt{unblind}{
 \author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
 \author[1]{\fnm{Sandra} \sur{Litz}}
 \author[2]{\fnm{Olivia} \sur{Michael}}
@@ -76,10 +76,7 @@ oscillators (MSO), robotic soccer (RoboCup), and stock price prediction. LRNNs
 outperform the previous state-of-the-art for the MSO task with a minimal number
 of units.}
 
-
-
 %\begin{keyword}
-
 %\MSC[2010] 15A06 %Linear equations
 %\sep 62M10 %Time series, auto-correlation, regression, etc.
 %\sep 62M45 %Neural nets and related approaches
@@ -210,7 +207,9 @@ both the low and high frequency patterns. As we will see (cf. \cref{mso}),
 RNNs in general can easily learn time series that have a constant frequency
 spectrum, which may be obtained also by Fourier analysis.
 
-The Legendre memory unit (LMU) \citep{VKE19}  is a memory cell for recurrent neural networks that maintains information across long windows of time using relatively few resources. It is derived from the linear transfer function for
+The Legendre memory unit (LMU) \citep{VKE19} is a memory cell for recurrent
+neural networks that maintains information across long windows of time using
+relatively few resources. It is derived from the linear transfer function for
 a continuous-time history of its input signal across a sliding window,
 approximated by coupled differential equations, which can implicitly also be
 solved by LRNNs (cf. \cref{rem}).
@@ -1110,13 +1109,10 @@ calculate exactly identical eigenvalues then. Therefore, we cluster the
 computed eigenvalues as follows: If the distance in the complex plane between
 eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
-of single linkage clustering \citep{GR69}. \opt{accepted}{\def\showlink{}}
-The complete implementation of the learning procedure together with some case studies (cf. \cref{result}) 
-\ifdefined\showlink
-    is publicly available at \url{http://github.com/OliverObst/decorating/}.
-\else
-    will be made available upon acceptance.
-\fi
+of single linkage clustering \citep{GR69}. The complete implementation of the
+learning procedure together with some case studies (cf. \cref{result})%
+\opt{unblind}{is publicly available at \url{http://github.com/OliverObst/decorating/}.}%
+\opt{blind}{ will be made available upon acceptance.}
 
 \begin{figure}
 \newcommand{\commt}[1]{\%~#1\\}%
@@ -1528,10 +1524,13 @@ application of machine learning. A \emph{soccer simulation} game lasts 10\,mins 
 divided into 6000 time steps where the length of each cycle is 100\,ms. Logfiles
 contain information about the game, in particular about the current positions of
 all players and the ball including velocity and orientation for each cycle.
-For our experiments we evaluated ten games of the
-top-five teams in a public research dataset \citep{MO+19} that contains recorded games 
-from the RoboCup 2D soccer simulation league \citep{CDF+03,GFG16} in 2016 and 2017 \citep{MO+18}\opt{accepted}{ (Data set available from \url{http://bitbucket.org/oliverobst/robocupsimdata})}.  We consider the $(x,y)$-coordinates of the ball and all 22 players for all time points during regular game play.
-%the so-called \enquote{play-on} mode.
+For our experiments we evaluated ten games of the top-five teams in a public
+research dataset \citep{MO+19} that contains recorded games from the RoboCup 2D
+soccer simulation league \citep{CDF+03,GFG16} in 2016 and 2017
+\citep{MO+18}\opt{unblind}{ (dataset available from
+\url{http://bitbucket.org/oliverobst/robocupsimdata})}. We consider the
+$(x,y)$-coordinates of the ball and all 22 players for all time points during
+regular game play, the so-called \enquote{play-on} mode.
 
 \begin{table}
 \centering
@@ -1766,7 +1765,7 @@ some extent also in \citep{CW+16}. Last but not least, other machine learning ta
 prediction shall be addressed in more detail, including classification and
 reinforcement learning~\citep{SB18,PGL17}.
 
-\opt{accepted}{%
+\opt{unblind}{%
 \section*{Acknowledgments}
 
 We would like to thank Chad Clark, Andrew Francis, Rouven Neitzel, Oliver Otto,
