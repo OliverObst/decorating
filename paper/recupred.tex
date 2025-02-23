@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_US
-\documentclass[sn-mathphys-num]{sn-jnl}
+\documentclass[sn-mathphys-num,a4paper]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
 \usepackage[blind,proof]{optional}
@@ -124,7 +124,7 @@ demanding approaches, suitable for scenarios where simplicity and rapid deployme
 
 The rest of this paper is structured as follows: First, we briefly review related 
 works (\cref{related}). We then formally introduce LRNNs as a special and simple 
-kind of RNN together with their properties, including the general network 
+kind of RNNs together with their properties, including the general network 
 dynamics and their long-term behavior (\cref{define}). Afterwards, learning 
 LRNNs is explained (\cref{learn}). It is a relatively straightforward procedure 
 that allows network size reduction; no backpropagation or gradient-descent 
@@ -198,7 +198,6 @@ an iterative method, namely gradient descent. In contrast to this and other
 related works, in this paper we present a method working with linearly activated
 RNNs that does not require backpropagation or similar procedures in the learning
 phase.
-
 State-frequency memory (SFM) RNNs \citep{HQ17}  
 aim to model the frequency patterns of the temporal sequences.
 The key idea of the SFM is to decompose the memory states into different
@@ -217,7 +216,11 @@ solved by LRNNs (cf. \cref{rem}).
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
-employing a linear autoencoder for sequences. In both cases, backpropagation is
+employing a linear autoencoder for sequences. More recently, deep state-space
+models have been shown to perform well on long sequence modeling tasks.
+\cite{GGR22,OS+23} cover ideas of linear recurrent equations in so-called state
+spaces, Jordan-type factorizations, and links to continuous-time differential
+equations. Nevertheless, in all these cases, backpropagation is
 employed, which is not needed for LRNNs whose network size is reduced
 significantly in addition (cf. \cref{reduce}), thus we address the topic of
 architecture learning.
@@ -232,8 +235,6 @@ modern neural network models, resulting in sparse networks. Furthermore,
 the final loss and iteratively removes those with smaller scores. In contrast to
 this, for LRNNs, the network architecture and hence its size are reduced in one
 step by analyzing the network transition matrix (cf. \cref{reduce}).
-
-\cite{OS+23,GGR22,Ham94}
 
 \subsection{Autoregression}\label{regress}
 
@@ -254,7 +255,7 @@ A popular choice in this context is the autoregressive integrated moving average
 autoregression AR($p$) and a moving average MA($q$). The parameter $p$ describes
 the history length (lag order) used to predict the time series at time $t$. We
 have $f(t) = c_1 f(t-1) + \dots + c_p f(t-p) + e_t$ where $c_1,\dots,c_p$ are
-(real-valued) autocorrelation coefficients and $e_t$, the residuals, are
+(real-valued) autocorrelation coefficients and $e_t$, the residuals, is
 Gaussian white noise. In the moving average process MA($q$), the value $q$
 specifies the number of past residuals considered for prediction. An underlying
 trend of the time series is modeled by using a drift, i.e., a constant that extends
@@ -265,10 +266,13 @@ transformation to make them stationary. This is achieved by investigating the
 derivatives of the series, with the order of this process given by the parameter
 $d$.
 
-Autoregressive frameworks are common in current machine-learning applications
-like language modeling, e.g., in the generative pre-trained transformer GPT-3 and their successors,
+State-space time series models, which are a natural bridge between
+autoregressive models and LRNNs, have been studied at length \cite{Ham94}.
+Autoregressive frameworks are also common in current machine-learning
+applications like language modeling, e.g., in the generative pre-trained
+transformer GPT-3 and their successors,
 by next word prediction \citep{BM+20}. The models applied in this context,
-however, are very complex (175 billion parameters and even much more) and non-linear.
+however, are very complex (175 billion parameters and much more) and non-linear.
 Related to autoregression is autoencoding of sequences. It has been shown in \citep{PS14}
 that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citep{Spe06} gives an
@@ -355,11 +359,11 @@ $g$ may be different for different parts of the network.
 Usually, a nonlinear, bounded, strictly increasing, sigmoidal function $g$ is
 used, e.g., the logistic function, the hyperbolic tangent ($\tanh$), or the
 softplus function \citep[Sect.~3.10]{GBC16}. In the following, we employ simply
-the (linear) identity function, i.e., with $g(x)=x$ for all $x$, and can still
+the (linear) identity function, i.e., $g(x)=x$ for all $x$, and can still
 approximate arbitrary time-dependent functions (cf. \cref{approx}).
 
 \begin{defn}[linear recurrent neural network]\label{thedef}
-A \emph{linear recurrent network} (LRNN) is an RNN with the
+A \emph{linear recurrent neural network} (LRNN) is an RNN with the
 following properties:
 \begin{enumerate}
   \item For the start time, it holds that $t_0=0$ and $\tau$ is constant, usually $\tau=1$.
@@ -425,7 +429,7 @@ input/output neuron in this case.
 \begin{exmp}\label{fibonacci}
 The Fibonacci series ($0,1,1,2,3,5,8,\dots$) can be defined as follows:
 \[ f(t) = \left\{ \begin{array}{ll}
-	t, & t=0,1\\
+	t, & \text{for~} t=0,1\\
 	f(t-1)+f(t-2), & \text{otherwise}
 \end{array} \right. \]
 It can be realized by an LRNN (in output generating mode) with just two neurons
@@ -686,8 +690,8 @@ very small number of dimensions/neurons in the long run. They determine the beha
 for computing short-term predictions.
 
 \begin{prop}\label{exponential}
-In none of the $N$ dimensions $f(t) = W^t \cdot s$ grows faster than a
-polynomial and only single-exponential in $t$.
+In all of the $N$ dimensions, $f(t) = W^t \cdot s$ grows only polynomially or
+single-exponentially in $t$.
 \end{prop}
 
 \opt{long}{\begin{proof}
@@ -704,8 +708,8 @@ case, namely a \emph{pure random reservoir} where both conditions do not hold:
 
 \begin{prop}\label{infty}
 Consider an LRNN solely consisting of a random reservoir whose transition matrix
-$W^\mathrm{res}$ (a)~is completely real-valued, (b)~has (according to
-\cref{eigen}) an eigendecomposition $W^\mathrm{res} = V \cdot D \cdot V^{-1}$
+$W^\mathrm{res}$ (a)~is completely real-valued, (b)~has an eigendecomposition
+$W^\mathrm{res} = V \cdot D \cdot V^{-1}$ (as in~\cref{eigen})
 with unit spectral radius, and thus (c)~all eigenvalues are distinct (which is
 almost always, i.e., with probability close to $1$, true for random matrices),
 together with a completely real-valued random start vector $s$ with unit norm.
@@ -782,9 +786,9 @@ may be different for transition matrices other than pure random reservoirs.
 
 \begin{figure}
   \centering
-    (a) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/spectrum}} \hfill
-    (b) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/ellipse}} \hfill
-    (c) \raisebox{-35mm}{\includegraphics[scale=0.23]{fig/wave}}
+    (a) \raisebox{-35mm}{\includegraphics[scale=0.21]{fig/spectrum}} \hfill
+    (b) \raisebox{-35mm}{\includegraphics[scale=0.21]{fig/ellipse}} \hfill
+    (c) \raisebox{-35mm}{\includegraphics[scale=0.21]{fig/wave}}
   \caption{Dynamic system behavior of a pure random reservoir with unit spectral
 	radius, with $N^\mathrm{res} = 100$ neurons:
     \textbf{(a)}~Eigenvalue spectrum of the reservoir matrix $W^\mathrm{res}$ with
@@ -811,9 +815,9 @@ may be different for transition matrices other than pure random reservoirs.
 
 The long-term behavior of LRNNs is related to that of ESNs. For the latter,
 usually the activation function is $\tanh$ and the spectral radius is smaller
-than $1$. Then reservoirs with zero input collapse because of $|\!\tanh(z)| \le
-|z|$ for all $z \in \mathbb{R}$ but the convergence may be rather slow,
-nonetheless it guarantees contractivity and hence for any fixed input (not just
+than $1$. Then reservoirs collapse because of $|\!\tanh(z)| \le
+|z|$ for all $z \in \mathbb{R}$, but the convergence may be rather slow.
+Nonetheless it guarantees contractivity and hence for any fixed input (not just
 the origin) the system converges to a unique fixed point. This leads
 to the so-called \emph{echo state property} \citep{MJ13}: Any random initial
 state of a reservoir is forgotten such that, after a washout period, the current
@@ -839,11 +843,8 @@ follows:
 	explode if the spectral radius is greater or vanish if the spectral
 	radius is smaller than $1$ (cf. \cref{ellipse}). In consequence, the
 	overall learning procedure behaves rather stable.
-  \item The norms of the vectors in $W^\mathrm{in}$ and $W^\mathrm{res}$ should
-	be balanced \citep{KLB12}. To achieve this, we initialize the reservoir
-	neurons such that the reservoir start vector $r$ (with $N^\mathrm{res}$
-	components) has unit norm by
-	setting:
+  \item Furthermore, we initialize the reservoir neurons such that the reservoir
+	start vector $r$ (with $N^\mathrm{res}$ components) has unit norm by setting:
 	\[ r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
 	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r
 	\end{array} \right]$ (cf. \cref{define}).
@@ -1050,7 +1051,7 @@ more controlled way -- after learning the output weights. Our procedure of
 dimensionality reduction leads to smaller networks with sparse connectivity. In
 contrast to other approaches, we do not learn the new network architecture by
 incremental derivation from the original network, e.g., by removing unimportant
-neurons or weights, but in only one step by inspecting the eigenvalues of the
+neurons or weights, but in one step by inspecting the eigenvalues of the
 transition matrix.
 
 For ESNs, dimensionality reduction is considered, too, namely by means of
@@ -1138,7 +1139,7 @@ learning procedure together with some case studies (cf. \cref{result})%
 		\multicolumn{2}{c}{W^\mathrm{out}}\\
 		W^\mathrm{in} & W^\mathrm{res}
 	\end{array} \right]$\\
-	$J = \mathrm{jordan\_matrix}(W)$ with components sorted in decreasing order\\
+	$J = \mathrm{jordan\_matrix}(W)$ with components $k$ sorted in decreasing order\\
 	\quad with respect to $\mathrm{Error}(J_{\langle 1,\dots,k-1,k+1,\dots,K \rangle})$\\
 	\quad where $K = \#$\,Jordan components in $J$\newline
 	\\
@@ -1224,7 +1225,7 @@ of course, and may be worse hence. The size of the learned network is in $O(N)$
 Note that, in contrast, feedforward networks with three threshold neurons
 already are NP-hard to train \citep{BR92}. This results from the fact
 that the universal approximation theorem for feedforward networks differs from
-\cref{approx} because the former holds for multi-dimensional functions and
+\cref{approx} because the former holds for multivariate functions and
 not only time-dependent input. In this light, the computational complexity of
 $O(N^3)$ for LRNNs does not look overly expensive. It dominates the
 overall time complexity of the whole learning procedure because it is not
@@ -1383,11 +1384,13 @@ LRNNs do not perform quite so well.
 LRNNs are also advantageous considering the time required to train a well
 performing model with less than 3\,s per series for training and testing on average:
 \begin{center}
+\smallskip
 \begin{tabular}{cccccc}
 \toprule
 & Arima (R) & Arima (Python)  & ESN & LSTM & LRNN\\ \midrule
 train + test time & 0.35\,s & 3.20\,s & 1.24\,s & 125.43\,s & 2.97\,s \\ \bottomrule
 \end{tabular}
+\smallskip
 \end{center}
 The ARIMA experiments with an R implementation are fastest (0.35\,s
 per series) but often perform even worse than our baseline. Interestingly, an
@@ -1658,9 +1661,9 @@ As one can see in \cref{dax}, LRNNs outperform the other approaches in the
 majority of all cases, namely for 19~of~39 stocks, where the resulting network
 size $N$ after size reduction often is rather small. However, the overall
 performance for all approaches often is not much better than the baseline (see
-also \cref{stockfig}). In line with that, the review in \citep{SIZ19} shows that
-predicting stock prices remains a challenging problem, especially for a longer
-timeframe, which we investigate
+also \cref{stockfig}). In line with that, the reviews in
+\citep{SIZ19,SGO20,Jia21} show that predicting stock prices remains a
+challenging problem, especially for a longer timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
 \citep{NPO17,RPV17} to attention-based models that use further information about
 the events that drive the stock prices, e.g., news texts from social media
@@ -1761,9 +1764,9 @@ new hardware that mimics the functioning of the human brain, and neuromorphic
 hardware results from the exploration of unconventional physical substrates
 and nonlinear phenomena. Future work shall include improving predictive and
 memory capacity of LRNNs, analyzed for small networks \citep{Mar17} and to
-some extent also in \citep{CW+16}. Last but not least, other machine learning tasks besides
-prediction shall be addressed in more detail, including classification and
-reinforcement learning~\citep{SB18,PGL17}.
+some extent also in \citep{CW+16}. Last but not least, other machine learning
+tasks besides prediction shall be addressed in more detail, including
+classification and reinforcement learning~\citep{SB18,PGL17}.
 
 \opt{unblind}{%
 \section*{Acknowledgments}
