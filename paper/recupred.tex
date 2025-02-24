@@ -1,5 +1,6 @@
 % !TeX spellcheck = en_US
-\documentclass[sn-mathphys-num,a4paper]{sn-jnl}
+\documentclass[sn-basic,a4paper]{sn-jnl}
+
 
 % versioning: blind,long,proof,unblind
 \usepackage[blind,proof]{optional}
@@ -21,7 +22,7 @@
 % other packages
 \usepackage{microtype}
 \usepackage{algorithmicx}
-\usepackage[numbers]{natbib}
+%\usepackage[numbers]{natbib}
 \usepackage{csquotes,url}
 \usepackage{booktabs,graphicx,siunitx,tikz}
 \usepackage[figuresright]{rotating}
@@ -198,6 +199,9 @@ an iterative method, namely gradient descent. In contrast to this and other
 related works, in this paper we present a method working with linearly activated
 RNNs that does not require backpropagation or similar procedures in the learning
 phase.
+
+For feedforward neural networks, the forward-forward algorithm \citep{Hin22} presents an approach to training models without backpropagation but, at least in its current form, is only applicable to the classification of static patterns.
+
 State-frequency memory (SFM) RNNs \citep{HQ17}  
 aim to model the frequency patterns of the temporal sequences.
 The key idea of the SFM is to decompose the memory states into different
