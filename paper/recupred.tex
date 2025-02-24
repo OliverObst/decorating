@@ -199,8 +199,6 @@ related works, in this paper we present a method working with linearly activated
 RNNs that does not require backpropagation or similar procedures in the learning
 phase.
 
-For feedforward neural networks, the forward-forward algorithm \citep{Hin22} presents an approach to training models without backpropagation but, at least in its current form, is only applicable to the classification of static patterns.
-
 State-frequency memory (SFM) RNNs \citep{HQ17}  
 aim to model the frequency patterns of the temporal sequences.
 The key idea of the SFM is to decompose the memory states into different
@@ -238,6 +236,10 @@ modern neural network models, resulting in sparse networks. Furthermore,
 the final loss and iteratively removes those with smaller scores. In contrast to
 this, for LRNNs, the network architecture and hence its size are reduced in one
 step by analyzing the network transition matrix (cf. \cref{reduce}).
+
+For feedforward neural networks, the forward-forward algorithm \citep{Hin22}
+presents an approach to training models without backpropagation but, at least in
+its current form, is only applicable to the classification of static patterns.
 
 \subsection{Autoregression}\label{regress}
 
@@ -506,7 +508,7 @@ satisfying \cref{diff} and the following transition matrix:
 \end{equation}
 \end{prop}
 
-\opt{long}{\begin{proof}
+\opt{proof}{\begin{proof}
 See \cref{proof:rem}.
 \end{proof}}
 
@@ -679,7 +681,7 @@ matrix $A$ of size $N \times N$ such that for all $t \ge 0$ we have:
 \[ f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
 \end{prop}
 
-\opt{long}{\begin{proof}
+\opt{proof}{\begin{proof}
 See \cref{proof:chad}.
 \end{proof}}
 
@@ -697,7 +699,7 @@ In all of the $N$ dimensions, $f(t) = W^t \cdot s$ grows only polynomially or
 single-exponentially in $t$.
 \end{prop}
 
-\opt{long}{\begin{proof}
+\opt{proof}{\begin{proof}
 See \cref{proof:exponential}.
 \end{proof}}
 
@@ -952,7 +954,7 @@ LRNN with the following properties:
 \end{enumerate}
 \end{prop}
 
-\opt{long}{\begin{proof}
+\opt{proof}{\begin{proof}
 See \cref{proof:approx}.
 \end{proof}}
 
@@ -1397,7 +1399,7 @@ train + test time & 0.35\,s & 3.20\,s & 1.24\,s & 125.43\,s & 2.97\,s \\ \bottom
 \end{center}
 The ARIMA experiments with an R implementation are fastest (0.35\,s
 per series) but often perform even worse than our baseline. Interestingly, an
-ARIMA implementation in Python turns out to be much slower (3.20\,s per series).
+ARIMA implementation in Python turns out to be significantly slower (3.20\,s per series).
 ESN learning takes 1.24\,s per series. LRNNs more or less extend the ESN
 approach and take 2.97\,s per series on average with our approach, 
 including required repeated reservoir generations. LSTM learning including hyperparameter
@@ -1624,7 +1626,7 @@ attention in finance. Complexity of markets resulting in multiple and sudden
 changes in trends of stock prices make their prediction a challenge.
 Consequently, a number of different approaches and methods have been developed.
 \citep{Lit20} analyzes $30$ different stocks by ARIMA and LRNNs using the
-closing stock prices 2016--2019. The stock price time series (consisting of
+closing stock prices 2016--2019 from \url{http://de.finance.yahoo.com/}. The stock price time series (consisting of
 $762$ data points each) are split into training and testing data, with the first
 80\% of each series for training and the final 20\% for evaluation. For a
 representative comparison, the RMSE of the predictions on every stock in the set
