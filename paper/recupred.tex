@@ -34,7 +34,7 @@
 
 \begin{document}
 
-\title{The Power of Linear Recurrent Neural Networks}
+\title{Efficient Time Series Approximation with Linear Recurrent Neural Networks: Architecture Learning and Predictive Power}
 
 \opt{unblind}{
 \author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
@@ -112,7 +112,7 @@ networks with long short-term memory (LSTM) \citep{HS97}. Recent works in this
 area also aim to enhance the performance of RNNs, e.g., HiPPO \citep{GDE+20} and
 structured state spaces \citep{GGR22}, which learn representations of signals
 over time. There are also more biologically inspired spiking neural networks
-\cite{KK+22} that can perfom (simple) delay tasks quite well.
+\citep{KK+22} that can perfom (simple) delay tasks quite well.
 
 In the following, we consider an alternative, yet simple but very powerful type of RNNs: linear 
 recurrent neural networks (LRNNs). We utilize linear activation, which 
@@ -219,7 +219,7 @@ and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
 employing a linear autoencoder for sequences. More recently, deep state-space
 models have been shown to perform well on long sequence modeling tasks.
-\cite{GGR22,OS+23} cover ideas of linear recurrent equations in so-called state
+\citet{GGR22,OS+23} cover ideas of linear recurrent equations in so-called state
 spaces, Jordan-type factorizations, and links to continuous-time differential
 equations. Nevertheless, in all these cases, backpropagation is
 employed, which is not needed for LRNNs whose network size is reduced
@@ -965,6 +965,8 @@ although clearly not every function can be implemented by LRNNs, in particular
 functions increasing faster than single-exponential (cf. \cref{exponential})
 like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
 practice, the LRNN learning procedure performs rather well (cf. \cref{result}).
+\citet{MG77,JH04} %%%
+
 Nevertheless, the matrix $X$ may be ill-conditioned for long input sequences, because the reservoir state
 sequence as part of the matrix $X$ reduces to at most two dimensions for large
 $t$, independent of the number of reservoir neurons (cf. \cref{ellipse}). Hence,
