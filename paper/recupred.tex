@@ -110,9 +110,11 @@ $f(t)$, and prediction of future values.
 Numerous studies address these topics using RNNs, particularly variants of 
 networks with long short-term memory (LSTM) \citep{HS97}. Recent works in this
 area also aim to enhance the performance of RNNs, e.g., HiPPO \citep{GDE+20} and
-structured state spaces \citep{GGR22}, which learn representations of signals
+structured state spaces \citep{GGR22,WKF+25}, which learn representations of signals
 over time. There are also more biologically inspired spiking neural networks
 \citep{KK+22} that can perfom (simple) delay tasks quite well.
+
+In \citep{ZMV+25}, the authors establish an explicit connection and a direct architectural match between Koopman operator approximation and linear RNNs, with the goal of  time-series prediction.
 
 In the following, we consider an alternative, yet simple but very powerful type of RNNs: linear 
 recurrent neural networks (LRNNs). We utilize linear activation, which 

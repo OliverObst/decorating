@@ -913,6 +913,21 @@
   url = {http://proceedings.neurips.cc/paper/2019/file/952285b9b7e7a1be5aa7849f32ffff05-Paper.pdf}
 }
 
+@article{WKF+25,
+  title = {Is {{Mamba}} Effective for Time Series Forecasting?},
+  author = {Wang, Zihan and Kong, Fanheng and Feng, Shi and Wang, Ming and Yang, Xiaocui and Zhao, Han and Wang, Daling and Zhang, Yifei},
+  year = {2025},
+  month = feb,
+  journal = {Neurocomputing},
+  volume = {619},
+  pages = {129178},
+  issn = {0925-2312},
+  doi = {10.1016/j.neucom.2024.129178},
+  urldate = {2025-07-02},
+  abstract = {In the realm of time series forecasting (TSF), it is imperative for models to adeptly discern and distill hidden patterns within historical time series data to forecast future states. Transformer-based models exhibit formidable efficacy in TSF, primarily attributed to their advantage in apprehending these patterns. However, the quadratic complexity of the Transformer leads to low computational efficiency and high costs, which somewhat hinders the deployment of the TSF model in real-world scenarios. Recently, Mamba, a selective state space model, has gained traction due to its ability to process dependencies in sequences while maintaining near-linear complexity. For TSF tasks, these characteristics enable Mamba to comprehend hidden patterns as the Transformer and reduce computational overhead compared to the Transformer. Therefore, we propose a Mamba-based model named Simple-Mamba (S-Mamba) for TSF. Specifically, we tokenize the time points of each variate autonomously via a linear layer. A bidirectional Mamba layer is utilized to extract inter-variate correlations and a Feed-Forward Network is set to learn temporal dependencies. Finally, the generation of forecast outcomes through a linear mapping layer. Experiments on thirteen public datasets prove that S-Mamba maintains low computational overhead and achieves leading performance. Furthermore, we conduct extensive experiments to explore Mamba's potential in TSF tasks. Our code is available at https://github.com/wzhwzhwzh0921/S-D-Mamba.},
+  keywords = {Mamba,State space model,Time series forecasting,Transformer}
+}
+
 @article{WLS94,
   title = {Short-Term Memory in Orthogonal Neural Networks},
   author = {White, Olivia L. and Lee, Daniel D. and Sompolinsky, Haim},
@@ -943,4 +958,18 @@
   volume = {35},
   pages = {1--9},
   url = {http://doi.org/10.1016/j.neunet.2012.07.005}
+}
+
+@misc{ZMV+25,
+  title = {{{SKOLR}}: {{Structured Koopman Operator Linear RNN}} for {{Time-Series Forecasting}}},
+  author = {Zhang, Yitian and Ma, Liheng and Valkanas, Antonios and Oreshkin, Boris N. and Coates, Mark},
+  year = {2025},
+  month = jun,
+  number = {arXiv:2506.14113},
+  eprint = {2506.14113},
+  publisher = {arXiv},
+  doi = {10.48550/arXiv.2506.14113},
+  urldate = {2025-07-02},
+  abstract = {Koopman operator theory provides a framework for nonlinear dynamical system analysis and time-series forecasting by mapping dynamics to a space of real-valued measurement functions, enabling a linear operator representation. Despite the advantage of linearity, the operator is generally infinite-dimensional. Therefore, the objective is to learn measurement functions that yield a tractable finite-dimensional Koopman operator approximation. In this work, we establish a connection between Koopman operator approximation and linear Recurrent Neural Networks (RNNs), which have recently demonstrated remarkable success in sequence modeling. We show that by considering an extended state consisting of lagged observations, we can establish an equivalence between a structured Koopman operator and linear RNN updates. Building on this connection, we present SKOLR, which integrates a learnable spectral decomposition of the input signal with a multilayer perceptron (MLP) as the measurement functions and implements a structured Koopman operator via a highly parallel linear RNN stack. Numerical experiments on various forecasting benchmarks and dynamical systems show that this streamlined, Koopman-theory-based design delivers exceptional performance.},
+  keywords = {Computer Science - Artificial Intelligence,Computer Science - Machine Learning,Statistics - Machine Learning}
 }
