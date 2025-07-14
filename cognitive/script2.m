@@ -48,29 +48,3 @@ endfor
 # output result
 Data
 save -binary result.out Data
-
-##for k=20  # examples
-##  i=0;      # number of generated reservoirs
-##  j=0;      # number of minimal reservoirs
-##  m = Inf;  # size of smallest reservoir
-##  n = 0;    # number of correct predictions
-##  while i<1000 || j<1000
-##    [Out,Err,A,J,Y,W,X] = predict(S(k,1:end-1),1,-1,theta);
-##    i++;
-##    c = columns(A);
-##    round(Out)-S(k,:)
-##    if c==m
-##      j++;
-##      if all(round(Out)==S(k,:))
-##        n++;
-##      endif
-##    endif
-##    if c<m
-##      m = c#;
-##      j = 1;
-##      n = all(round(Out)==S(k,:));
-##    endif
-##  endwhile
-##  Data(k,:)= [m n];
-##endfor
-
