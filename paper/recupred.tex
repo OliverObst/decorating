@@ -3,11 +3,13 @@
 
 % versioning: blind,long,proof,unblind
 \usepackage[blind,proof]{optional}
+\usepackage{todonotes}
+  \setuptodonotes{inline}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
 \usepackage[utf8x]{inputenc}
-\usepackage{hyperref} % hyperlinks
+\usepackage{hyperref,url} % hyperlinks
   \hypersetup{hidelinks}
 
 \usepackage[capitalize,noabbrev]{cleveref}
@@ -21,9 +23,9 @@
 % other packages
 \usepackage{microtype}
 \usepackage{algorithmicx}
-%\usepackage[numbers]{natbib}
-\usepackage{csquotes,url}
-\usepackage{booktabs,graphicx,siunitx,tikz}
+\usepackage[numbers]{natbib}
+\usepackage{booktabs,siunitx}
+\usepackage{graphicx,tikz}
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
 
@@ -34,6 +36,7 @@
 
 \begin{document}
 
+%\subtitle{The Power of Linear Recurrent Neural Networks}
 \title{Efficient Time Series Approximation with Linear Recurrent Neural Networks: Architecture Learning and Predictive Power}
 
 \opt{unblind}{
@@ -64,7 +67,7 @@ how autoregressive linear, i.e., linearly activated recurrent neural networks
 (LRNNs) can approximate any time-dependent function $f(t)$. The approximation
 can effectively be learned by simply solving a linear
 equation system; no backpropagation or similar methods are needed. Furthermore,
-and this is the main contribution of this article, the size of an
+and this is the main contribution of this paper, the size of an
 LRNN can be reduced significantly in one step after inspecting the spectrum
 of the network transition matrix, i.e., its eigenvalues, by taking only the most
 relevant components. Therefore, in contrast to other approaches, we do not only
@@ -95,7 +98,7 @@ and transformation \citep{DY14}. The tremendous success of deep learning in
 diverse fields of artificial intelligence, such as computer vision and natural 
 language processing, appears to depend on several key components: artificial, 
 possibly recurrent neural networks (RNNs) with nonlinearly activated neurons, 
-convolutional layers, and iterative training methods like backpropagation 
+convolutional layers, and iterative training methods such as backpropagation 
 \citep{GBC16}. However, which of these components are truly essential for machine 
 learning tasks such as time-series analysis?
 
@@ -113,8 +116,6 @@ area also aim to enhance the performance of RNNs, e.g., HiPPO \citep{GDE+20} and
 structured state spaces \citep{GGR22,WKF+25}, which learn representations of signals
 over time. There are also more biologically inspired spiking neural networks
 \citep{KK+22} that can perfom (simple) delay tasks quite well.
-
-In \citep{ZMV+25}, the authors establish an explicit connection and a direct architectural match between Koopman operator approximation and linear RNNs, with the goal of  time-series prediction.
 
 In the following, we consider an alternative, yet simple but very powerful type of RNNs: linear 
 recurrent neural networks (LRNNs). We utilize linear activation, which 
@@ -163,25 +164,25 @@ networks on complex and difficult sequence modeling problems which may contain
 long-term data dependencies. This can also be done with LRNNs (cf. MSO
 benchmark, \cref{mso}).
 Previous work in \citep{Tin18} considers the effect of weight changes in linear symmetric ESNs on
-(Fisher) memory of the network. Furthermore, \citep{CW+16} investigates the
+(Fisher) memory of the network. Furthermore, \citet{CW+16} investigate the
 asymptotic performance of linear ESNs from a solely theoretical point of view.
 
 \subsection{Recurrent Neural Networks}
 
-Simple RNNs have been proposed originally in \citep{Elm90}. By allowing them to accept sequences
+Simple RNNs have been proposed originally by \citet{Elm90}. By allowing them to accept sequences
 as inputs and outputs rather than individual observations, RNNs extend the
 standard feedforward multilayer perceptron networks. As shown in many sequence
 modeling tasks, data points such as video frames, audio snippets, and sentence
 segments are usually highly related in time. This results in RNNs being used as
 the indispensable tools for modeling such temporal dependencies. Linear RNNs and
-some of their properties (like short-term memory) are already investigated in
+some of their properties (such as short-term memory) are already investigated in
 \citep{WLS94}. Unfortunately, however, it can be a struggle to train RNNs to
 capture long-term dependencies \citep{BSF94,PMB13}. This is due to the
 gradients vanishing or exploding during backpropagation which in turn makes the
 gradient-based optimization difficult.
 
 As a next step,  long short-term memory (LSTM) networks \citep{HS97} became 
-a prominent and dominant type of RNN. The expression \enquote{long
+a prominent and dominant type of RNN. The expression \emph{long
 short-term} refers to the fact that LSTM is a model for the short-term memory
 which can last for a long period of time. An LSTM is well-suited to classify,
 process and predict time series given time lags of unknown size. They were
@@ -190,6 +191,14 @@ training traditional RNNs. A common LSTM unit is composed of a cell,
 an input gate, an output gate, and a forget gate. Each unit type is activated in
 a different manner, whereas in this paper we consider completely linearly
 activated RNNs.
+
+State-frequency memory (SFM) RNNs \citep{HQ17}  
+aim to model the frequency patterns of the temporal sequences.
+The key idea of the SFM is to decompose the memory states into different
+frequency states. In doing so, they can explicitly learn the dependencies of
+both the low and high frequency patterns. As we will see (cf. \cref{mso}),
+RNNs in general can easily learn time series that have a constant frequency
+spectrum, which may be obtained also by Fourier analysis.
 
 The NoBackTrack algorithm \citep{OTC15} trains RNN parameters in an online, 
 memoryless setting
@@ -200,14 +209,10 @@ an iterative method, namely gradient descent. In contrast to this and other
 related works, in this paper we present a method working with linearly activated
 RNNs that does not require backpropagation or similar procedures in the learning
 phase.
-
-State-frequency memory (SFM) RNNs \citep{HQ17}  
-aim to model the frequency patterns of the temporal sequences.
-The key idea of the SFM is to decompose the memory states into different
-frequency states. In doing so, they can explicitly learn the dependencies of
-both the low and high frequency patterns. As we will see (cf. \cref{mso}),
-RNNs in general can easily learn time series that have a constant frequency
-spectrum, which may be obtained also by Fourier analysis.
+Nevertheless, for feedforward neural networks, the forward-forward algorithm
+\citep{Hin22} presents an approach to training models without backpropagation
+but, at least in its current form, is only applicable to the classification of
+static patterns.
 
 The Legendre memory unit (LMU) \citep{VKE19} is a memory cell for recurrent
 neural networks that maintains information across long windows of time using
@@ -215,13 +220,13 @@ relatively few resources. It is derived from the linear transfer function for
 a continuous-time history of its input signal across a sliding window,
 approximated by coupled differential equations, which can implicitly also be
 solved by LRNNs (cf. \cref{rem}).
-\citep{CSB21} proposes an approach to address memorization challenges in RNNs
+\citet{CSB21} propose an approach to address memorization challenges in RNNs
 which puts forward a way between the random encoding in the reservoir paradigm
 and the vanishing-gradient prone approach of fully-trained RNNs. The objective
 is to train memorization units to maximize their short-term memory capacity,
 employing a linear autoencoder for sequences. More recently, deep state-space
 models have been shown to perform well on long sequence modeling tasks.
-\citet{GGR22,OS+23} cover ideas of linear recurrent equations in so-called state
+\citet{GGR22} and \citet{OS+23} cover ideas of linear recurrent equations in so-called state
 spaces, Jordan-type factorizations, and links to continuous-time differential
 equations. Nevertheless, in all these cases, backpropagation is
 employed, which is not needed for LRNNs whose network size is reduced
@@ -230,18 +235,23 @@ architecture learning.
 
 Architecture learning, in particular the pruning of neural networks, has been
 studied extensively in the literature, with an early survey on pruning algorithms
-for neural networks in \citep{Ree93}. More recent work \citep{LAT19} presents 
+for neural networks in \citep{Ree93}. More recently, \citet{LAT19} present
 a method that prunes irrelevant connections between
 neurons for a given task prior to training and is applicable to a variety of
 modern neural network models, resulting in sparse networks. Furthermore,
-\citep{MM+19} proposes a method that estimates the contribution of a neuron to
+\citet{MM+19} propose a method that estimates the contribution of a neuron to
 the final loss and iteratively removes those with smaller scores. In contrast to
 this, for LRNNs, the network architecture and hence its size are reduced in one
 step by analyzing the network transition matrix (cf. \cref{reduce}).
 
-For feedforward neural networks, the forward-forward algorithm \citep{Hin22}
-presents an approach to training models without backpropagation but, at least in
-its current form, is only applicable to the classification of static patterns.
+In more recent works, linear RNNs are considered explicitly: \citet{ZM+25}
+establish an explicit connection and a direct architectural match between
+Koopman operator approximation and linear RNNs, with the goal of time-series
+prediction. \citet{Dur17} considers piecewise linear RNNs and develops a
+specific maximum-likelihood estimation scheme for them. Furthermore,
+\citet{FCR24} investigate block-diagonal, input-dependent, linear RNNs,
+exploring them in the context of regular language modeling. However, none of
+these recent works consider network size reduction as done here.
 
 \subsection{Autoregression}\label{regress}
 
@@ -265,21 +275,21 @@ have $f(t) = c_1 f(t-1) + \dots + c_p f(t-p) + e_t$ where $c_1,\dots,c_p$ are
 (real-valued) autocorrelation coefficients and $e_t$, the residuals, is
 Gaussian white noise. In the moving average process MA($q$), the value $q$
 specifies the number of past residuals considered for prediction. An underlying
-trend of the time series is modeled by using a drift, i.e., a constant that extends
-the term. This procedure is particularly well-suited for stationary time series,
-i.e., whose properties do not vary with time.
+trend of the time series is modeled by using a drift\opt{long}{, i.e., a constant that extends
+the term}. This procedure is particularly well-suited for stationary time
+series\opt{long}{, i.e., whose properties do not vary with time}.
 Many time series, however, exhibit non-stationary behavior and thus require a
 transformation to make them stationary. This is achieved by investigating the
 derivatives of the series, with the order of this process given by the parameter
 $d$.
 
 State-space time series models, which are a natural bridge between
-autoregressive models and LRNNs, have been studied at length \cite{Ham94}.
+autoregressive models and LRNNs, have been studied at length \citep{Ham94}.
 Autoregressive frameworks are also common in current machine-learning
-applications like language modeling, e.g., in the generative pre-trained
-transformer GPT-3 and their successors,
-by next word prediction \citep{BM+20}. The models applied in this context,
-however, are very complex (175 billion parameters and much more) and non-linear.
+applications such as large language models (LLMs), e.g., in the generative
+pre-trained transformer GPT-3, GPT-4 and related models, by next word prediction
+\citep{BM+20,OpenAI24}. The models applied in this context,
+however, are very complex (175 billion parameters and much more) and nonlinear.
 Related to autoregression is autoencoding of sequences. It has been shown in \citep{PS14}
 that linear autoencoders can be used for pre-training of RNNs, while we
 establish completely linear RNNs here. Furthermore, \citep{Spe06} gives an
@@ -320,10 +330,10 @@ sets. Obviously it holds $N = N^\mathrm{in\,out}+N^\mathrm{res}$ and
 $N^\mathrm{in\,out} \le N^\mathrm{in}+N^\mathrm{out}$.
 
 The edges of the directed graph represent the network connections. They are
-annotated with \emph{weights} which are compiled in the \emph{transition matrix}
-$W$ of size $N \times N$. An entry~$w_{ij}$ in row~$i$ and column~$j$ denotes the weight of the edge
-from neuron~$j$ to neuron~$i$. If there is no connection, then
-$w_{ij} = 0$. The transition matrix has the form
+annotated with \emph{weights} which are compiled into the \emph{transition
+matrix} $W$ of size $N \times N$. An entry~$w_{ij}$ in row~$i$ and column~$j$
+denotes the weight of the edge from neuron~$j$ to neuron~$i$. If there is no
+connection, then $w_{ij} = 0$. The transition matrix has the form
 \begin{equation}\label{matrix}
   W = \left[ \begin{array}{cc}
   \multicolumn{2}{c}{W^\mathrm{out}}\\
@@ -354,8 +364,8 @@ configuration of the neural network is given by a column vector $s$ with $N$
 components, called \emph{start vector}. It represents the network state at the
 start time $t=t_0$. Because of the discrete time model, the activation
 of a (non-input) neuron $x_i$ at time $t+\tau$ (for some time step $\tau>0$) from
-the activation at time $t$ of the neurons $x_1,\dots,x_k$ (for some $k \ge 0$ ) that
-are connected to $x_i$ with the weights $w_{i1},\dots,w_{ik}$ is computed as
+the activation at time $t$ of the neurons $x_1,\dots,x_k$ (for some $k \ge 0$),
+connected to $x_i$ with the weights $w_{i1},\dots,w_{ik}$, is computed as
 follows:
 \begin{equation}\label{recur}
 	x_i(t+\tau) = g\big(w_{i1}\,x_1(t) +\dots+ w_{ik}\,x_k(t)\big)
@@ -365,7 +375,7 @@ This has to be done simultaneously for all neurons of the network. $g$ is called
 $g$ may be different for different parts of the network.
 Usually, a nonlinear, bounded, strictly increasing, sigmoidal function $g$ is
 used, e.g., the logistic function, the hyperbolic tangent ($\tanh$), or the
-softplus function \citep[Sect.~3.10]{GBC16}. In the following, we employ simply
+softplus function \citep[Section~3.10]{GBC16}. In the following, we employ simply
 the (linear) identity function, i.e., $g(x)=x$ for all $x$, and can still
 approximate arbitrary time-dependent functions (cf. \cref{approx}).
 
@@ -380,8 +390,8 @@ following properties:
 	is the identity.
   \item The weights in $W^\mathrm{in}$ and $W^\mathrm{res}$ are taken
 	randomly, independently, and identically distributed from the standard
-	normal distribution, i.e., the Gaussian distribution with mean $\mu = 0$
-	and standard deviation $\sigma = 1$, and remain unchanged all the time,
+	normal distribution\opt{long}{, i.e., the Gaussian distribution with mean $\mu = 0$
+	and standard deviation $\sigma = 1$,} and remain unchanged all the time,
 	whereas the output weights $W^\mathrm{out}$ are learned (cf. \cref{output}).
   \item The spectral radius of the reservoir weights matrix $W^\mathrm{res}$ is
 	set to $1$, i.e., $W^\mathrm{res}$ is divided by the maximal absolute
@@ -458,7 +468,7 @@ for the Fibonacci series, revealing its exponential growth, known as
 \begin{equation}\label{binet}
    f(t) = \frac{{\lambda_1}^t-{\lambda_2}^t}{\sqrt{5}}
 	\text{~with~} \lambda_1 = \displaystyle\frac{1+\sqrt{5}}{2} \approx 1.61803
-	\text{~(golden ratio) and~} \lambda_2 = 1-\lambda_1
+	\text{~(\emph{golden ratio}) and~} \lambda_2 = 1-\lambda_1
 \end{equation}
 Interestingly, $\lambda_1$ and $\lambda_2$ are the eigenvalues of the above transition
 matrix $W$. Moreover, Binet's formula can be used to create another LRNN to
@@ -514,7 +524,7 @@ satisfying \cref{diff} and the following transition matrix:
 See \cref{proof:rem}.
 \end{proof}}
 
-\begin{exmp}\label{exp}
+\opt{long}{\begin{exmp}
 The exponential function $\exp(t) = e^t$ can be defined by the differential
 equation $\dot{x}(t) = x(t)$, i.e., we have $c_0 = 1$ and $c_1 = -1$ in
 \cref{diff}. In consequence, according to \cref{rem} and because of $\exp(0)=\dot{\exp}(0)=1$,
@@ -530,11 +540,11 @@ the transition matrix $W$ and start vector $s$ of the corresponding LRNN are:
 \]
 Induction over time yields immediately $x(t) = \dot{x}(t) = (1+\tau)^{t/\tau}
 \approx e^t$ for small $\tau>0$ (according to Euler) as expected.
-\end{exmp}
+\end{exmp}}
 
 The strong relationship between RNNs and differential equations is already known
-\citep[Sect.~9]{KB+16} as well as the extraction of eigenvalues to describe
-dynamical systems \citep[Sect.~5]{Str15}. Nevertheless, as we will show in the
+\citep[Section~9]{KB+16} as well as the extraction of eigenvalues to describe
+dynamical systems \citep[Section~5]{Str15}. Nevertheless, as we will show in the
 rest of this paper, the combination of both provides an effective method for
 network size reduction (cf. \cref{reduce}) and therefore seems to be worthwhile
 to be considered by the machine learning community in more detail.
@@ -547,7 +557,7 @@ An LRNN runs through network states $f(t)$ for $t
 	s, & t=0\\
 	W \cdot f(t-\tau), & \text{otherwise}
 \end{array} \right. \]
-and hence simply $f(t) = W^t \cdot s$. Note that we assume $\tau = 1$ here (cf. \cref{thedef}).
+and hence simply $f(t) = W^t \cdot s$ for $\tau = 1$ (cf. \cref{thedef}).
 
 \begin{prop}\label{jordan}
 Let $W = V \cdot J \cdot V^{-1}$ be the Jordan decomposition of the transition
@@ -568,11 +578,11 @@ If we decompose $V$ into matrices $v$ of size $N \times m$ and the column vector
 $V^{-1} \cdot s$ into a stack of column vectors $w$ of size $m$, corresponding
 to the Jordan blocks in $J$, then $f(t)$ can be expressed as a sum of vectors $u
 = v \cdot J_m(\lambda)^t \cdot w$ where the Jordan block powers are upper
-triangular Toeplitz matrices, i.e., in which each descending diagonal from left
-to right is constant, with:
+triangular Toeplitz matrices\opt{long}{, i.e., in which each descending diagonal from left
+to right is constant,} with:
 \begin{equation}\label{power}
   \Big( J_m(\lambda)^t \Big)_{ij} = \binom{t}{j-i}\,\lambda^{t-(j-i)}
-	\quad\text{\citep[Sect.~3.2.5]{HJ13}}
+	\quad\text{\citep[Section~3.2.5]{HJ13}}
 \end{equation}
 \end{prop}
 
@@ -615,7 +625,7 @@ on the diagonal of the diagonal matrix $D$, sorted in decreasing order with
 respect to their absolute values. Like every column vector, we can represent the
 start vector $s$ as linear combination of the eigenvectors, namely as $s =
 x_1 v_1 + \dots + x_N v_N = V \cdot x$ where $x = \big[ x_1 \cdots x_N
-\big]^\top$. It follows $x = V^{-1} \cdot s$.
+\big]^\top$ such that $x = V^{-1} \cdot s$.
 Since $W$ is a linear mapping and for each eigenvector $v_k$ with eigenvalue
 $\lambda_k$ with $1 \le k \le N$ it holds that $W \cdot v_k = \lambda_k\, v_k$, we
 have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
@@ -631,9 +641,9 @@ have $W \cdot s = W \cdot (x_1 v_1 + \dots + x_N v_N) = x_1 \lambda_1 v_1 +
 For real-valued transition matrices $W$, it is possible to define a
 decomposition that, in contrast to the ordinary Jordan decomposition in
 \cref{jordan}, solely makes use of real-valued components, adopting the
-so-called \emph{real Jordan canonical form} \cite[Sect.~3.4.1]{HJ13} of the
+so-called \emph{real Jordan canonical form} \citep[Section~3.4.1]{HJ13} of the
 square matrix $W$.
-For this completely real-valued decomposition, the Jordan matrix $J$ is
+\opt{long}{For this completely real-valued decomposition, the Jordan matrix $J$ is
 transformed as follows:
 \begin{enumerate}
   \item A Jordan block with real eigenvalue $\lambda$ remains as is in $J$.
@@ -666,10 +676,10 @@ transformed as follows:
 	  \end{array} \right]$.
 \end{enumerate}
 
-This procedure yields the real Jordan matrix $J$. In consequence, we have to
+This procedure yields a real Jordan matrix $J$. In consequence, we have to
 transform $V$ also into a completely real-valued form. For each complex
 conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
-two eigenvectors in $V$ could be replaced by two real-valued vectors. But the
+two eigenvectors in $V$ could be replaced by two real-valued vectors. }But the
 subsequent theorem (\cref{chad}) shows a more general way: The matrix $V$ from
 \cref{jordan} is transformed into a real matrix $A$ and, what is more, the start
 vector $s$ can be replaced by an arbitrary column vector $y$ with all non-zero
@@ -706,10 +716,10 @@ See \cref{proof:exponential}.
 \end{proof}}
 
 In fact, LRNNs can model polynomials (cf. \cref{parabola}, parabola), general
-single-exponential functions like the Fibonacci series (cf. \cref{fibonacci}),
+single-exponential functions such as the Fibonacci series (cf. \cref{fibonacci}),
 multiple superimposed oscillators (cf. \cref{exmp}), and many more (cf.
-\cref{approx}). For this, the overall transition matrix $W$ may have (a) a
-spectral radius greater than $1$ and (b) many eigenvalues (more than two) with
+\cref{approx}). For this, the overall transition matrix $W$ may have (a)~a
+spectral radius greater than $1$ and (b)~many eigenvalues (more than two) with
 absolute value $1$. Nevertheless, it is interesting to investigate a special
 case, namely a \emph{pure random reservoir} where both conditions do not hold:
 
@@ -752,7 +762,7 @@ values $1$. In consequence, we have one of the following cases:
 
 We can build a matrix $\hat{D}$, similar to $\tilde{D}$ but completely
 real-valued (cf.~\cref{real}) which states the ellipse rotation. Furthermore,
-the rotation speed can be derived from the eigenvalue $\lambda_1$. In each step
+the rotation speed can be derived from the eigenvalue $\lambda_1$ as follows: In each step
 of length $\tau$, there is a rotation by the angle $\omega\tau$ where $\omega$
 is the angular frequency, which can be determined from the equation $\lambda_1 =
 |\lambda_1|\,e^{\mathfrak{i}\omega\tau}$ (cf. \cref{general}). The
@@ -791,7 +801,7 @@ hundred steps (cf. \cref{asymptot}). Of course this depends on the eigenvalue
 distribution of the transition matrix \citep{TV10}. So the long-term behavior
 may be different for transition matrices other than pure random reservoirs.
 
-\begin{figure}
+\begin{figure}[b]
   \centering
     (a) \raisebox{-35mm}{\includegraphics[scale=0.21]{fig/spectrum}} \hfill
     (b) \raisebox{-35mm}{\includegraphics[scale=0.21]{fig/ellipse}} \hfill
@@ -853,18 +863,18 @@ follows:
   \item Furthermore, we initialize the reservoir neurons such that the reservoir
 	start vector $r$ (with $N^\mathrm{res}$ components) has unit norm by setting:
 	\[ r = \frac{1}{\sqrt{N^\mathrm{res}}} \cdot \big[ 1 \cdots 1 \big]^\top \]
-	It is part of the start vector $s = \left[ \begin{array}{c} S(0) \\ r
-	\end{array} \right]$ (cf. \cref{define}).
-  \item We usually employ fully connected graphs, i.e., all, especially the
-	reservoir neurons are connected with each other because the
+	It is part of the (overall) start vector $s = \left[ \begin{array}{c}
+	S(0) \\ r \end{array} \right]$ (cf. \cref{define}).
+  \item We employ fully connected graphs\opt{long}{, i.e., all, especially the
+	reservoir neurons are connected with each other,} because the
 	connectivity has nearly no influence on the best reachable performance
 	\citep{KLB12}.
 \end{itemize}
-Second, if possible, we reduce the network size (cf. \cref{reduce}).
-This often leads to better generalization and avoids overfitting. Thus, in
-contrast to many other approaches, the network architecture is changed during
-the learning process. In contrast to other approaches, we do not do this by
-incremental derivation from the original network but in only one step.
+Second, if possible, we reduce the network size (cf. \cref{reduce}). This often
+leads to better generalization and avoids overfitting. Thus, in contrast to many
+other approaches, the network architecture is changed during the learning
+process, and we do not do this by incremental derivation from the original
+network but in only one step.
 
 \subsection{Learning the Output Weights}\label{output}
 
@@ -872,12 +882,12 @@ To learn the output weights $W^\mathrm{out}$, we run the input values from the
 time series $S(0),\dots,S(n)$ through the network (in input receiving mode),
 particularly through the reservoir. This means, we build the sequence of
 corresponding reservoir states $R(0),\dots,R(n)$ where the reservoir start
-vector $r$ in principle can be chosen arbitrarily but with all non-zero
+vector $r$ (see above) in principle can be chosen arbitrarily but with all non-zero
 entries (cf. \cref{chad}):
-\begin{equation}\label{Res}
-	R(t_0) = r \text{~and~} R(t+\tau) =
+\begin{equation}\label{reserv}
+	R(t_0) = r \text{~and~} R(t+\tau) \opt{long}{=
 	\left[ W^\mathrm{in} ~~ W^\mathrm{res} \right] \cdot
-	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]
+	\left[ \begin{array}{c} S(t) \\ R(t) \end{array} \right]}
 	= W^\mathrm{in} \cdot S(t) + W^\mathrm{res} \cdot R(t)
 \end{equation}
 We want to predict the next input value $S(t+\tau)$, given the current input and
@@ -905,7 +915,7 @@ Its solution can easily be determined as $W^\mathrm{out} = Y^\mathrm{out}/X$,
 where $/$ denotes right matrix division, i.e., the operation of solving a linear
 equation system, possibly applying the least squares method in case of an
 overdetermined system, as implemented in many scientific programming languages
-like Matlab \citep{HH17} or Octave \citep{EB+17}. Prediction of further values
+such as Matlab \citep{HH17} or Octave \citep{EB+17}. Prediction of further values
 is now possible (in output generating mode) as follows:
 \begin{equation}\label{predict}
 	\left[ \begin{array}{c} S(t+\tau) \\ R(t+\tau) \end{array} \right]
@@ -920,7 +930,7 @@ identical) lengths $n_1,\dots,n_K$ be given. For each $S_k$ with $1 \le k \le
 K$, we determine:
 \begin{itemize}
   \item the sequence of corresponding reservoir states $R_k$ (according to
-	\cref{Res}), taking always the same reservoir start vector $r$,
+	\cref{reserv}), taking always the same reservoir start vector $r$,
   \item the corresponding input matrix $X_k$ (according to \cref{Xin}), and
   \item the corresponding predicted output matrix $Y^\mathrm{out}_k$ (according to \cref{Yout}).
 \end{itemize}
@@ -937,7 +947,7 @@ difference to an autoregressive model is that for LRNNs the output does not only
 depend on its own previous values and possibly white noise but on the complete
 state of the possibly big reservoir whose dynamics is explicitly dealt with in
 the reservoir matrix $W^\mathrm{res}$. The reservoir effectively allows us to do
-arbitrary auxiliary computation such that any (non-linear) function $f(t)$ can
+arbitrary auxiliary computation such that any (nonlinear) function $f(t)$ can
 be approximated by an LRNN (cf.~\cref{approx}).
 
 \subsection{An Approximation Theorem}
@@ -965,9 +975,8 @@ interpolated, i.e., exactly approximated on the given function values and
 continued on input other than nonnegative integer numbers (cf. \cref{general}),
 although clearly not every function can be implemented by LRNNs, in particular
 functions increasing faster than single-exponential (cf. \cref{exponential})
-like $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
+such as $2^{2^t}$ (double-exponential) or $t\/!$ (factorial function). Also in
 practice, the LRNN learning procedure performs rather well (cf. \cref{result}).
-\citet{MG77,JH04} %%%
 
 Nevertheless, the matrix $X$ may be ill-conditioned for long input sequences, because the reservoir state
 sequence as part of the matrix $X$ reduces to at most two dimensions for large
@@ -1011,19 +1020,35 @@ but additionally the reservoir state time series $R$ into account, then exactly
 the given input and reservoir weights are learned if \cref{ineq} holds. Only
 with nonlinear activation there is a learning effect.
 
-\opt{long}{\begin{remk}[generalization to nonlinear activation]
+Although LRNNs rely on linear activation functions, they can represent
+nonlinear functions $f(t)$. In fact, LRNNs are well suited to represent
+differential equations (cf. \cref{rem}), which lead to highly nonlinear
+functions. Any exponential, trigonometric and polynomial functions can be
+modeled (cf. \cref{jordan}). There is no restriction to cyclic or periodic time
+series. Any time-dependent function $f(t)$ can be exactly approximated (cf.
+\cref{approx}), including functions with regime shifts. This is also true for
+chaotic functions such as random number series or the Mackey-Glass time series
+\citep{MG77,JH04}. However, long-term prediction is not that accurate for these
+types of time series.
+
+\begin{remk}[generalization to nonlinear activation]
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
-function $f(s)$ from the possibly multi-dimensional (start) input $s$. Only linearly
-separable functions can be represented. Nevertheless, the LRNN learning
-procedure (cf. \cref{output}) and \cref{approx} can be generalized in a
-straightforward manner to nonlinear, invertible activation functions $g$.
-For this, $g$ has to be applied component-wise to \cref{Res} while running the
-input through the reservoir and to \cref{linear}. The solution of the resulting
-equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ is then just
-$W^\mathrm{out} = g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence, LRNN learning is as
-easy as learning a single-layer perceptron and allows us to approximate any
-(possibly nonlinear) function over time $f(t)$ efficiently. 
-\end{remk}}
+function $f(s)$, i.e., depending on the possibly multi-dimensional (start) input
+$s$. Only linearly separable functions can be represented. Nonetheless, though
+not in the focus of this paper, the LRNN learning procedure (cf. \cref{output})
+and \cref{approx} can be generalized in a straightforward manner to nonlinear,
+invertible activation functions $g$. For this, $g$ has to be applied
+component-wise to \cref{reserv} while running the input through the reservoir
+and to \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
+g\big(W^\mathrm{out} \cdot X\big)$ is then just $W^\mathrm{out} =
+g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence, LRNN learning is as easy as learning a
+single-layer perceptron and allows us to approximate any (possibly nonlinear)
+function over time $f(t)$ efficiently. But: The procedure for network size
+reduction (cf. \cref{reduce}) does not work with nonlinear activation. At least,
+the precision would be lost because (the proof of) \cref{chad} requires the
+commutativity of matrix multiplication with $J$, which does not hold any
+longer if a nonlinear activation function is employed. 
+\end{remk}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
@@ -1031,7 +1056,7 @@ network with a linear output layer and at least one hidden layer activated by a
 nonlinear, sigmoidal function can approximate any continuous function on a
 closed and bounded subset of the $\mathbb{R}^n$ from one finite-dimensional
 space to another with any desired non-zero amount of error, provided that the
-network is given enough hidden neurons \citep[Sect.~6.4.1]{GBC16}. Since RNNs
+network is given enough hidden neurons \citep[Section~6.4.1]{GBC16}. Since RNNs
 are more general than feedforward networks, the universal approximation theorem
 also holds for them \citep{MNM02}. Any measurable function can be
 approximated with a (general) recurrent network arbitrarily well in probability
@@ -1040,7 +1065,7 @@ approximated with a (general) recurrent network arbitrarily well in probability
 \opt{long}{\begin{remk}
 Any time series $S(0),\dots,S(n)$ can be generated by employing a backward shift
 matrix, i.e., a binary matrix with $1$s on the subdiagonal and $0$s elsewhere
-\citep[Sect.~0.9.7]{HJ13}, as transition matrix $W$ and $s = \big[ S(0) \cdots
+\citep[Section~0.9.7]{HJ13}, as transition matrix $W$ and $s = \big[ S(0) \cdots
 S(n) \big]^\top$ as start vector. But such a network clearly would have no
 ability to generalize to future data. Fortunately, this does not hold for a
 transition matrix $W$ learned by the procedure in \cref{output}. Furthermore,
@@ -1073,7 +1098,7 @@ also into account the temporal order of the data points in the time series. By
 applying insights from linear algebra, the actual network size can be reduced
 and not only the subspace of computation as with conceptors.
 
-\begin{prop}
+\begin{prop}\label{relevan}
 By \cref{chad}, the function $f(t) = W^t \cdot s$ can be rewritten by
 means of the Jordan matrix of the transition matrix $W$ as $A \cdot J^t
 \cdot y$, where the start vector can be chosen as non-zero constant, e.g., $y =
@@ -1119,10 +1144,18 @@ calculate exactly identical eigenvalues then. Therefore, we cluster the
 computed eigenvalues as follows: If the distance in the complex plane between
 eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
-of single linkage clustering \citep{GR69}. The complete implementation of the
-learning procedure together with some case studies (cf. \cref{result})%
-\opt{unblind}{is publicly available at \url{http://github.com/OliverObst/decorating/}.}%
-\opt{blind}{ will be made available upon acceptance.}
+of single linkage clustering \citep{GR69}. 
+In our approach, eigenvalues are considered in decreasing order of their
+absolute values (cf. \cref{relevan}). Therefore, they cannot be removed by
+mistake, provided that a reasonable threshold $\theta$ is taken. However, in our
+network size reduction procedure (which is not a simple pruning), we use a
+binary search (cf. \cref{proc}). It handles a large group of similarly relevant
+eigenvalues in one step. This speeds up the procedure considerably, although it
+is a kind of approximation.
+The complete implementation of the learning procedure together with some case
+studies (cf. \cref{result})\opt{unblind}{ is publicly available at
+\url{http://github.com/OliverObst/decorating/}.}\opt{blind}{ will be made
+available upon acceptance.}
 
 \begin{figure}
 \newcommand{\commt}[1]{\%~#1\\}%
@@ -1224,7 +1257,7 @@ In both learning steps, it is possible to employ any of the many available fast
 and constructive algorithms for linear regression and eigendecomposition
 \citep{DDH07}. Therefore, the time complexity is just $O(N^3)$ for both output
 weights learning and network size reduction. In theory, if we assume that
-the basic numerical operations like $+$~and~$\cdot$ can be done in constant
+the basic numerical operations such as $+$~and~$\cdot$ can be done in constant
 time, the asymptotic complexity is even a bit better. In practice, however, the
 complexity depends on the bit length of numbers in floating point arithmetic,
 of course, and may be worse hence. The size of the learned network is in $O(N)$
@@ -1238,7 +1271,7 @@ that the universal approximation theorem for feedforward networks differs from
 not only time-dependent input. In this light, the computational complexity of
 $O(N^3)$ for LRNNs does not look overly expensive. It dominates the
 overall time complexity of the whole learning procedure because it is not
-embedded in a time-consuming iterative learning procedure (like backpropagation)
+embedded in a time-consuming iterative learning procedure (such as backpropagation)
 as in other state-of-the-art methods.
 
 \opt{long}{\begin{remk}
@@ -1271,7 +1304,7 @@ by our LRNN learning procedure (cf. \cref{learn})?
 \begin{figure}
 	\centering	
         \hfill %
-                 \includegraphics[width=0.45\textwidth]{fig/parasin2}
+	\includegraphics[width=0.45\textwidth]{fig/parasin2}
         \hfill %
 	\includegraphics[width=0.45\textwidth]{fig/accuracy}
 	\hfill
@@ -1365,7 +1398,7 @@ this number is not further reduced.
 For a more systematic evaluation, we generalize the MSO benchmark (\cref{exmp})
 by considering $20$ times $K=8$ random frequencies $\alpha_1,\dots,\alpha_8$
 uniformly distributed on the interval $[0,1]$. We take the first $250$ time
-steps, i.e., $t=1,\dots,250$, as training data and the subsequent $50$ time
+steps\opt{long}{, i.e., $t=1,\dots,250$,} as training data and the subsequent $50$ time
 steps as testing data and compare the performance of LRNNs with other approaches
 (cf. \cref{related}) with respect to their RSME on the testing data, partially
 using the Python library Darts \citep[see also
@@ -1487,43 +1520,61 @@ significantly: For 19 of 20 number puzzles, the most frequently predicted last
 element (simple majority) is the correct one. It is predicted in 76.5\% on
 average over all trials and number puzzles. Let us remark that the whole
 evaluation with altogether $20 \cdot 50 \cdot 1000 = 1\,000\,000$ trials
-including possibly repeated network generation and network size reduction ran in
-only a few minutes on standard hardware.
+including possibly repeated network generation ran in only a few minutes on
+standard hardware.
 
-\begin{table}[t]
+Although the application domains of transformer models and LRNNs are different,
+one can compare modern LLMs and LRNNs with respect to solving number puzzles:
+LLMs can yield interpretable explanations. For example, ChatGPT (which is based on
+GPT-4, cf. \cref{regress}) predicts the correct next value for all number
+puzzles, but it only finds correct (recursive or closed) formulae only for 10 of
+20 number puzzles\opt{long}{ (cf. \cref{chatgpt})}.
+The LRNN learning procedure with network size reduction determines LRNNs with
+small reservoir sizes. From these, we can read off explicit, i.e., also
+interpretable, small formulae for the number series, e.g., $f(t) = 3 \cdot 2^n$
+for $S_9$ with a minimal reservoir size $N^\mathrm{res}=1$. Focussing on small
+reservoir sizes (determined from $1000$ trials), for 18 of 20 number puzzles,
+the most frequently predicted last element is the correct one.
+Hence, network size reduction can improve the generalization and explanation
+ability of LRNNs because it may suppress noise. However, for applications with
+high variability and noise, the network size reduction procedure clearly does
+not lead to such a strong compression of the network (cf. \cref{soccer}).
+
+\begin{table}[h]
   \centering
   \sisetup{table-number-alignment = center, %
 	table-figures-integer = 3, table-figures-decimal = 1, table-figures-exponent = 0}%
-  \begin{tabular}{crrrrr}
+  \begin{tabular}{crrrrcr}
 	\toprule
- 	\head{series} & \head{$N^\mathrm{res}=3$}& \head{$N^\mathrm{res}=4$} & \head{$N^\mathrm{res}=5$} & \head{with reduction} & \head{plus clue}\\ \midrule
-	$S_{1}$ & 2.2\% & 1.3\% & 1.3\% & 0.8\% & 33.4\% \\
-	$S_{2}$ & 37.6\% & 42.2\% & 29.4\% & 32.0\% & 100.0\% \\
-	$S_{3}$ & 5.4\% & 4.1\% & 1.1\% & 3.2\% & 100.0\% \\
-	$S_{4}$ & 23.8\% & 24.2\% & 16.8\% & 23.2\% & 99.9\% \\
-	$S_{5}$ & 56.9\% & 57.6\% & 44.2\% & 44.7\% & 99.7\% \\
-	$S_{6}$ & 31.7\% & 33.7\% & 16.1\% & 11.0\% & 100.0\% \\
-	$S_{7}$ & 72.8\% & 68.2\% & 56.2\% & 64.5\% & 100.0\% \\
-	$S_{8}$ & 5.1\% & 3.4\% & 1.3\% & 1.8\% & 76.3\% \\
-	$S_{9}$ & 100.0\% & 100.0\% & 100.0\% & 100.0\% & 100.0\% \\
-	$S_{10}$ & 48.9\% & 71.5\% & 67.6\% & 72.6\% & 100.0\% \\
-	$S_{11}$ & 10.6\% & 9.0\% & 3.4\% & 3.7\% & 100.0\% \\
-	$S_{12}$ & 23.8\% & 21.1\% & 11.0\% & 8.5\% & 43.2\% \\
-	$S_{13}$ & 56.5\% & 58.1\% & 41.5\% & 47.2\% & 99.8\% \\
-	$S_{14}$ & 6.7\% & 7.4\% & 2.1\% & 2.7\% & 87.1\% \\
-	$S_{15}$ & 1.6\% & 2.6\% & 2.5\% & 0.3\% & 1.1\% \\
-	$S_{16}$ & 6.8\% & 5.9\% & 3.4\% & 2.9\% & 73.3\% \\
-	$S_{17}$ & 11.9\% & 12.0\% & 6.8\% & 6.6\% & 41.0\% \\
-	$S_{18}$ & 3.1\% & 2.0\% & 1.1\% & 0.9\% & 18.0\% \\
-	$S_{19}$ & 59.6\% & 70.1\% & 72.0\% & 77.8\% & 99.8\% \\
-	$S_{20}$ & 1.5\% & 0.5\% & 0.6\% & 0.5\% & 57.2\% \\ \bottomrule
+ 	\head{series} & \head{$N^\mathrm{res}=3$}& \head{$N^\mathrm{res}=4$} & \head{$N^\mathrm{res}=5$} & \head{with reduction} &  \head{$\min(N^\mathrm{res})$} & \head{plus clue}\\ \midrule
+	$S_{1}$ & 2.2\% & 1.3\% & 1.3\% & 64.4\% & 3 & 33.4\% \\
+	$S_{2}$ & 37.6\% & 42.2\% & 29.4\% & 100.0\% & 2 & 100.0\% \\
+	$S_{3}$ & 5.4\% & 4.1\% & 1.1\% & 99.5\% & 2 & 100.0\% \\
+	$S_{4}$ & 23.8\% & 24.2\% & 16.8\% & 81.5\% & 2 & 99.9\% \\
+	$S_{5}$ & 56.9\% & 57.6\% & 44.2\% & 99.1\% & 2 & 99.7\% \\
+	$S_{6}$ & 31.7\% & 33.7\% & 16.1\% & 56.6\% & 2 & 100.0\% \\
+	$S_{7}$ & 72.8\% & 68.2\% & 56.2\% & 99.2\% & 2 & 100.0\% \\
+	$S_{8}$ & 5.1\% & 3.4\% & 1.3\% & 86.0\% & 3 & 76.3\% \\
+	$S_{9}$ & 100.0\% & 100.0\% & 100.0\% & 100.0\% & 1 & 100.0\% \\
+	$S_{10}$ & 48.9\% & 71.5\% & 67.6\% & 83.3\% & 2 & 100.0\% \\
+	$S_{11}$ & 10.6\% & 9.0\% & 3.4\% & 96.9\% & 2 & 100.0\% \\
+	$S_{12}$ & 23.8\% & 21.1\% & 11.0\% & 82.4\% & 2 & 43.2\% \\
+	$S_{13}$ & 56.5\% & 58.1\% & 41.5\% & 95.1\% & 2 & 99.8\% \\
+	$S_{14}$ & 6.7\% & 7.4\% & 2.1\% & 94.3\% & 2 & 87.1\% \\
+	$S_{15}$ & 1.6\% & 2.6\% & 2.5\% & 3.6\% & 4 & 1.1\% \\
+	$S_{16}$ & 6.8\% & 5.9\% & 3.4\% & 88.7\% & 3 & 73.3\% \\
+	$S_{17}$ & 11.9\% & 12.0\% & 6.8\% & 51.6\% & 3 & 41.0\% \\
+	$S_{18}$ & 3.1\% & 2.0\% & 1.1\% & 37.5\% & 4 & 18.0\% \\
+	$S_{19}$ & 59.6\% & 70.1\% & 72.0\% & 99.0\% & 2 & 99.8\% \\
+	$S_{20}$ & 1.5\% & 0.5\% & 0.6\% & 57.9\% & 4 & 57.2\% \\ \bottomrule
   \end{tabular}
   \caption{Percentages of correct predictions of the last element for 20 number
 	puzzles \citep{RK11,GW13} in 1000 trials for different settings:
 	\textbf{(a)}~with fixed reservoir size $N^\mathrm{res}=3,4,5$;
 	\textbf{(b)}~with network size reduction starting with
-	$N^\mathrm{res}=7$ reservoir neurons; \textbf{(c)}~same procedure but in
-	addition always the previous time series value is used as clue.}
+	$N^\mathrm{res}=7$ reservoir neurons yielding small/minimal reservoirs;
+	\textbf{(c)}~same procedure but in addition always the previous time
+	series value is used as clue.}
   \label{table}
 \end{table}
 
@@ -1542,7 +1593,7 @@ soccer simulation league \citep{CDF+03,GFG16} in 2016 and 2017
 \citep{MO+18}\opt{unblind}{ (dataset available from
 \url{http://bitbucket.org/oliverobst/robocupsimdata})}. We consider the
 $(x,y)$-coordinates of the ball and all 22 players for all time points during
-regular game play, the so-called \enquote{play-on} mode.
+regular game play, the so-called \emph{play-on} mode.
 
 \begin{table}
 \centering
@@ -1582,9 +1633,9 @@ ones (Euclidean distance) -- over the whole length of the game (cf.
 compared to the original number $N = 46+500 = 546$ -- on average 29.2\% if we
 concentrate on the relevant components for the ball trajectory (cf.
 \cref{robocup}). Note that the size of the learned network is in $O(N)$ (cf.
-\cref{complexity}). Thus the LRNN model is definitely smaller than the original
-time series representation of a game. The complete learning procedure runs in
-less than a minute on standard hardware.
+\cref{complexity}). Thus, the LRNN model is smaller than the original time
+series representation of a game, which means it is substantially compressed. The
+complete learning procedure runs in less than a minute on standard hardware.
 
 \cref{multi} shows how we can learn from multiple time series at once. This is
 also helpful here because by this procedure we can investigate the overall
@@ -1662,8 +1713,8 @@ index DAX (again from \url{http://de.finance.yahoo.com/}) and consider the last
 $250+50$ data points until the end of 2021 as training and testing data,
 respectively, for each stock in the DAX existing at least $300$ trading days
 until that time. We apply the same approaches as in \cref{mso} and compute their
-RMSE with respect to the testing data, each normalized (i.e., divided) by the
-arithmetic mean of the corresponding training data. As baseline we just
+RMSE with respect to the testing data, each normalized\opt{long}{ (i.e., divided)}
+by the arithmetic mean of the corresponding training data. As baseline we just
 constantly predict the stock price of the last trading day of the training data.
 
 As one can see in \cref{dax}, LRNNs outperform the other approaches in the
@@ -1674,10 +1725,10 @@ also \cref{stockfig}). In line with that, the reviews in
 \citep{SIZ19,SGO20,Jia21} show that predicting stock prices remains a
 challenging problem, especially for a longer timeframe, which we investigate
 here. Contemporary research often uses complex models, ranging from LSTM RNNs
-\citep{NPO17,RPV17} to attention-based models that use further information about
-the events that drive the stock prices, e.g., news texts from social media
-\citep{LL+19}. These models and also LRNNs yield rather accurate results, but mainly
-only in the short run.
+\citep{NPO17,RPV17} to attention-based models with transformer architecture
+\citep{VS+17} that use further information about the events that drive the stock
+prices, e.g., news texts from social media \citep{LL+19}. These models and also
+LRNNs yield rather accurate results, but mainly only in the short run.
 
 \begin{figure}
   \centering
@@ -1764,7 +1815,9 @@ of almost identical eigenvectors and eigenvalues with absolute values greater
 than $1$ in the learned transition matrix $W$ is increased then. Nonetheless,
 the underlying major problem here seems to be that existing scientific
 programming libraries do not calculate the eigenvalues of large matrices
-accurately enough. This point needs further investigation.
+accurately enough. Therefore, a more stable reimplementation in Python has
+already been prepared\opt{nonblind}{ (see \url{http://github.com/OliverObst/lrnn})}.
+But this point needs further investigation. 
 
 A particularly interesting application of our approach reducing the network size
 is in hardware implementations of neural networks, e.g., for neuromorphic or
@@ -1845,7 +1898,7 @@ matrix
   \vdots & \ddots & \ddots & \vdots\\
   0 & \cdots & 0 & b_N
 \end{array} \right] \]
-which commutes with the Jordan block $J$ \cite[Sect.~3.2.4]{HJ13}, i.e., it
+which commutes with the Jordan block $J$ \citep[Section~3.2.4]{HJ13}, i.e., it
 holds that (a)~$J \cdot B = B \cdot J$. We define $B$ and hence $b$ by the
 equation (b)~$x = B \cdot y$ which is equivalent to:
 
@@ -1858,7 +1911,7 @@ equation (b)~$x = B \cdot y$ which is equivalent to:
   x_1\\[7pt] x_2\\ \vdots\\ x_N
 \end{array} \right] \]
 Since the main diagonal of the left matrix contains no $0$s because $y_N \neq 0$
-by precondition, there always exists a solution for $b$ \cite[Sect.~0.9.3]{HJ13}.
+by precondition, there always exists a solution for $b$ \citep[Section~0.9.3]{HJ13}.
 Then $A = V \cdot B$ does the job:
 \[ f(t) = W^t \cdot s
 	\overset{\text{\cref{jordan}}}{=} V \cdot J^t \cdot V^{-1} \cdot s
@@ -1877,8 +1930,8 @@ similar to the diagonal matrix $D = \left[ \begin{array}{cc}
 \end{array} \right]$ via $U = \left[ \begin{array}{cc}
 	-\mathfrak{i} & -\mathfrak{i}\\
 	1 & -1
-\end{array} \right]$ \citep[Sect.~3.4.1]{HJ13}, i.e., $M = U \cdot D \cdot
-U^{-1}$. The above-mentioned commutation property~(a) analogously holds for real
+\end{array} \right]$ \citep[Section~3.4.1]{HJ13}, i.e., $M = U \cdot D \cdot
+U^{-1}$. The above-mentioned commutativity property~(a) analogously holds for real
 Jordan blocks. This completes the proof.
 
 \section{Proof of \cref{exponential}}\label{proof:exponential}
@@ -1921,6 +1974,9 @@ rank of the matrix $X$ is maximal. For the latter, we consider two cases:
 	reservoir (cf. \cref{thedef}). Thus, a suitable reservoir does the job,
 	which completes the proof.
 \end{itemize}}
+
+\opt{long}{\section{Solving Number Puzzles with LLMs}\label{chatgpt}
+\todo{Insert results here.}}
 
 \end{document}
 

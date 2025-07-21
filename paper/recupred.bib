@@ -163,6 +163,17 @@
   url = {http://www.deeplearningbook.org}
 }
 
+@inproceedings{GDE+20,
+  title = {{{HiPPO}}: {{Recurrent}} Memory with Optimal Polynomial Projections},
+  booktitle = {Advances in Neural Information Processing Systems},
+  author = {Gu, Albert and Dao, Tri and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
+  editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M.F. and Lin, H.},
+  year = {2020},
+  volume = {33},
+  pages = {1474--1487},
+  url = {http://proceedings.neurips.cc/paper_files/paper/2020/file/102f0bb6efb3a6128a3c750dd16729be-Paper.pdf}
+}
+
 @inproceedings{GFG16,
   title = {Progress in {{RoboCup}} Revisited: {{The}} State of Soccer Simulation {{2D}}},
   booktitle = {{{RoboCup}} 2016: {{Robot}} Soccer World Cup {{XX}}. {{RoboCup}} International Symposium},
@@ -346,7 +357,7 @@
 
 @article{IL+11,
   title = {Neuromorphic Silicon Neuron Circuits},
-  author = {Indiveri, Giacomo and {Linares-Barranco}, Bernabe and Hamilton, Tara and {van Schaik}, Andr{\'e} and {Etienne-Cummings}, Ralph and Delbruck, Tobi and Liu, Shih-Chii and Dudek, Piotr and H{\"a}fliger, Philipp and Renaud, Sylvie and Schemmel, Johannes and Cauwenberghs, Gert and Arthur, John and Hynna, Kai and Folowosele, Fopefolu and Sa{\"i}ghi, Sylvain and {Serrano-Gotarredona}, Teresa and Wijekoon, Jayawan and Wang, Yingxue and Boahen, Kwabena},
+  author = {Indiveri, Giacomo and {Linares-Barranco}, Bernabe and Hamilton, Tara and {van Schaik}, Andr{\'e} and others},
   year = {2011},
   journal = {Frontiers in Neuroscience},
   volume = {5},
@@ -645,17 +656,6 @@
   institution = {{Automation and Computer Sciences Department}}
 }
 
-@inproceedings{GDE+20,
-  title = {{{HiPPO}}: {{Recurrent}} Memory with Optimal Polynomial Projections},
-  booktitle = {Advances in Neural Information Processing Systems},
-  author = {Gu, Albert and Dao, Tri and Ermon, Stefano and Rudra, Atri and R{\'e}, Christopher},
-  editor = {Larochelle, H. and Ranzato, M. and Hadsell, R. and Balcan, M.F. and Lin, H.},
-  year = {2020},
-  volume = {33},
-  pages = {1474--1487},
-  url = {http://proceedings.neurips.cc/paper_files/paper/2020/file/102f0bb6efb3a6128a3c750dd16729be-Paper.pdf}
-}
-
 @inproceedings{NPO17,
   title = {Stock Market's Price Movement Prediction with {{LSTM}} Neural Networks},
   booktitle = {International Joint Conference on Neural Networks ({{IJCNN}})},
@@ -664,6 +664,18 @@
   publisher = {IEEE},
   address = {New York, NY, USA},
   url = {http://doi.org/10.1109/IJCNN.2017.7966019}
+}
+
+@techreport{OpenAI24,
+  title = {{GPT}-4 Technical Report},
+  abstract = {We report the development of GPT-4, a large-scale, multimodal model which can accept image and text inputs and produce text outputs. While less capable than humans in many real-world scenarios, GPT-4 exhibits human-level performance on various professional and academic benchmarks, including passing a simulated bar exam with a score around the top 10\% of test takers. GPT-4 is a Transformerbased model pre-trained to predict the next token in a document. The post-training alignment process results in improved performance on measures of factuality and adherence to desired behavior. A core component of this project was developing infrastructure and optimization methods that behave predictably across a wide range of scales. This allowed us to accurately predict some aspects of GPT-4’s performance based on models trained with no more than 1/1,000th the compute of GPT-4.},
+  author = {OpenAI and Josh Achiam and Steven Adler and Sandhini Agarwal and Lama Ahmad and Ilge Akkaya and Florencia Leoni Aleman and Diogo Almeida and Janko Altenschmidt and Sam Altman and others},
+  year = {2024},
+  keywords = {Computer Science - Artificial Intelligence, Computer Science - Computation and Language},
+  doi = {10.48550/arXiv.2303.08774},
+  number = {abs/2303.08774},
+  institution = {Cornell University Library},
+  url = {http://arxiv.org/abs/2303.08774}
 }
 
 @inproceedings{OS+23,
@@ -845,7 +857,7 @@
 
 @inproceedings{Spe06,
   title = {Exact Solutions for Recursive Principal Components Analysis of Sequences and Trees},
-  booktitle = {Artificial Neural Networks -- {{ICANN}}},
+  booktitle = {Artificial Neural Networks -- {ICANN}},
   author = {Sperduti, Alessandro},
   editor = {Kollias, Stefanos D. and Stafylopatis, Andreas and Duch, W{\l}odzis{\l}aw and Oja, Erkki},
   year = {2006},
@@ -941,6 +953,16 @@
   year = {2019},
   address = {Vancouver, Canada},
   url = {http://proceedings.neurips.cc/paper/2019/file/952285b9b7e7a1be5aa7849f32ffff05-Paper.pdf}
+}
+
+@article{VS+17,
+  title = {Attention is All you Need},
+  abstract = {The dominant sequence transduction models are based on complex recurrent or convolutional neural networks that include an encoder and a decoder. The best performing models also connect the encoder and decoder through an attention mechanism. We propose a new simple network architecture, the Transformer, based solely on attention mechanisms, dispensing with recurrence and convolutions entirely. Experiments on two machine translation tasks show these models to be superior in quality while being more parallelizable and requiring signiﬁcantly less time to train. Our model achieves 28.4 BLEU on the WMT 2014 Englishto-German translation task, improving over the existing best results, including ensembles, by over 2 BLEU. On the WMT 2014 English-to-French translation task, our model establishes a new single-model state-of-the-art BLEU score of 41.0 after training for 3.5 days on eight GPUs, a small fraction of the training costs of the best models from the literature.},
+  author = {Vaswani, Ashish and Shazeer, Noam and Parmar, Niki and Uszkoreit, Jakob and Jones, Llion and Gomez, Aidan N and Kaiser, {\L}ukasz and Polosukhin, Illia},
+  journal = {Advances in Neural Information Processing Systems},
+  year = {2017},
+  doi = {10.48550/arXiv.1706.03762},
+  url = {http://papers.neurips.cc/paper/7181-attention-is-all-you-need.pdf}
 }
 
 @article{WKF+25,
