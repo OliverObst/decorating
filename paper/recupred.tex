@@ -2,7 +2,7 @@
 \documentclass[sn-mathphys-num,a4paper]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
-\usepackage[blind,proof,long]{optional}
+\usepackage[blind]{optional}
 \usepackage{todonotes}
   \setuptodonotes{inline}
 
@@ -1036,6 +1036,15 @@ chaotic functions such as random number series or the Mackey-Glass time series
 \citep{MG77,JH04}. However, long-term prediction is not that accurate for these
 types of time series.
 
+\begin{remk}[scope and generalization to nonlinear activation]
+This paper focuses on time-dependent functions $f(t)$, where the output evolves autonomously over time. Such functions are central to modeling dynamic systems and are naturally handled by LRNNs with purely linear activation. In this setting, nonlinearities are not required: the network dynamics, governed by the transition matrix, already permit the approximation of a broad class of functions, including polynomials, exponentials, and oscillatory signals (cf. \cref{approx}). 
+
+A different problem is to compute general functions $f(s)$, i.e., mappings from arbitrary input vectors $s$ to output values. In that context, nonlinear activation functions may offer benefits. If the activation function $g$ is monotonic and invertible, the LRNN learning procedure can, in principle, be extended. Specifically, the equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ could be transformed into a linear system that can be solved by applying $g^{-1}$ component-wise to both sides, yielding $W^\mathrm{out} = g^{-1}(Y^\mathrm{out}) / X$. However, this approach assumes $g^{-1}(Y^\mathrm{out})$ is well-defined and numerically stable. 
+
+We note that the network size reduction procedure (\cref{reduce}) relies on linear structure and matrix commutativity, and is therefore not applicable when nonlinear activation is used. In such cases, approximation may still be possible, but the reduction method would no longer preserve precision.
+\end{remk}
+
+\if 0
 \begin{remk}[generalization to nonlinear activation]
 Because of the completely linear activation, LRNNs cannot compute a nonlinear
 function $f(s)$, i.e., depending on the possibly multi-dimensional (start) input
@@ -1054,6 +1063,7 @@ the precision would be lost because (the proof of) \cref{chad} requires the
 commutativity of matrix multiplication with $J$, which does not hold any
 longer if a nonlinear activation function is employed. 
 \end{remk}
+\fi
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
@@ -1798,6 +1808,9 @@ reduction is shown.}
 
 \section{Conclusions}\label{conclude}
 
+This paper presented LRNNs as an efficient and mathematically grounded approach to time series modeling. The main contribution is a closed-form learning procedure that requires solving only a linear equation system and eliminates the need for backpropagation or gradient descent. This enables fast and stable training while retaining strong approximation capabilities. LRNNs, despite using purely linear activation functions, can represent a wide class of functions, including exponential, polynomial, and trigonometric signals. A second key contribution is the method for learning network architecture through spectral analysis of the transition matrix. This enables substantial and principled reduction in network size by identifying the most relevant dynamical modes based on eigenvalue contributions. Unlike iterative pruning, our approach reduces the network in a single step and often yields compact models with interpretable internal structure. We demonstrated this across several tasks, including the MSO benchmark, stock prediction, and symbolic number series, where LRNNs matched or outperformed LSTMs and ESNs with significantly fewer units and faster runtime. The models also showed robustness in nonstationary and irregular data, though very large reservoirs may cause numerical issues, especially in long-term prediction. Nonetheless, the reduced models typically generalize well and support compact formula extraction for interpretable applications. These properties make LRNNs particularly suitable for domains requiring fast training, compact models, and insights into learned structure, for example, finance, embedded systems, and symbolic reasoning. Future work may explore hybrid extensions that incorporate nonlinearity or adaptive updates, while preserving the architectural simplicity and closed-form solvability of the LRNN framework.
+
+\if 0
 In this paper, we have introduced LRNNs. The major innovation in this work is a
 closed-form approach to network size reduction (cf.
 \cref{reduce}) that learns both architecture and parameters of linearly activated RNNs.
@@ -1833,6 +1846,7 @@ memory capacity of LRNNs, analyzed for small networks \citep{Mar17} and to
 some extent also in \citep{CW+16}. Last but not least, other machine learning
 tasks besides prediction shall be addressed in more detail, including
 classification and reinforcement learning~\citep{SB18,PGL17}.
+\fi 
 
 \opt{unblind}{%
 \section*{Acknowledgments}
