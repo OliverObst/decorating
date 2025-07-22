@@ -2,7 +2,7 @@
 \documentclass[sn-mathphys-num,a4paper]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
-\usepackage[blind,proof]{optional}
+\usepackage[blind,proof,long]{optional}
 \usepackage{todonotes}
   \setuptodonotes{inline}
 
@@ -20,6 +20,9 @@
 \newtheorem{prop}{Property}
 \newtheorem{remk}{Remark}
 
+\newcommand{\seq}[1]{\texttt{#1}}
+\newcommand{\nextval}[1]{\underline{#1}}
+
 % other packages
 \usepackage{microtype}
 \usepackage{algorithmicx}
@@ -28,6 +31,8 @@
 \usepackage{graphicx,tikz}
 \usepackage[figuresright]{rotating}
 \usepackage[official]{eurosym}
+\usepackage{xcolor}
+\usepackage{enumitem}
 
 \newcommand{\head}[1]{\multicolumn{1}{c}{#1}}
 
@@ -1976,7 +1981,255 @@ rank of the matrix $X$ is maximal. For the latter, we consider two cases:
 \end{itemize}}
 
 \opt{long}{\section{Solving Number Puzzles with LLMs}\label{chatgpt}
-\todo{Insert results here.}}
+For comparison, we gave chatGPT (o3) the task to solve the number puzzles.
+For each numbered series below the first seven terms were supplied.  The value in position 8 (in parenthesis) is the ground truth next value. The tasks were (a) to predict the $8^\text{th}$ value and (b) to give a formula that generates the entire sequence.  The LLM response is shown below the series, split into next value prediction (which was correct for all 20 sequences), and a suggested generating formula (usually with alternative solutions). The predicted next values were correct for all 20 sequences, but some of the suggested generating formulas were not. \emph{Note:} the LLM started indexing the values at 0.\\
+
+\noindent
+We used the following prompt for the first sequence:
+\begin{quote}
+\ttfamily
+I am interested in time series prediction, and would like to see if it is possible to uncover an underlying function. I will show you the first few values, and you should (a) predict the next value, and (b) tell me the function generating the series.\\
+
+Let's start with the first series:\\
+15,12,8,11,4,7,0
+\end{quote}
+
+~\\
+We requested \LaTeX{} output for the subsequent series (``\texttt{output the formula in latex code}'') that we used verbatim below. We have annotated mistakes in the formulas in \textcolor{red}{red}, and added remarks in \textcolor{orange}{orange}.
+
+%------------------------------------------------------------
+\subsection*{Series \#1 -- \seq{15,\,12,\,8,\,11,\,4,\,7,\,0,\,(3)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{3}.
+  \item Rule (recurrence):~ (\textcolor{red}{incorrect formula})
+  \[
+    a_0=15,\;a_1=12,\quad
+    a_n=\begin{cases}
+      a_{n-1}+3 & n\text{ odd},\\[4pt]
+      a_{n-1}-7 & n\text{ even},\;n\ge2.
+    \end{cases}
+  \]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#2 -- \seq{148,\,84,\,52,\,36,\,28,\,24,\,22,\,(21)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{21}.
+  \item Closed form: 
+  \[a_n = 20 + 2^{7-n},\qquad n\ge0.\]
+  Recurrence: $a_0=148$ and $a_n=a_{n-1}-2^{7-n}$ for $n\ge1$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#3 -- \seq{2,\,12,\,21,\,29,\,36,\,42,\,47,\,(51)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{51}.
+  \item Closed form:
+  \[
+    a_n = 2 + 11n - \frac{n(n+1)}{2}=2+\frac{n(21-n)}{2},\qquad n\ge0.
+  \]
+  Recurrence: $a_0=2$ and $a_{n+1}=a_n+(10-n)$.\\[1em]
+  \textcolor{orange}{The alternative formulas (closed form vs recurrence) diverge for larger $n$ but produce the same results for the first 8 relevant values of $n$.} 
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#4 -- \seq{2,\,3,\,5,\,9,\,17,\,33,\,65,\,(129)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{129}.
+  \item Closed form: $a_n=1+2^{n}$, $n\ge0$.  (Note $a_0=2$.)
+  
+  Recurrence: $a_{n+1}=2a_n-1$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#5 -- \seq{2,\,5,\,8,\,11,\,14,\,17,\,20,\,(23)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{23}.
+  \item Closed form: $a_n = 2+3n$.
+  
+  Recurrence: $a_{n+1}=a_n+3$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#6 -- \seq{2,\,5,\,9,\,19,\,37,\,75,\,149,\,(299)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{299}.
+  \item Closed form (\textcolor{red}{incorrect})
+  \[
+    a_n=\frac{7\,2^{n}-(-1)^{n}}{3},\qquad n\ge0.
+  \]
+  Recurrence: (\textcolor{red}{incorrect}) \\
+  $a_0=2$ and $a_{n+1}=2a_n+(-1)^{n+1}$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#7 -- \seq{25,\,22,\,19,\,16,\,13,\,10,\,7,\,(4)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{4}.
+  \item Formula: $a_n = 25-3n$ \;(equivalently $a_{n+1}=a_n-3$).
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#8 -- \seq{28,\,33,\,31,\,36,\,34,\,39,\,37,\,(42)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{42}.
+  \item Even--odd definition:
+  \[
+    a_{2m}=28+3m,\qquad a_{2m+1}=33+3m,\qquad m\ge0.
+  \]
+  Single‑line version:
+  \[a_n = 28+3\lfloor n/2\rfloor+5\,(n\bmod 2).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#9 -- \seq{3,\,6,\,12,\,24,\,48,\,96,\,192,\,(384)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{384}.
+  \item Closed form: $a_n=3\,2^{n}$. \textcolor{orange}{ correct when interpreted as $3\cdot2^n$}
+  
+  Recurrence: $a_{n+1}=2a_n$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#10 -- \seq{3,\,7,\,15,\,31,\,63,\,127,\,255,\,(511)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{511}.
+  \item Closed form: $a_n = 2^{n+2}-1$.
+  
+  Recurrence: $a_{n+1}=2a_n+1$.
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#11 -- \seq{4,\,11,\,15,\,26,\,41,\,67,\,108,\,(175)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{175}.
+  \item Recurrence:
+  \[
+    a_0=4,\;a_1=11,\qquad a_{n+1}=a_n+a_{n-1}\quad(n\ge1).
+  \]
+  Closed form using Fibonacci numbers $F_n$ ($F_0=0,\,F_1=1$):
+  \[a_n = 7F_n+4F_{n+1}.\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#12 -- \seq{5,\,6,\,7,\,8,\,10,\,11,\,14,\,(15)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{15}.
+  \item Piece‑wise form:
+  \[
+    a_{2m}=5+\frac{m(m+3)}{2},\qquad a_{2m+1}=6+\frac{m(m+3)}{2}.
+  \]
+  Single‑line:
+  \[a_n = 5+\frac{\lfloor n/2\rfloor(\lfloor n/2\rfloor+3)}{2}+(n\bmod 2).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#13 -- \seq{54,\,48,\,42,\,36,\,30,\,24,\,18,\,(12)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{12}.
+  \item Formula: $a_n = 54-6n$ \;(so $a_{n+1}=a_n-6$).
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#14 -- \seq{6,\,8,\,5,\,7,\,4,\,6,\,3,\,(5)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{5}.
+  \item Recurrence:
+  \[
+    a_0=6,\qquad a_{n+1}=\begin{cases}a_n+2 & n\text{ even},\\[4pt]a_n-3 & n\text{ odd} .\end{cases}
+  \]
+  Closed form:
+  \[
+    a_{2m}=6-m,\qquad a_{2m+1}=8-m.
+  \]
+  Single‑line:
+  \[a_n = 6-\lfloor n/2\rfloor+2\,(n\bmod 2).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#15 -- \seq{6,\,9,\,18,\,21,\,42,\,45,\,90,\,(93)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{93}.
+  \item Recurrence:
+  \[
+    a_0=6,\qquad a_{n+1}=\begin{cases}a_n+3 & n\text{ even},\\[4pt]2a_n & n\text{ odd}.\end{cases}
+  \]
+  Closed form:
+  \[
+    a_{2m}=12\,2^{m}-6,\qquad a_{2m+1}=12\,2^{m}-3.
+  \]
+  Single‑line:
+  \[a_n = 12\,2^{\lfloor n/2\rfloor}-6+3\,(n\bmod 2).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#16 -- \seq{7,\,10,\,9,\,12,\,11,\,14,\,13,\,(16)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{16}.
+  \item Recurrence:
+  \[
+    a_0=7,\quad a_{n+1}=\begin{cases}a_n+3 & n\text{ even},\\[4pt]a_n-1 & n\text{ odd}.\end{cases}
+  \]
+  Closed form:
+  \[
+    a_{2m}=7+2m,\qquad a_{2m+1}=10+2m.
+  \]
+  Single‑line:
+  \[a_n = 7+2\lfloor n/2\rfloor+3\,(n\bmod 2).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#17 -- \seq{8,\,10,\,14,\,18,\,26,\,34,\,50,\,(66)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{66}.
+  \item Recurrence:
+  \[
+    a_0=8,\qquad a_{n+1}=a_n+2^{\left\lfloor\frac{n+3}{2}\right\rfloor}.
+  \]
+  Closed form (even/odd):
+  \[
+    a_{2m}=3\,2^{m+1}+2,\qquad a_{2m+1}=4\,2^{m+1}+2.
+  \]
+  Single‑line:
+  \[a_n = 2\Bigl((3+(n\bmod 2))\,2^{\lfloor n/2\rfloor}+1\Bigr).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#18 -- \seq{8,\,12,\,10,\,16,\,12,\,20,\,14,\,(24)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{24}.
+  \item Closed form:
+  \[
+    a_{2k}=8+2k,\qquad a_{2k+1}=12+4k.
+  \]
+  Single‑line:
+  \[a_n = 8+2\lfloor n/2\rfloor+(n\bmod 2)\bigl(4+2\lfloor n/2\rfloor\bigr).\]
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#19 -- \seq{8,\,12,\,16,\,20,\,24,\,28,\,32,\,(36)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{36}.
+  \item Formula: $a_n=8+4n$ \;(so $a_{n+1}=a_n+4$).
+\end{enumerate}
+
+%------------------------------------------------------------
+\subsection*{Series \#20 -- \seq{9,\,20,\,6,\,17,\,3,\,14,\,0,\,(11)}}
+\begin{enumerate}[label=(\alph*)]
+  \item Next value: \nextval{11}.
+  \item Even--odd closed form:
+  \[
+    a_{2k}=9-3k,\qquad a_{2k+1}=20-3k,\qquad k\ge0.
+  \]
+  Single‑line variant:
+  \[a_n = 9+11\left\lceil\tfrac{n}{2}\right\rceil-14\left\lfloor\tfrac{n}{2}\right\rfloor.\]
+  Recurrence:
+  \[
+    a_0=9,\qquad a_{n+1}=\begin{cases}a_n+11 & n\text{ even},\\[4pt]a_n-14 & n\text{ odd}.\end{cases}
+  \]
+\end{enumerate}
+
+}
 
 \end{document}
 
