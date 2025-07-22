@@ -3,8 +3,6 @@
 
 % versioning: blind,long,proof,unblind
 \usepackage[blind]{optional}
-\usepackage{todonotes}
-  \setuptodonotes{inline}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
@@ -1037,33 +1035,31 @@ chaotic functions such as random number series or the Mackey-Glass time series
 types of time series.
 
 \begin{remk}[scope and generalization to nonlinear activation]
-This paper focuses on time-dependent functions $f(t)$, where the output evolves autonomously over time. Such functions are central to modeling dynamic systems and are naturally handled by LRNNs with purely linear activation. In this setting, nonlinearities are not required: the network dynamics, governed by the transition matrix, already permit the approximation of a broad class of functions, including polynomials, exponentials, and oscillatory signals (cf. \cref{approx}). 
+This paper focuses on time-dependent functions $f(t)$, where the output evolves
+autonomously over time. Such functions are central to modeling dynamic systems
+and are naturally handled by LRNNs with purely linear activation. In this
+setting, nonlinearities are not required: The network dynamics, governed by the
+transition matrix, already permit the approximation of a broad class of
+functions, including polynomials, exponentials, and oscillatory signals (cf.
+\cref{approx}). 
 
-A different problem is to compute general functions $f(s)$, i.e., mappings from arbitrary input vectors $s$ to output values. In that context, nonlinear activation functions may offer benefits. If the activation function $g$ is monotonic and invertible, the LRNN learning procedure can, in principle, be extended. Specifically, the equation $Y^\mathrm{out} = g\big(W^\mathrm{out} \cdot X\big)$ could be transformed into a linear system that can be solved by applying $g^{-1}$ component-wise to both sides, yielding $W^\mathrm{out} = g^{-1}(Y^\mathrm{out}) / X$. However, this approach assumes $g^{-1}(Y^\mathrm{out})$ is well-defined and numerically stable. 
-
-We note that the network size reduction procedure (\cref{reduce}) relies on linear structure and matrix commutativity, and is therefore not applicable when nonlinear activation is used. In such cases, approximation may still be possible, but the reduction method would no longer preserve precision.
-\end{remk}
-
-\if 0
-\begin{remk}[generalization to nonlinear activation]
-Because of the completely linear activation, LRNNs cannot compute a nonlinear
-function $f(s)$, i.e., depending on the possibly multi-dimensional (start) input
-$s$. Only linearly separable functions can be represented. Nonetheless, though
-not in the focus of this paper, the LRNN learning procedure (cf. \cref{output})
-and \cref{approx} can be generalized in a straightforward manner to nonlinear,
-invertible activation functions $g$. For this, $g$ has to be applied
-component-wise to \cref{reserv} while running the input through the reservoir
-and to \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
+A different problem is to compute general functions $f(s)$, i.e., mappings from
+arbitrary input vectors $s$ to output values. In that context, nonlinear
+activation functions may offer benefits. If the activation function $g$ is
+monotonic and invertible, the LRNN learning procedure can, in principle, be
+extended to this case. For this, $g$ has to be applied component-wise to
+\cref{reserv} while running the input through the reservoir and to
+\cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
 g\big(W^\mathrm{out} \cdot X\big)$ is then just $W^\mathrm{out} =
-g^{-1}\big(Y^\mathrm{out}\big)/X$. Hence, LRNN learning is as easy as learning a
-single-layer perceptron and allows us to approximate any (possibly nonlinear)
-function over time $f(t)$ efficiently. But: The procedure for network size
-reduction (cf. \cref{reduce}) does not work with nonlinear activation. At least,
-the precision would be lost because (the proof of) \cref{chad} requires the
-commutativity of matrix multiplication with $J$, which does not hold any
-longer if a nonlinear activation function is employed. 
+g^{-1}\big(Y^\mathrm{out}\big)/X$.
+
+We note that, however, the network size reduction procedure (\cref{reduce})
+relies on linear activation and is therefore not applicable when nonlinear
+activation is used. In such cases, approximation may still be possible, but the
+reduction method would no longer preserve precision because (the proof of)
+\cref{chad} requires the commutativity of matrix multiplication, which does not
+hold any longer if nonlinear activation is employed.
 \end{remk}
-\fi
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
 feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
@@ -1306,8 +1302,9 @@ time series, approximating them by a function $f(t)$ represented by an LRNN,
 for several tasks. We consider the following benchmarks: multiple superimposed
 oscillators (MSO), number puzzles, robot soccer simulation, and predicting stock
 prices. All experiments are performed with a program written by the authors in
-Octave \citep{EB+17} (cf. \cref{reduce}). Let us start with an example that
-illustrates the overall method.
+Octave \citep{EB+17} (cf. \cref{reduce}). \opt{long}{There is also a reimplementation
+in Python available (see \url{http://github.com/OliverObst/lrnn}).} Let us start
+with an example that illustrates the overall method.
 
 \begin{exmp}\label{quest}
 The graphs of the functions $f_1(t) = 4\,t\,(1-t)$ (parabola) and $f_2(t) =
@@ -1522,14 +1519,14 @@ reservoirs because the number series are short. As a side effect, this leads to
 learning more general functions, which seems to be fully adequate because number
 puzzles are usually presented to humans. The first 7 of 8 elements of each
 series are given as input. In each trial, we repeatedly generate LRNNs, until the
-RMSE is smaller than $\theta=0.1$. Then the last (8-th) element of the
+RMSE is smaller than $\theta=0.1$. Then the last ($8^\text{th}$) element of the
 respective series is predicted (according to \cref{predict}) and rounded to the
 nearest integer because all considered number series are integer.
 
 \cref{table} lists the percentages of correct predictions of the last
 element for different settings. Here, the series with definitions recurring to
 $f(t-2)$ but not $f(t-1)$, e.g., $S_8$ and $S_{15}$, turned out to be the most
-difficult. If we now just add the previous values of the time series, i.e., $f(t-2)$,
+difficult. If we add the previous values of the time series, i.e., $f(t-2)$,
 as clue to the input, then the correctness of the procedure increases
 significantly: For 19 of 20 number puzzles, the most frequently predicted last
 element (simple majority) is the correct one. It is predicted in 76.5\% on
@@ -1542,15 +1539,15 @@ Although the application domains of transformer models \cite{VS+17} and LRNNs ar
 one can compare modern LLMs and LRNNs with respect to solving number puzzles:
 LLMs can yield interpretable explanations. For example, ChatGPT (which is based on
 GPT-4, cf. \cref{regress}) correctly predicts the next value for all number
-puzzles, but in some cases finds incorrect (recursive or closed) formulae explaining the number puzzles\opt{long}{ (cf. \cref{chatgpt})}.
+puzzles, but in some cases finds incorrect (recursive or closed) formulae explaining the number puzzles\opt{proof}{ (cf. \cref{chatgpt})}.
 The LRNN learning procedure with network size reduction determines LRNNs with
 small reservoir sizes. From these, we can read off explicit, i.e., also
 interpretable, small formulae for the number series, e.g., $f(t) = 3 \cdot 2^n$
-for $S_9$ with a minimal reservoir size $N^\mathrm{res}=1$. Focussing on small
+for $S_9$ with a minimal reservoir size $N^\mathrm{res}=1$. Focusing on small
 reservoir sizes (determined from $1000$ trials), for 18 of 20 number puzzles,
 the most frequently predicted last element is the correct one.
 Hence, network size reduction can improve the generalization and explanation
-ability of LRNNs because it may suppress noise. However, for applications with
+ability of LRNNs because it may suppress noise. However, for complex applications with
 high variability and noise, the network size reduction procedure clearly does
 not lead to such a strong compression of the network (cf. \cref{soccer}).
 
@@ -1808,45 +1805,32 @@ reduction is shown.}
 
 \section{Conclusions}\label{conclude}
 
-This paper presented LRNNs as an efficient and mathematically grounded approach to time series modeling. The main contribution is a closed-form learning procedure that requires solving only a linear equation system and eliminates the need for backpropagation or gradient descent. This enables fast and stable training while retaining strong approximation capabilities. LRNNs, despite using purely linear activation functions, can represent a wide class of functions, including exponential, polynomial, and trigonometric signals. A second key contribution is the method for learning network architecture through spectral analysis of the transition matrix. This enables substantial and principled reduction in network size by identifying the most relevant dynamical modes based on eigenvalue contributions. Unlike iterative pruning, our approach reduces the network in a single step and often yields compact models with interpretable internal structure. We demonstrated this across several tasks, including the MSO benchmark, stock prediction, and symbolic number series, where LRNNs matched or outperformed LSTMs and ESNs with significantly fewer units and faster runtime. The models also showed robustness in nonstationary and irregular data, though very large reservoirs may cause numerical issues, especially in long-term prediction. Nonetheless, the reduced models typically generalize well and support compact formula extraction for interpretable applications. These properties make LRNNs particularly suitable for domains requiring fast training, compact models, and insights into learned structure, for example, finance, embedded systems, and symbolic reasoning. Future work may explore hybrid extensions that incorporate nonlinearity or adaptive updates, while preserving the architectural simplicity and closed-form solvability of the LRNN framework.
+This paper presented LRNNs as an efficient and mathematically grounded approach
+to time series modeling. The main contribution is a closed-form learning
+procedure that requires solving only a linear equation system and eliminates the
+need for backpropagation or gradient descent. This enables fast and stable
+training while retaining strong approximation capabilities. LRNNs, despite using
+purely linear activation functions, can represent a wide class of functions,
+including exponential, polynomial, and trigonometric signals. A second key
+contribution is the method for learning network architecture through spectral
+analysis of the transition matrix. This enables substantial and principled
+reduction in network size by identifying the most relevant dynamical modes based
+on eigenvalue contributions. Unlike iterative pruning, our approach reduces the
+network in a single step and often yields compact models with interpretable
+internal structure.
 
-\if 0
-In this paper, we have introduced LRNNs. The major innovation in this work is a
-closed-form approach to network size reduction (cf.
-\cref{reduce}) that learns both architecture and parameters of linearly activated RNNs.
-No backpropagation, gradient-descent, or other iterative procedure with several
-epochs is required, and the approach leads to significantly smaller, sparsely
-connected, and in many cases even minimal size networks.
-
-We have shown that despite its simplicity of using only linear activation in the
-recurrent layer, LRNNs are a powerful approach to model time-dependent functions.
-The training procedure only uses standard matrix operations and is thus quite fast.
-In contrast to ESNs also no washout period is required. Any
-function can be approximated directly from its first step, with an arbitrary
-start vector (cf. \cref{chad}).
-Experiments with reasonably large example and network sizes can be performed
-successfully within seconds on standard hardware.
-However, if thousands of reservoir neurons are employed, the procedure may
-become numerically unstable, at least our Octave implementation. The likelihood
-of almost identical eigenvectors and eigenvalues with absolute values greater
-than $1$ in the learned transition matrix $W$ is increased then. Nonetheless,
-the underlying major problem here seems to be that existing scientific
-programming libraries do not calculate the eigenvalues of large matrices
-accurately enough. Therefore, a more stable reimplementation in Python has
-already been prepared\opt{nonblind}{ (see \url{http://github.com/OliverObst/lrnn})}.
-But this point needs further investigation. 
-
-A particularly interesting application of our approach reducing the network size
-is in hardware implementations of neural networks, e.g., for neuromorphic or
-reservoir computing~\citep{Mea90,IL+11,LL17}. Neuromorphic computing refers to
-new hardware that mimics the functioning of the human brain, and neuromorphic
-hardware results from the exploration of unconventional physical substrates
-and nonlinear phenomena. Future work shall include improving predictive and
-memory capacity of LRNNs, analyzed for small networks \citep{Mar17} and to
-some extent also in \citep{CW+16}. Last but not least, other machine learning
-tasks besides prediction shall be addressed in more detail, including
-classification and reinforcement learning~\citep{SB18,PGL17}.
-\fi 
+We have demonstrated this across several tasks, including the MSO benchmark,
+stock prediction, and number puzzles, where LRNNs matched or outperformed LSTMs
+and ESNs with significantly fewer units and faster runtime. The models also
+showed robustness in nonstationary and irregular data, though very large
+reservoirs may cause numerical issues, especially in long-term prediction.
+Nonetheless, the reduced models typically generalize well and support compact
+formula extraction for interpretable applications. These properties make LRNNs
+particularly suitable for domains requiring fast training, compact models, and
+insights into learned structure, for example, finance, embedded systems, and
+symbolic reasoning. Future work may explore hybrid extensions that incorporate
+nonlinearity or adaptive updates, while preserving the architectural simplicity
+and closed-form solvability of the LRNN framework.
 
 \opt{unblind}{%
 \section*{Acknowledgments}
@@ -1993,9 +1977,16 @@ rank of the matrix $X$ is maximal. For the latter, we consider two cases:
 	which completes the proof.
 \end{itemize}}
 
-\opt{long}{\section{Solving Number Puzzles with LLMs}\label{chatgpt}
-For comparison, we gave chatGPT (o3) the task to solve the number puzzles.
-For each numbered series below the first seven terms were supplied.  The value in position 8 (in parenthesis) is the ground truth next value. The tasks were (a) to predict the $8^\text{th}$ value and (b) to give a formula that generates the entire sequence.  The LLM response is shown below the series, split into next value prediction (which was correct for all 20 sequences), and a suggested generating formula (usually with alternative solutions). The predicted next values were correct for all 20 sequences, but some of the suggested generating formulas were not. \emph{Note:} the LLM started indexing the values at 0.\\
+\opt{proof}{\section{Solving Number Puzzles with LLMs}\label{chatgpt}
+For comparison, we gave ChatGPT (o3) the task to solve the number puzzles from \citep{GW13}.
+For each numbered series below the first seven terms were supplied. The value in
+position 8 (in parenthesis) is the ground truth next value. The tasks were (a)
+to predict the $8^\text{th}$ value and (b) to give a formula that generates the
+entire sequence. The LLM response is shown below the series, split into next
+value prediction (which was correct for all 20 sequences), and a suggested
+generating formula (usually with alternative solutions). The predicted next
+values were correct for all 20 sequences, but some of the suggested generating
+formulas were not. Note that the LLM started indexing the values at 0.\\
 
 \noindent
 We used the following prompt for the first sequence:
@@ -2003,7 +1994,7 @@ We used the following prompt for the first sequence:
 \ttfamily
 I am interested in time series prediction, and would like to see if it is possible to uncover an underlying function. I will show you the first few values, and you should (a) predict the next value, and (b) tell me the function generating the series.\\
 
-Let's start with the first series:\\
+\noindent Let's start with the first series:\\
 15,12,8,11,4,7,0
 \end{quote}
 
@@ -2240,9 +2231,7 @@ We requested \LaTeX{} output for the subsequent series (``\texttt{output the for
   \[
     a_0=9,\qquad a_{n+1}=\begin{cases}a_n+11 & n\text{ even},\\[4pt]a_n-14 & n\text{ odd}.\end{cases}
   \]
-\end{enumerate}
-
-}
+\end{enumerate}}
 
 \end{document}
 
