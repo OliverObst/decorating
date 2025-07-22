@@ -1046,14 +1046,14 @@ functions, including polynomials, exponentials, and oscillatory signals (cf.
 A different problem is to compute general functions $f(s)$, i.e., mappings from
 arbitrary input vectors $s$ to output values. In that context, nonlinear
 activation functions may offer benefits. If the activation function $g$ is
-monotonic and invertible, the LRNN learning procedure can, in principle, be
-extended to this case. For this, $g$ has to be applied component-wise to
+monotonic and invertible, the LRNN learning procedure (\cref{output}) can, in
+principle, be extended. For this, $g$ has to be applied component-wise to
 \cref{reserv} while running the input through the reservoir and to
 \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
 g\big(W^\mathrm{out} \cdot X\big)$ is then just $W^\mathrm{out} =
 g^{-1}\big(Y^\mathrm{out}\big)/X$.
 
-We note that, however, the network size reduction procedure (\cref{reduce})
+However, the network size reduction procedure introduced next (\cref{reduce})
 relies on linear activation and is therefore not applicable when nonlinear
 activation is used. In such cases, approximation may still be possible, but the
 reduction method would no longer preserve precision because (the proof of)
