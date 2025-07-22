@@ -1531,9 +1531,8 @@ standard hardware.
 Although the application domains of transformer models \cite{VS+17} and LRNNs are different,
 one can compare modern LLMs and LRNNs with respect to solving number puzzles:
 LLMs can yield interpretable explanations. For example, ChatGPT (which is based on
-GPT-4, cf. \cref{regress}) predicts the correct next value for all number
-puzzles, but it only finds correct (recursive or closed) formulae only for 10 of
-20 number puzzles\opt{long}{ (cf. \cref{chatgpt})}.
+GPT-4, cf. \cref{regress}) correctly predicts the next value for all number
+puzzles, but in some cases finds incorrect (recursive or closed) formulae explaining the number puzzles\opt{long}{ (cf. \cref{chatgpt})}.
 The LRNN learning procedure with network size reduction determines LRNNs with
 small reservoir sizes. From these, we can read off explicit, i.e., also
 interpretable, small formulae for the number series, e.g., $f(t) = 3 \cdot 2^n$
