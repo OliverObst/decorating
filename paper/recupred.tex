@@ -2,7 +2,7 @@
 \documentclass[sn-mathphys-num,a4paper]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
-\usepackage[blind]{optional}
+\usepackage[blind,proof]{optional}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
@@ -1046,7 +1046,7 @@ functions, including polynomials, exponentials, and oscillatory signals (cf.
 A different problem is to compute general functions $f(s)$, i.e., mappings from
 arbitrary input vectors $s$ to output values. In that context, nonlinear
 activation functions may offer benefits. If the activation function $g$ is
-monotonic and invertible, the LRNN learning procedure (\cref{output}) can, in
+monotonic and invertible, the LRNN learning procedure introduced so far (\cref{output}) can, in
 principle, be extended. For this, $g$ has to be applied component-wise to
 \cref{reserv} while running the input through the reservoir and to
 \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
@@ -1539,7 +1539,7 @@ Although the application domains of transformer models \cite{VS+17} and LRNNs ar
 one can compare modern LLMs and LRNNs with respect to solving number puzzles:
 LLMs can yield interpretable explanations. For example, ChatGPT (which is based on
 GPT-4, cf. \cref{regress}) correctly predicts the next value for all number
-puzzles, but in some cases finds incorrect (recursive or closed) formulae explaining the number puzzles\opt{proof}{ (cf. \cref{chatgpt})}.
+puzzles, but in 2 of 20 cases finds incorrect (recursive or closed) formulae explaining the number puzzles\opt{proof}{ (cf. \cref{chatgpt})}.
 The LRNN learning procedure with network size reduction determines LRNNs with
 small reservoir sizes. From these, we can read off explicit, i.e., also
 interpretable, small formulae for the number series, e.g., $f(t) = 3 \cdot 2^n$
