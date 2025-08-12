@@ -645,44 +645,7 @@ For real-valued transition matrices $W$, it is possible to define a
 decomposition that, in contrast to the ordinary Jordan decomposition in
 \cref{jordan}, solely makes use of real-valued components, adopting the
 so-called \emph{real Jordan canonical form} \citep[Section~3.4.1]{HJ13} of the
-square matrix $W$.
-\opt{long}{For this completely real-valued decomposition, the Jordan matrix $J$ is
-transformed as follows:
-\begin{enumerate}
-  \item A Jordan block with real eigenvalue $\lambda$ remains as is in $J$.
-  \item For complex conjugate eigenvalue pairs $\lambda = \lambda_\Re +
-	\mathfrak{i}\lambda_\Im$ and $\overline{\lambda} = \lambda_\Re - \mathfrak{i}\lambda_\Im$
-	with $\lambda_\Re,\lambda_\Im \in \mathbb{R}$, the
-	direct sum of the two corresponding Jordan blocks $J_m(\lambda)$ and
-	$J_m(\overline{\lambda})$ is replaced by one real Jordan block:
-	\[
-	  \left[ \begin{array}{*{5}{c}}
-		M & I & O & \cdots & O\\
-		O & M & I & \ddots & \vdots\\
-		\vdots & \ddots & \ddots & \ddots & O\\
-		\vdots & & \ddots & M & I\\
-		O & \cdots & \cdots & O & M
-	  \end{array} \right]
-	\]
-	with
-	  $M = \left[ \begin{array}{cc}
-		\lambda_\Re & \lambda_\Im\\
-		-\lambda_\Im & \lambda_\Re
-	  \end{array} \right]$,
-	  $I = \left[ \begin{array}{cc}
-		1 & 0\\
-		0 & 1
-	  \end{array} \right]$, and
-	  $O = \left[ \begin{array}{cc}
-		0 & 0\\
-		0 & 0
-	  \end{array} \right]$.
-\end{enumerate}
-
-This procedure yields a real Jordan matrix $J$. In consequence, we have to
-transform $V$ also into a completely real-valued form. For each complex
-conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
-two eigenvectors in $V$ could be replaced by two real-valued vectors. }But the
+square matrix $W$\opt{proof}{ (cf. \cref{omi})}. But the
 subsequent theorem (\cref{chad}) shows a more general way: The matrix $V$ from
 \cref{jordan} is transformed into a real matrix $A$ and, what is more, the start
 vector $s$ can be replaced by an arbitrary column vector $y$ with all non-zero
@@ -1046,7 +1009,7 @@ functions, including polynomials, exponentials, and oscillatory signals (cf.
 A different problem is to compute general functions $f(s)$, i.e., mappings from
 arbitrary input vectors $s$ to output values. In that context, nonlinear
 activation functions may offer benefits. If the activation function $g$ is
-monotonic and invertible, the LRNN learning procedure introduced so far (\cref{output}) can, in
+monotonic and invertible, the LRNN learning procedure (\cref{output}) can, in
 principle, be extended. For this, $g$ has to be applied component-wise to
 \cref{reserv} while running the input through the reservoir and to
 \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
@@ -1057,8 +1020,9 @@ However, the network size reduction procedure introduced next (\cref{reduce})
 relies on linear activation and is therefore not applicable when nonlinear
 activation is used. In such cases, approximation may still be possible, but the
 reduction method would no longer preserve precision because (the proof of)
-\cref{chad} requires the commutativity of matrix multiplication, which does not
-hold any longer if nonlinear activation is employed.
+\cref{chad} requires the commutativity of matrix multiplication with Jordan
+matrices $J$, which does not hold any longer if nonlinear activation is
+employed.
 \end{remk}
 
 \cref{approx} is related to the \emph{universal approximation theorem} for
@@ -1155,9 +1119,9 @@ calculate exactly identical eigenvalues then. Therefore, we cluster the
 computed eigenvalues as follows: If the distance in the complex plane between
 eigenvalues is below some given small threshold $\delta$, they are put into the
 same cluster which eventually is identified with its centroid. Thus it is a kind
-of single linkage clustering \citep{GR69}. 
-In our approach, eigenvalues are considered in decreasing order of their
-absolute values (cf. \cref{relevan}). Therefore, they cannot be removed by
+of single linkage clustering \citep{GR69}. In our approach, the Jordan
+components are considered in decreasing order of their relevance, sorted by the
+RMSE that their omission causes. Therefore, they cannot be removed by
 mistake, provided that a reasonable threshold $\theta$ is taken. However, in our
 network size reduction procedure (which is not a simple pruning), we use a
 binary search (cf. \cref{proc}). It handles a large group of similarly relevant
@@ -1880,6 +1844,47 @@ From this, we can read off the desired transition matrix $W$ of size $(n+1) \tim
 Together with a start vector $s$ satisfying \cref{diff}, we can thus solve
 differential equations approximately by LRNNs.
 
+\section{Real Jordan Canonical Form}\label{omi}
+
+For a completely real-valued decomposition \citep[Section~3.4.1]{HJ13}, a Jordan
+matrix $J$ can be transformed as follows:
+\begin{enumerate}
+  \item A Jordan block with real eigenvalue $\lambda$ remains as is in $J$.
+  \item For complex conjugate eigenvalue pairs $\lambda = \lambda_\Re +
+	\mathfrak{i}\lambda_\Im$ and $\overline{\lambda} = \lambda_\Re - \mathfrak{i}\lambda_\Im$
+	with $\lambda_\Re,\lambda_\Im \in \mathbb{R}$, the
+	direct sum of the two corresponding Jordan blocks $J_m(\lambda)$ and
+	$J_m(\overline{\lambda})$ is replaced by one real Jordan block:
+	\[
+	  \left[ \begin{array}{*{5}{c}}
+		M & I & O & \cdots & O\\
+		O & M & I & \ddots & \vdots\\
+		\vdots & \ddots & \ddots & \ddots & O\\
+		\vdots & & \ddots & M & I\\
+		O & \cdots & \cdots & O & M
+	  \end{array} \right]
+	\]
+	with
+	  $M = \left[ \begin{array}{cc}
+		\lambda_\Re & \lambda_\Im\\
+		-\lambda_\Im & \lambda_\Re
+	  \end{array} \right]$,
+	  $I = \left[ \begin{array}{cc}
+		1 & 0\\
+		0 & 1
+	  \end{array} \right]$, and
+	  $O = \left[ \begin{array}{cc}
+		0 & 0\\
+		0 & 0
+	  \end{array} \right]$.
+\end{enumerate}
+\smallskip
+
+This procedure yields a real Jordan matrix $J$. In consequence, we have to
+transform $V$ also into a completely real-valued form. For each complex
+conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
+eigenvectors in $V$ can be replaced by real-valued vectors.
+
 \section{Proof of \cref{chad}}\label{proof:chad}
 
 We first prove the case where the Jordan matrix $J$ only contains ordinary
@@ -1925,7 +1930,7 @@ Then $A = V \cdot B$ does the job:
 
 The generalization to the real Jordan decomposition is straightforward by
 applying the fact that for complex conjugate eigenvalue pairs $\lambda$ and
-$\overline{\lambda}$ the matrix $M$ in a real Jordan block (cf. \cref{real}) is
+$\overline{\lambda}$ the matrix $M$ in a real Jordan block (cf. \cref{omi}) is
 similar to the diagonal matrix $D = \left[ \begin{array}{cc}
 	\lambda & 0\\
 	0 & \overline{\lambda}
