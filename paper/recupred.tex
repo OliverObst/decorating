@@ -1,8 +1,10 @@
 % !TeX spellcheck = en_US
-\documentclass[sn-mathphys-num,a4paper]{sn-jnl}
+\documentclass[sn-mathphys-num]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
-\usepackage[blind,proof]{optional}
+\usepackage[unblind]{optional}
+
+\opt{long}{\setlength{\textheight}{235mm}}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
@@ -40,7 +42,7 @@
 \begin{document}
 
 %\subtitle{The Power of Linear Recurrent Neural Networks}
-\title{Efficient Time Series Approximation with Linear Recurrent Neural Networks: Architecture Learning and Predictive Power}
+\title{\opt{long}{\bf}Efficient Time Series Approximation with Linear Recurrent Neural Networks: Architecture Learning and Predictive Power}
 
 \opt{unblind}{
 \author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
@@ -1881,7 +1883,7 @@ matrix $J$ can be transformed as follows:
 \smallskip
 
 This procedure yields a real Jordan matrix $J$. In consequence, we have to
-transform $V$ also into a completely real-valued form. For each complex
+transform $V$ also into a completely real-valued form. For this, for each complex
 conjugate eigenvalue pair $\lambda$ and $\overline{\lambda}$, the corresponding
 eigenvectors in $V$ can be replaced by real-valued vectors.
 
