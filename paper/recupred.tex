@@ -2,9 +2,10 @@
 \documentclass[sn-mathphys-num]{sn-jnl}
 
 % versioning: blind,long,proof,unblind
-\usepackage[unblind]{optional}
+\usepackage[unblind,long,proof]{optional}
 
-\opt{long}{\setlength{\textheight}{235mm}}
+\opt{long}{\setlength{\textheight}{235mm}
+\usepackage{pslatex}}
 
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[american]{babel} % American English
@@ -46,8 +47,8 @@
 
 \opt{unblind}{
 \author*[1]{\fnm{Frieder} \sur{Stolzenburg}}\email{fstolzenburg@hs-harz.de}
-\author[1]{\fnm{Sandra} \sur{Litz}}
-\author[2]{\fnm{Olivia} \sur{Michael}}
+\author[1]{\fnm{Sandra} \sur{Litz}}\email{litz\_sandra@web.de}
+\author[2]{\fnm{Olivia} \sur{Michael}}\email{olivia\_michael@hotmail.com}
 \author[2]{\fnm{Oliver} \sur{Obst}}\email{o.obst@westernsydney.edu.au}
 
 % Frieder: fstolzenburg@hs-harz.de orcid 0000-0002-4037-2445
@@ -650,13 +651,13 @@ so-called \emph{real Jordan canonical form} \citep[Section~3.4.1]{HJ13} of the
 square matrix $W$\opt{proof}{ (cf. \cref{omi})}. But the
 subsequent theorem (\cref{chad}) shows a more general way: The matrix $V$ from
 \cref{jordan} is transformed into a real matrix $A$ and, what is more, the start
-vector $s$ can be replaced by an arbitrary column vector $y$ with all non-zero
+vector $s$ can be replaced by an arbitrary column vector $y$ with all nonzero
 entries.
 
 \begin{prop}\label{chad}
 Let $W = V \cdot J \cdot V^{-1}$ be the (real) Jordan decomposition of the
 transition matrix $W$ and $s$ the corresponding start vector. Then for all
-column vectors $y$ of size $N$ with all non-zero entries, there exists a square
+column vectors $y$ of size $N$ with all nonzero entries, there exists a square
 matrix $A$ of size $N \times N$ such that for all $t \ge 0$ we have:
 \[ f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
 \end{prop}
@@ -850,7 +851,7 @@ To learn the output weights $W^\mathrm{out}$, we run the input values from the
 time series $S(0),\dots,S(n)$ through the network (in input receiving mode),
 particularly through the reservoir. This means, we build the sequence of
 corresponding reservoir states $R(0),\dots,R(n)$ where the reservoir start
-vector $r$ (see above) in principle can be chosen arbitrarily but with all non-zero
+vector $r$ (see above) in principle can be chosen arbitrarily but with all nonzero
 entries (cf. \cref{chad}):
 \begin{equation}\label{reserv}
 	R(t_0) = r \text{~and~} R(t+\tau) \opt{long}{=
@@ -1011,7 +1012,7 @@ functions, including polynomials, exponentials, and oscillatory signals (cf.
 A different problem is to compute general functions $f(s)$, i.e., mappings from
 arbitrary input vectors $s$ to output values. In that context, nonlinear
 activation functions may offer benefits. If the activation function $g$ is
-monotonic and invertible, the LRNN learning procedure (\cref{output}) can, in
+monotonic and invertible, the LRNN learning procedure introduced so far (\cref{output}) can, in
 principle, be extended. For this, $g$ has to be applied component-wise to
 \cref{reserv} while running the input through the reservoir and to
 \cref{linear}. The solution of the resulting equation $Y^\mathrm{out} =
@@ -1032,7 +1033,7 @@ feedforward neural networks \citep{Hor91}. It states that a (non-recurrent)
 network with a linear output layer and at least one hidden layer activated by a
 nonlinear, sigmoidal function can approximate any continuous function on a
 closed and bounded subset of the $\mathbb{R}^n$ from one finite-dimensional
-space to another with any desired non-zero amount of error, provided that the
+space to another with any desired nonzero amount of error, provided that the
 network is given enough hidden neurons \citep[Section~6.4.1]{GBC16}. Since RNNs
 are more general than feedforward networks, the universal approximation theorem
 also holds for them \citep{MNM02}. Any measurable function can be
@@ -1078,7 +1079,7 @@ and not only the subspace of computation as with conceptors.
 \begin{prop}\label{relevan}
 By \cref{chad}, the function $f(t) = W^t \cdot s$ can be rewritten by
 means of the Jordan matrix of the transition matrix $W$ as $A \cdot J^t
-\cdot y$, where the start vector can be chosen as non-zero constant, e.g., $y =
+\cdot y$, where the start vector can be chosen as nonzero constant, e.g., $y =
 \big[ 1 \cdots 1 \big]^\top$. Furthermore, by \cref{jordan}, $f(t)$ can be
 expressed as a sum of vectors $u = v \cdot J_m(\lambda)^t \cdot w$ where $w$ is
 constant because it is part of the start vector~$y$. Then it follows from
@@ -1108,7 +1109,7 @@ $A$ and $J$ and the vector $y$ as follows:
 Note that the dimensionality reduction does not only lead to a smaller number of
 reservoir neurons but also to a rather simple network structure: The transition
 matrix $J$ (which comprises the reservoir weights $W^\mathrm{res}$ of
-the reduced network) is a sparse matrix with non-zero elements only on the main
+the reduced network) is a sparse matrix with nonzero elements only on the main
 and immediately adjacent diagonals. Thus, the number of connections is in
 $O(N)$, i.e., linear in the number of reservoir neurons, not quadratic -- as in
 general.
@@ -1625,7 +1626,7 @@ for the RMSE of $\theta = 1$\,m, and only use every $20^\text{th}$ step of each 
 $7$ games. The overall trajectory of the FRA-UNIted goalkeeper can be learned
 easily then (cf. \cref{game}~Right). From this, one may conclude that the
 goalkeeper takes up three basic positions in front of the goal, does not
-approach the centre line more than about 30\,m and hardly leaves the centre
+approach the center line more than about 30\,m and hardly leaves the center
 line.
 
 \begin{figure}
@@ -1897,7 +1898,7 @@ matrix $J$, the matrices $A$ and also $B$ (see below) can be obtained as direct
 sums, too.
 
 In the following, we use the column vectors $y = \big[ y_1 \cdots y_N
-\big]^\top$ with all non-zero entries, $x = \big[ x_1 \cdots x_N \big]^\top$
+\big]^\top$ with all nonzero entries, $x = \big[ x_1 \cdots x_N \big]^\top$
 with $x = V^{-1} \cdot s$ (cf. \cref{eigen}), and $b = \big[ b_1 \cdots b_N
 \big]^\top$. From $b$, we construct the following upper triangular Toeplitz
 matrix
