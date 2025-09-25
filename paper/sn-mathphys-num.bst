@@ -2823,7 +2823,7 @@ FUNCTION {write.preambule}
   "\ifx \blpage  \undefined \def \blpage #1{#1}\fi" write$ newline$
   "\ifx \burl  \undefined \def \burl#1{\textsf{#1}}\fi" write$ newline$
   %%"\ifx \doiurl  \undefined \def \doiurl#1{\textsf{#1}}\fi" write$ newline$
-  "\ifx \doiurl  \undefined \def \doiurl#1{\url{https://doi.org/#1}}\fi" write$ newline$
+  "\ifx \doiurl  \undefined \def \doiurl#1{\url{http://doi.org/#1}}\fi" write$ newline$
   "\ifx \betal  \undefined \def \betal{\textit{et al.}}\fi" write$ newline$
   "\ifx \binstitute  \undefined \def \binstitute#1{#1}\fi" write$ newline$
   "\ifx \binstitutionaled  \undefined \def \binstitutionaled#1{#1}\fi" write$ newline$
