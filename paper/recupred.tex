@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_US
-\documentclass[sn-mathphys-num]{sn-jnl}
+\documentclass{sn-jnl}
 
 % versioning: blind,long,proof,unblind
 \usepackage[unblind,long,proof]{optional}
@@ -27,6 +27,8 @@
 \usepackage{microtype}
 \usepackage{algorithmicx}
 \usepackage[numbers]{natbib}
+  \opt{blind}{\bibliographystyle{sn-mathphys-num}}
+  \opt{long}{\bibliographystyle{unsrturl}}
 \usepackage{booktabs,siunitx}
 \usepackage{graphicx,tikz}
 \usepackage[figuresright]{rotating}
