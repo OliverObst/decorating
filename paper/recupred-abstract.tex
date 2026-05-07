@@ -1,0 +1,187 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath, amssymb, graphicx}
+
+\title{Efficient Time-Series Approximation with Linear Recurrent Neural Networks}
+\author{Short Summary}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Linear Recurrent Neural Networks (LRNNs) provide a simple yet powerful framework for modeling time series. Unlike traditional recurrent neural networks, LRNNs use linear activation functions and can be trained without backpropagation by solving linear systems. This paper summarizes their theoretical properties, learning procedure, and ability to approximate arbitrary time-dependent functions. A key contribution is a method for reducing network size using eigenvalue analysis, enabling both efficient learning and architecture optimization.
+\end{abstract}
+
+\section{Introduction}
+Time-series modeling is essential in many domains such as forecasting, signal processing, and control systems. Recurrent neural networks (RNNs), especially LSTMs, are widely used but often require complex training procedures like backpropagation through time.
+
+This work focuses on \emph{Linear Recurrent Neural Networks (LRNNs)}, a simplified class of RNNs with linear activation. Despite their simplicity, LRNNs:
+\begin{itemize}
+    \item can approximate arbitrary time-dependent functions,
+    \item can be trained efficiently using linear algebra,
+    \item allow direct architecture reduction via eigenvalue analysis.
+\end{itemize}
+
+\section{Linear Recurrent Neural Networks}
+
+\subsection{Model Definition}
+An LRNN consists of neurons connected via a transition matrix $W$. The network evolves as:
+\[
+f(t) = W^t s,
+\]
+where $s$ is the initial state.
+
+Key properties:
+\begin{itemize}
+    \item Linear activation ($g(x)=x$),
+    \item Random input and reservoir weights,
+    \item Only output weights are learned,
+    \item Spectral radius of reservoir is normalized to 1.
+\end{itemize}
+
+\subsection{Dynamics}
+Using eigendecomposition $W = VDV^{-1}$, the system evolves as:
+\[
+f(t) = \sum_{k=1}^{N} x_k \lambda_k^t v_k.
+\]
+
+This shows that network behavior is governed by eigenvalues:
+\begin{itemize}
+    \item $|\lambda| < 1$: decay,
+    \item $|\lambda| = 1$: oscillation,
+    \item $|\lambda| > 1$: growth.
+\end{itemize}
+
+\subsection{Long-Term Behavior}
+For large $t$, LRNN dynamics simplify drastically:
+\begin{itemize}
+    \item Most components vanish,
+    \item Remaining dynamics lie in at most 2 dimensions,
+    \item Output follows an \emph{ellipse trajectory}.
+\end{itemize}
+
+Thus, complex high-dimensional systems reduce to simple oscillatory behavior over time.
+
+\section{Learning Procedure}
+
+\subsection{Output Weight Learning}
+Training is performed via linear regression instead of backpropagation.
+
+Given:
+\[
+X =
+\begin{bmatrix}
+S(0) & \cdots & S(n-1) \\
+R(0) & \cdots & R(n-1)
+\end{bmatrix},
+\quad
+Y =
+\begin{bmatrix}
+S(1) & \cdots & S(n)
+\end{bmatrix},
+\]
+we solve:
+\[
+W_{\text{out}} = Y X^{-1}.
+\]
+
+This step is efficient and avoids gradient-based optimization.
+
+\subsection{Approximation Capability}
+LRNNs satisfy an approximation theorem:
+\begin{quote}
+Any time-dependent function $f(t)$ can be approximated arbitrarily well given sufficient reservoir size.
+\end{quote}
+
+They can represent:
+\begin{itemize}
+    \item polynomials,
+    \item exponentials,
+    \item oscillatory signals,
+    \item solutions to differential equations.
+\end{itemize}
+
+\section{Network Size Reduction}
+
+A major contribution is reducing network size using eigenvalue analysis.
+
+\subsection{Method}
+After training:
+\begin{enumerate}
+    \item Compute eigenvalues of $W$,
+    \item Rank components by importance,
+    \item Remove those with minimal contribution,
+    \item Ensure error remains below threshold.
+\end{enumerate}
+
+\subsection{Result}
+This yields:
+\begin{itemize}
+    \item significantly smaller networks,
+    \item sparse structure,
+    \item improved generalization,
+    \item faster computation.
+\end{itemize}
+
+Unlike pruning methods, this reduction is performed in a \emph{single step}.
+
+\section{Properties and Insights}
+
+\subsection{Computational Efficiency}
+\begin{itemize}
+    \item Training complexity: $O(N^3)$,
+    \item No iterative optimization,
+    \item Faster than traditional RNN training.
+\end{itemize}
+
+\subsection{Interpretability}
+Eigenvalues provide direct insight into:
+\begin{itemize}
+    \item frequency components,
+    \item growth/decay rates,
+    \item system dynamics.
+\end{itemize}
+
+\subsection{Relation to Other Models}
+LRNNs connect to:
+\begin{itemize}
+    \item autoregressive models (AR, ARIMA),
+    \item echo state networks,
+    \item state-space models.
+\end{itemize}
+
+However, LRNNs uniquely combine:
+\begin{itemize}
+    \item linear learning,
+    \item exact approximation,
+    \item architecture reduction.
+\end{itemize}
+
+\section{Experimental Findings}
+
+Experiments demonstrate that LRNNs:
+\begin{itemize}
+    \item achieve high accuracy on time-series prediction,
+    \item outperform traditional methods on oscillatory tasks,
+    \item learn compact representations (e.g., minimal networks).
+\end{itemize}
+
+Example:
+\begin{itemize}
+    \item Multiple superimposed oscillators require only $2K$ neurons,
+    \item Each frequency corresponds to one eigenvalue pair.
+\end{itemize}
+
+\section{Conclusion}
+
+Linear Recurrent Neural Networks provide a powerful alternative to traditional RNNs. Despite their simplicity, they:
+\begin{itemize}
+    \item approximate complex time-dependent functions,
+    \item enable efficient training without backpropagation,
+    \item support principled network size reduction.
+\end{itemize}
+
+Their combination of theoretical elegance and practical efficiency makes them a valuable tool for time-series analysis and dynamic system modeling.
+
+\end{document}
+
