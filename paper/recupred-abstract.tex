@@ -1,9 +1,21 @@
-\documentclass[11pt]{article}
-\usepackage{amsmath, amssymb, graphicx}
+\documentclass[11pt]{llncs}
+
+\usepackage{amsmath,amssymb,graphicx}
+\usepackage[utf8x]{inputenc}
+\usepackage{hyperref,url} % hyperlinks
 
 \title{Efficient Time-Series Approximation with Linear Recurrent Neural Networks}
-\author{Short Summary}
-\date{}
+\author{Oliver Obst\inst{1} \and Frieder Stolzenburg\inst{1,2}}
+\institute{
+  School of Computer Science and Engineering\\
+  University of New South Wales (UNSW)\\
+  Sydney, NSW\\
+  \email{\{o.obst,f.stolzenburg@unsw.edu.au\}@unsw.edu.au}
+  \and
+  Harz University of Applied Sciences\\
+  Wernigerode, Germany\\
+  \texttt{fstolzenburg@hs-harz.de} \\
+}
 
 \begin{document}
 \maketitle
@@ -11,6 +23,8 @@
 \begin{abstract}
 Linear Recurrent Neural Networks (LRNNs) provide a simple yet powerful framework for modeling time series. Unlike traditional recurrent neural networks, LRNNs use linear activation functions and can be trained without backpropagation by solving linear systems. This paper summarizes their theoretical properties, learning procedure, and ability to approximate arbitrary time-dependent functions. A key contribution is a method for reducing network size using eigenvalue analysis, enabling both efficient learning and architecture optimization.
 \end{abstract}
+
+\cite{SL+25}
 
 \section{Introduction}
 Time-series modeling is essential in many domains such as forecasting, signal processing, and control systems. Recurrent neural networks (RNNs), especially LSTMs, are widely used but often require complex training procedures like backpropagation through time.
@@ -182,6 +196,9 @@ Linear Recurrent Neural Networks provide a powerful alternative to traditional R
 \end{itemize}
 
 Their combination of theoretical elegance and practical efficiency makes them a valuable tool for time-series analysis and dynamic system modeling.
+
+\bibliographystyle{splncs04}
+\bibliography{recupred}
 
 \end{document}
 
