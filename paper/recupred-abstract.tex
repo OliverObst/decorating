@@ -29,8 +29,8 @@ for modeling time series. Unlike traditional recurrent neural networks, LRNNs
 use linear activation functions and can be trained without backpropagation by
 solving linear systems. This paper summarizes their theoretical properties,
 learning procedure, and ability to approximate arbitrary time-dependent
-functions. A key contribution is a method for reducing network size using
-eigenvalue analysis, which is nowadays a very important topic, enabling both
+functions. A key contribution is a method for reducing network size, which is
+nowadays a very important topic, using eigenvalue analysis, enabling both
 efficient learning and architecture optimization. We demonstrate the properties
 and advantages of LRNNs by several case studies, among them multiple
 superimposed oscillators (MSO), robotic soccer (RoboCup), and stock price
@@ -44,10 +44,8 @@ processing, and control systems. Recurrent neural networks (RNNs), especially
 LSTMs, are widely used but often require complex training procedures like
 backpropagation through time. Research in time-series analysis and hence the
 modeling dynamics of complex systems has a long tradition and remains highly
-active due to its crucial role in many real-world applications \cite{LBE15},
-such as weather forecasts, stock quotations, comprehension of trajectories of
-objects and agents, and solving number puzzles \cite{GW13}. Among other
-benefits, the analysis of time series enables data compression, i.e., the
+active due to its crucial role in many real-world applications \cite{LBE15}. Among
+other benefits, the analysis of time series enables data compression, i.e., the
 compact representation of time series, by a function $f(t)$, and prediction of
 future values.
 
@@ -57,43 +55,35 @@ frameworks are also common in current machine-learning applications such as
 large language models (LLMs).
 Nevertheless, in all these cases, iterative methods like backpropagation are
 employed for neural network learning. This is not needed for \emph{linear
-recurrent neural networks} (LRNNs), a simplified class of RNNs with linear
-activation, which we discuss here. Despite their simplicity, LRNNs (1) can
-approximate arbitrary time-dependent functions $f(t)$, (2) can be trained
-efficiently using simple linear algebra, and (3)allow direct architecture
+recurrent neural networks} (LRNNs), i.e., the class of RNNs with linear
+activation, which we discuss here. Despite their simplicity, LRNNs can
+approximate arbitrary time-dependent functions $f(t)$, can be trained
+efficiently using simple linear algebra, and allow direct architecture
 reduction via eigenvalue analysis.
 
 \section{Linear Recurrent Neural Networks}
 
-An LRNN consists of neurons connected by network connections.
-They are annotated with \emph{weights} which are compiled into the
-\emph{transition matrix} $W$ of size $N \times N$. An entry~$w_{ij}$ in row~$i$
-and column~$j$ denotes the weight of the edge from neuron~$j$ to neuron~$i$. The
-transition matrix has the form
-\[
-  W = \left[ \begin{array}{cc}
-  \multicolumn{2}{c}{W^\mathrm{out}}\\
-  W^\mathrm{in} & W^\mathrm{res}
-\end{array} \right]
-\]
-and contains the input, output and reservoir weight matrices. The network
-evolves as: $f(t) = W^t s$, where $s$ is the initial state. Key properties of
-LRNNs are (1) Linear activation ($g(x)=x$), (2) random input and reservoir
-weights, (3) only output weights are learned, and (4) the spectral radius of the
-reservoir is normalized to $1$.
+An LRNN consists of neurons and connections between them. They are annotated
+with \emph{weights} which are compiled into the \emph{transition matrix} $W$ of
+size $N \times N$, containing input, output and reservoir weight sub-matrices.
+An entry~$w_{ij}$ in row~$i$ and column~$j$ denotes the weight of the edge from
+neuron~$j$ to neuron~$i$. The network evolves as $f(t) = W^t s$ where $s$ is the
+start state. Key properties of LRNNs are (1) linear activation, (2) random input
+and reservoir weights, (3) only output weights are learned, and (4) the spectral
+radius of the reservoir is normalized to $1$.
 
 Using eigendecomposition $W = VDV^{-1}$ with column eigenvectors $v_1,\dots,v_N$
 in $V$ and corresponding eigenvalues $\lambda_1, \dots, \lambda_N$, the system
 evolves as $f(t) = x_1 \lambda_1^t v_1 +\dots+ x_N \lambda_N^t v_N$ with $x =
 \big[ x_1 \cdots x_N \big]^\top$ such that $x = V^{-1} \cdot s$. This can be
 generalized to Jordan decomposition with Jordan matrix $J$ and to arbitrary
-start vectors $y$ with all nonzero entries. Then always a matrx $A$ exists such
-that: \[ f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
+start vectors $y$ with all nonzero entries. Then always a matrix $A$ exists such
+that $f(t) = W^t \cdot s = A \cdot J^t \cdot y$.
 
 This shows that network behavior is governed by eigenvalues $\lambda$, in
-particular the one with maximal absolute value (defining thze spectral radius.
+particular the one with maximal absolute value (defining the spectral radius).
 We have (1) decay for $|\lambda| < 1$, (2) oscillation for $|\lambda| = 1$, and (3)
-exponential growth for $|\lambda| > 1$. For large $t$, LRNN dynamics simplify
+growth for $|\lambda| > 1$. For large $t$, LRNN dynamics simplify
 drastically: Most components vanish, the remaining dynamics lie in at most $2$
 dimensions, and the output follows an ellipse trajectory. Thus, complex
 high-dimensional systems reduce to simple oscillatory behavior over time.
@@ -113,16 +103,14 @@ Y =
 S(1) & \cdots & S(n)
 \end{bmatrix},
 \]
-where $S(0),\dots,S(n)$ is the possibly multi-dimensional time series to be
-learned, we simply solve: $W_{\text{out}} = Y X^{-1}$. This step is efficient
+where $S$ and $R$ are the possibly multi-dimensional input and reservoir time series,
+we simply solve: $W_{\text{out}} = Y X^{-1}$. This step is efficient
 and avoids gradient-based optimization. LRNNs satisfy an approximation theorem:
 \emph{Any time-dependent function $f(t)$ can be approximated arbitrarily well
-and learned given sufficient reservoir size.} They can represent polynomials,
-exponentials, oscillatory signals, solutions to linear differential equation
-systems.
+and learned given sufficient reservoir size.}
 
 A major contribution is reducing network size using eigenvalue analysis. The
-method is as follows: After training (1) compute eigenvalues of $W$, (2) rank
+method works follows: After training (1) compute eigenvalues of $W$, (2) rank
 the Jordan components of $W$ by importance, (3) remove those with minimal
 contribution, and (4)ensure error remains below threshold. This yields
 significantly smaller networks with sparse structure, improved generalization of
