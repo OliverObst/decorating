@@ -1,6 +1,7 @@
 \documentclass[11pt]{llncs}
 
-\usepackage{amsmath,amssymb,graphicx}
+\usepackage{amsmath,amssymb}
+\usepackage{pslatex}
 \usepackage[utf8x]{inputenc}
 \usepackage{hyperref,url}
 \usepackage[capitalize]{cleveref}
@@ -8,16 +9,13 @@
 \title{Efficient Time-Series Approximation with Linear Recurrent Neural Networks%
   \thanks{This paper is an extended abstract of \cite{SL+25}, published in
 	\emph{Neural Computing and Applications} 37, 27027–27055 (2025).}}
-\author{Oliver Obst\inst{1} \and Frieder Stolzenburg\inst{1,2}}
+\author{Frieder Stolzenburg\inst{1,2} \and Sandra Litz \and Olivia Michael \and Oliver Obst\inst{2}}
 \institute{
-  School of Computer Science and Engineering\\
-  University of New South Wales (UNSW)\\
-  Sydney, NSW\\
-  \email{\{o.obst,f.stolzenburg@unsw.edu.au\}@unsw.edu.au}
-  \and
-  Harz University of Applied Sciences\\
-  Wernigerode, Germany\\
-  \texttt{fstolzenburg@hs-harz.de} \\
+  Harz University of Applied Sciences, Wernigerode, Germany,
+  \email{fstolzenburg@hs-harz.de}\\
+\and
+  School of Computer Science and Engineering, University of New South Wales
+  (UNSW), Sydney, NSW, \email{\{o.obst,f.stolzenburg@unsw.edu.au\}@unsw.edu.au}
 }
 
 \begin{document}
@@ -27,15 +25,15 @@
 Linear recurrent neural networks (LRNNs) provide a simple yet powerful framework
 for modeling time series. Unlike traditional recurrent neural networks, LRNNs
 use linear activation functions and can be trained without backpropagation by
-solving linear systems. This paper summarizes their theoretical properties,
-learning procedure, and ability to approximate arbitrary time-dependent
-functions. A key contribution is a method for reducing network size, which is
-nowadays a very important topic, using eigenvalue analysis, enabling both
-efficient learning and architecture optimization. We demonstrate the properties
-and advantages of LRNNs by several case studies, among them multiple
-superimposed oscillators (MSO), robotic soccer (RoboCup), and stock price
-prediction. LRNNs outperform the previous state-of-the-art for the MSO task with
-a minimal number of units. 
+solving linear equation systems. This paper summarizes their theoretical
+properties, learning procedure, and ability to approximate arbitrary
+time-dependent functions. A key contribution is a method for reducing network
+size using eigenvalue analysis, enabling both efficient learning and
+architecture optimization, which is nowadays an important topic. We
+demonstrate the properties and advantages of LRNNs by several case studies,
+among them multiple superimposed oscillators (MSO), robotic soccer (RoboCup),
+and stock price prediction. LRNNs outperform the previous state-of-the-art for
+the MSO task with a minimal number of units.
 \end{abstract}
 
 \section{Introduction}
@@ -51,15 +49,14 @@ future values.
 
 Numerous studies address these topics using RNNs, particularly variants of
 networks with long short-term memory (LSTM) \cite{HS97}. Autoregressive
-frameworks are also common in current machine-learning applications such as
-large language models (LLMs).
-Nevertheless, in all these cases, iterative methods like backpropagation are
-employed for neural network learning. This is not needed for \emph{linear
-recurrent neural networks} (LRNNs), i.e., the class of RNNs with linear
-activation, which we discuss here. Despite their simplicity, LRNNs can
-approximate arbitrary time-dependent functions $f(t)$, can be trained
-efficiently using simple linear algebra, and allow direct architecture
-reduction via eigenvalue analysis.
+frameworks \cite{Aka69} are also common in current machine-learning applications
+such as large language models (LLMs). Nevertheless, usually iterative methods
+like backpropagation are employed for neural network learning. This is not
+needed for \emph{linear recurrent neural networks} (LRNNs), i.e., the class of
+RNNs with linear activation, which we discuss here. Despite their simplicity,
+LRNNs can approximate arbitrary time-dependent functions $f(t)$, can be trained
+efficiently using simple linear algebra, and allow direct architecture reduction
+via eigenvalue analysis.
 
 \section{Linear Recurrent Neural Networks}
 
@@ -68,8 +65,8 @@ with \emph{weights} which are compiled into the \emph{transition matrix} $W$ of
 size $N \times N$, containing input, output and reservoir weight sub-matrices.
 An entry~$w_{ij}$ in row~$i$ and column~$j$ denotes the weight of the edge from
 neuron~$j$ to neuron~$i$. The network evolves as $f(t) = W^t s$ where $s$ is the
-start state. Key properties of LRNNs are (1) linear activation, (2) random input
-and reservoir weights, (3) only output weights are learned, and (4) the spectral
+start state. Key properties of LRNNs are (1)~linear activation, (2)~random input
+and reservoir weights, (3)~only output weights are learned, and (4)~the spectral
 radius of the reservoir is normalized to $1$.
 
 Using eigendecomposition $W = VDV^{-1}$ with column eigenvectors $v_1,\dots,v_N$
@@ -77,49 +74,51 @@ in $V$ and corresponding eigenvalues $\lambda_1, \dots, \lambda_N$, the system
 evolves as $f(t) = x_1 \lambda_1^t v_1 +\dots+ x_N \lambda_N^t v_N$ with $x =
 \big[ x_1 \cdots x_N \big]^\top$ such that $x = V^{-1} \cdot s$. This can be
 generalized to Jordan decomposition with Jordan matrix $J$ and to arbitrary
-start vectors $y$ with all nonzero entries. Then always a matrix $A$ exists such
-that $f(t) = W^t \cdot s = A \cdot J^t \cdot y$.
+start vectors $y$ with all nonzero entries. It can be shown that always a matrix
+$A$ exists such that $f(t) = W^t \cdot s = A \cdot J^t \cdot y$.
 
 This shows that network behavior is governed by eigenvalues $\lambda$, in
 particular the one with maximal absolute value (defining the spectral radius).
-We have (1) decay for $|\lambda| < 1$, (2) oscillation for $|\lambda| = 1$, and (3)
-growth for $|\lambda| > 1$. For large $t$, LRNN dynamics simplify
-drastically: Most components vanish, the remaining dynamics lie in at most $2$
-dimensions, and the output follows an ellipse trajectory. Thus, complex
-high-dimensional systems reduce to simple oscillatory behavior over time.
+We have (1)~contraction to a singularity for $|\lambda| < 1$, (2)~oscillation
+for $|\lambda| = 1$, and (3)~exponential growth for $|\lambda| > 1$. For large
+$t$, LRNN dynamics simplify drastically: Most components vanish, the remaining
+dynamics lie in at most $2$ dimensions, and the output follows an ellipse
+trajectory. Thus, complex high-dimensional systems reduce to simple oscillatory
+behavior over time.
 
 \section{Learning Procedure and Network Size Reduction}
 
-Training is performed via linear regression instead of backpropagation. Given:
+Training is performed via linear regression instead of backpropagation. Given
 \[
 X =
 \begin{bmatrix}
-S(0) & \cdots & S(n-1) \\
+S(0) & \cdots & S(n-1)\\
 R(0) & \cdots & R(n-1)
 \end{bmatrix},
 \quad
 Y =
 \begin{bmatrix}
-S(1) & \cdots & S(n)
+S(1)~& \cdots & S(n)
 \end{bmatrix},
 \]
-where $S$ and $R$ are the possibly multi-dimensional input and reservoir time series,
-we simply solve: $W_{\text{out}} = Y X^{-1}$. This step is efficient
-and avoids gradient-based optimization. LRNNs satisfy an approximation theorem:
-\emph{Any time-dependent function $f(t)$ can be approximated arbitrarily well
-and learned given sufficient reservoir size.}
+where $S$ and $R$ are the possibly multi-dimensional input and reservoir time
+series, we simply solve $W_{\text{out}} = Y X^{-1}$ to compute the output
+weights. This is efficient and avoids gradient-based optimization. LRNNs
+satisfy an approximation theorem: \emph{Any time-dependent function $f(t)$ can
+be approximated arbitrarily well and learned given sufficient reservoir size.}
 
-A major contribution is reducing network size using eigenvalue analysis. The
-method works follows: After training (1) compute eigenvalues of $W$, (2) rank
-the Jordan components of $W$ by importance, (3) remove those with minimal
-contribution, and (4)ensure error remains below threshold. This yields
-significantly smaller networks with sparse structure, improved generalization of
-the time series, and faster computation. Unlike pruning methods, network size
-reduction is performed in a \emph{single step}.
+A major contribution of this paper is reducing network size using eigenvalue
+analysis. The method works follows: After training, we (1)~compute the
+eigenvalues of $W$, (2)~rank the Jordan components of $W$ by importance,
+(3)~remove those with minimal contribution, and (4)~ensure that the error
+remains below some threshold. This yields significantly smaller networks with
+sparse structure, improved generalization of the time series, and faster
+computation. Unlike pruning methods, network size reduction is performed in a
+\emph{single step}.
 
 \section{Properties, Insights, and Experimental Findings}
 
-The learning procedure even with network size reduction is computationally
+The learning procedure, even with network size reduction, is computationally
 efficient: $O(N^3)$. No iterative optimization is required. Therefore, it is
 faster than traditional RNN training. LRNN are related to autoregressive models
 \cite{Aka69} like current large language models (LLMs), echo state networks
@@ -127,19 +126,19 @@ faster than traditional RNN training. LRNN are related to autoregressive models
 uniquely combine linear learning, exact approximation, and architecture
 reduction.
 
-Experiments demonstrate that LRNNs (1) achieve high accuracy on time-series
-prediction, (2) outperform traditional methods on oscillatory tasks, and (3)
-learn compact representations (e.g., minimal networks). The following benchmarks
+Experiments demonstrate that LRNNs (1)~achieve high accuracy on time-series
+prediction, (2)~outperform traditional methods on oscillatory tasks, and (3)
+learn compact representations, e.g., minimal networks. The following benchmarks
 have been considered: multiple superimposed oscillators (MSO) \cite{KLB12},
 number puzzles \cite{GW13}, robot soccer simulation \cite{MO+18}, and predicting
-stock prices. All experiments are performed with a program written by the
-authors in Octave \cite{EB+17}, available at \url{http://github.com/OliverObst/decorating/}.
+stock prices \cite{Lit20}.
 
 For instance, the MSO time series is generated by summing up several (pure)
 sinusoids. Interestingly, in LRNNs, multiple superimposed oscillators require
 only $2K$ neurons, where Each frequency corresponds to one eigenvalue pair.
 LRNNs outperform the previous state-of-the-art for the MSO task with this
-minimal number of units.
+minimal number of units. All experiments are performed with a program written by
+the authors in Octave \cite{EB+17}, available at \url{http://github.com/OliverObst/decorating/}.
 
 \section{Conclusion}
 
@@ -148,9 +147,9 @@ RNNs. Despite their simplicity, they approximate complex time-dependent
 functions, enable efficient training without backpropagation, and support
 principled network size reduction. Their combination of theoretical elegance and
 practical efficiency makes them a valuable tool for time-series analysis and
-dynamic system modeling. Future work will focus on extend the procedure in
-particular on network size reduction to RNNs augmented with nonlinear
-activation, see also \cite{BKP16}. This could make a larger class of networks
+dynamic system modeling. Future work will focus on extending the procedure, in
+particular on network size reduction, to RNNs augmented with nonlinear
+activation, see also \cite{BKP16}. This would make a larger class of networks
 more efficient.
 
 \clearpage
