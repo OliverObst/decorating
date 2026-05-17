@@ -2,7 +2,9 @@
 
 \usepackage{amsmath,amssymb,graphicx}
 \usepackage[utf8x]{inputenc}
-\usepackage{hyperref,url} % hyperlinks
+\usepackage{hyperref,url}
+\usepackage[capitalize]{cleveref}
+\usepackage{tikz}
 
 \title{Efficient Time-Series Approximation with Linear Recurrent Neural Networks%
   \thanks{This paper is an extended abstract of \cite{SL+25}, published in
@@ -73,43 +75,46 @@ reduction via eigenvalue analysis.
 
 \section{Linear Recurrent Neural Networks}
 
-\subsection{Model Definition}
-An LRNN consists of neurons connected via a transition matrix $W$. The network evolves as:
+An LRNN consists of neurons connected by network connections (cf. \cref{net}).
+They are annotated with \emph{weights} which are compiled into the
+\emph{transition matrix} $W$ of size $N \times N$. An entry~$w_{ij}$ in row~$i$
+and column~$j$ denotes the weight of the edge from neuron~$j$ to neuron~$i$. The
+transition matrix has the form
 \[
-f(t) = W^t s,
+  W = \left[ \begin{array}{cc}
+  \multicolumn{2}{c}{W^\mathrm{out}}\\
+  W^\mathrm{in} & W^\mathrm{res}
+\end{array} \right]
 \]
-where $s$ is the initial state.
+and contains the input, output and reservoir weight matrices. The network
+evolves as: $f(t) = W^t s$, where $s$ is the initial state. Key properties of
+LRNNs are (1) Linear activation ($g(x)=x$), (2) random input and reservoir
+weights, (3) only output weights are learned, and (4) the spectral radius of the
+reservoir is normalized to $1$.
 
-Key properties:
-\begin{itemize}
-    \item Linear activation ($g(x)=x$),
-    \item Random input and reservoir weights,
-    \item Only output weights are learned,
-    \item Spectral radius of reservoir is normalized to 1.
-\end{itemize}
+\begin{figure}
+  \centering
+  \input{fig/esn.tikz}
+  \caption{General recurrent neural network. In ESNs, only output weights are
+	trained and the hidden layer is also called reservoir.}
+  \label{net}
+\end{figure}
 
-\subsection{Dynamics}
-Using eigendecomposition $W = VDV^{-1}$, the system evolves as:
-\[
-f(t) = \sum_{k=1}^{N} x_k \lambda_k^t v_k.
-\]
+Using eigendecomposition $W = VDV^{-1}$ with column eigenvectors $v_1,\dots,v_N$
+in $V$ and corresponding eigenvalues $\lambda_1, \dots, \lambda_N$, the system
+evolves as $f(t) = x_1 \lambda_1^t v_1 +\dots+ x_N \lambda_N^t v_N$ with $x =
+\big[ x_1 \cdots x_N \big]^\top$ such that $x = V^{-1} \cdot s$. This can be
+generalized to Jordan decomposition with Jordan matrix $J$ and to arbitrary
+start vectors $y$ with all nonzero entries. Then always a matrx $A$ exists such
+that: \[ f(t) = W^t \cdot s = A \cdot J^t \cdot y \]
 
-This shows that network behavior is governed by eigenvalues:
-\begin{itemize}
-    \item $|\lambda| < 1$: decay,
-    \item $|\lambda| = 1$: oscillation,
-    \item $|\lambda| > 1$: growth.
-\end{itemize}
-
-\subsection{Long-Term Behavior}
-For large $t$, LRNN dynamics simplify drastically:
-\begin{itemize}
-    \item Most components vanish,
-    \item Remaining dynamics lie in at most 2 dimensions,
-    \item Output follows an \emph{ellipse trajectory}.
-\end{itemize}
-
-Thus, complex high-dimensional systems reduce to simple oscillatory behavior over time.
+This shows that network behavior is governed by eigenvalues $\lambda$, in
+particular the one with maximal absolute value (defining thze spectral radius.
+We have (1) for $|\lambda| < 1$, (2) oscillation for $|\lambda| = 1$, and (3)
+exponential growth for $|\lambda| > 1$. For large $t$, LRNN dynamics simplify
+drastically: Most components vanish, the remaining dynamics lie in at most $2$
+dimensions, and the output follows an ellipse trajectory. Thus, complex
+high-dimensional systems reduce to simple oscillatory behavior over time.
 
 \section{Learning Procedure}
 
@@ -174,6 +179,8 @@ This yields:
 
 Unlike pruning methods, this reduction is performed in a \emph{single step}.
 
+refer to long version and github
+
 \section{Properties and Insights}
 
 \subsection{Computational Efficiency}
@@ -181,14 +188,6 @@ Unlike pruning methods, this reduction is performed in a \emph{single step}.
     \item Training complexity: $O(N^3)$,
     \item No iterative optimization,
     \item Faster than traditional RNN training.
-\end{itemize}
-
-\subsection{Interpretability}
-Eigenvalues provide direct insight into:
-\begin{itemize}
-    \item frequency components,
-    \item growth/decay rates,
-    \item system dynamics.
 \end{itemize}
 
 \subsection{Relation to Other Models}
