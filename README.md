@@ -16,6 +16,11 @@ example and reproducible MSO/Python–Octave comparisons. Its
 [accuracy guide](python/docs/ACCURACY.md) explains the fitting settings and
 measured forecast accuracy.
 
+The [research website](https://oliverobst.github.io/decorating/) gives a visual overview of the paper,
+its learning and reduction method, published experiments and Python
+reproduction. See [website setup](docs/README.md) for local preview and
+GitHub Pages hosting.
+
 ## Attributions
 
 Frieder Stolzenburg, Sandra Litz, Olivia Michael and Oliver Obst.

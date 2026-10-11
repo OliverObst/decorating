@@ -1,0 +1,166 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="A scientific overview of linear recurrent neural networks: learning time series with linear algebra and reducing a fitted network to sparse dynamical blocks.">
+  <meta name="theme-color" content="#1859a6">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Linear recurrent neural networks | Decorating">
+  <meta property="og:description" content="Learn a time series. Inspect its dynamics. Keep the components that matter.">
+  <meta property="og:image" content="https://oliverobst.github.io/decorating/assets/mso-paper.png">
+  <title>Linear recurrent neural networks | Decorating</title>
+  <link rel="canonical" href="https://oliverobst.github.io/decorating/">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site.js" defer></script>
+</head>
+<body>
+<a class="skip-link" href="#overview">Skip to content</a>
+<header class="site-header">
+  <nav class="nav-wrap" aria-label="Main navigation">
+    <a class="wordmark" href="#top"><img src="assets/favicon.svg" width="27" height="27" alt="">Decorating <span>/ LRNN</span></a>
+    <div class="nav-links"><a href="#method">Method</a><a href="#results">Results</a><a href="#code">Code</a><a href="#citation">Citation</a></div>
+  </nav>
+</header>
+<main id="top">
+  <section class="hero wrap" aria-labelledby="paper-title">
+    <p class="eyebrow">Neural Computing and Applications · 2025</p>
+    <h1 id="paper-title">Efficient time-series approximation<br class="desktop-break"> with linear recurrent neural networks</h1>
+    <p class="paper-subtitle">Architecture learning and predictive power</p>
+    <div class="authors"><span>Frieder Stolzenburg<sup>1</sup></span><span>Sandra Litz<sup>1</sup></span><span>Olivia Michael<sup>2</sup></span><span>Oliver Obst<sup>2</sup></span></div>
+    <p class="affiliations"><span><sup>1</sup> Harz University of Applied Sciences</span><span><sup>2</sup> Western Sydney University</span></p>
+    <div class="resource-links">
+      <a class="button primary" href="https://link.springer.com/article/10.1007/s00521-025-11655-y">Read the paper <span aria-hidden="true">↗</span></a>
+      <a class="button" href="https://github.com/OliverObst/decorating">Code <span aria-hidden="true">↗</span></a>
+      <a class="button" href="#code">Try Python <span aria-hidden="true">↓</span></a>
+      <a class="button" href="#citation">BibTeX <span aria-hidden="true">↓</span></a>
+    </div>
+    <p class="hero-summary">Learn a time series with linear algebra. Then reduce the network<br class="desktop-break"> by keeping the dynamical components that explain the observations.</p>
+    <figure class="teaser">
+      <picture><source media="(max-width: 520px)" srcset="assets/reduction-mobile.svg"><img src="assets/reduction.svg" width="1080" height="304" alt="A densely connected fitted recurrence is represented as independent spectral blocks. Whole blocks with small omission errors are removed, leaving a smaller, sparse recurrence."></picture>
+      <figcaption>Schematic: the reduction changes the recurrent network itself, including its size and connectivity.</figcaption>
+    </figure>
+  </section>
+
+  <section id="overview" class="section wrap narrow" aria-labelledby="overview-title">
+    <p class="eyebrow">The question</p>
+    <h2 id="overview-title">How much network does a time series need?</h2>
+    <p>A recurrent network carries a state from one time step to the next. That state can represent oscillations, trends and other temporal structure. But a large fitted network may use many more state values than the signal needs.</p>
+    <p>This paper studies <strong>linear recurrent neural networks (LRNNs)</strong>. Every state update is linear. That makes the dynamics accessible to matrix analysis: we can identify components, measure which ones matter, and construct a smaller recurrence.</p>
+    <div class="equation" role="math" aria-label="The state at time t plus one equals W times the state at time t. The state at time t equals W to the power t times the initial state s."><span>x(t + 1) = W x(t)</span><span>x(t) = W<sup>t</sup>s</span></div>
+    <p class="equation-key"><i>x</i> is the vector of state values, <i>W</i> is the transition matrix, and <i>s</i> is the initial state.</p>
+    <p>Repeated linear updates can produce nonlinear curves over time, including sinusoids, polynomials and exponentials. The paper concerns these <em>autonomous time series</em>: during prediction, the network evolves without a new external input at every step.</p>
+  </section>
+
+  <section class="section tinted" aria-labelledby="rotation-title">
+    <div class="wrap">
+      <div class="section-heading narrow"><p class="eyebrow">An interactive example</p><h2 id="rotation-title">One oscillation, two state values</h2><p>A pair of state values can rotate around a circle. Reading one of them gives a sinusoid. The point below represents the state values <i>z</i><sub>1</sub> and <i>z</i><sub>2</sub>; these values are what rotate.</p></div>
+      <div class="demo" id="rotation-demo">
+        <div class="demo-visual">
+          <svg class="state-svg" viewBox="0 0 340 288" role="img" aria-labelledby="rotation-svg-title rotation-svg-desc">
+            <title id="rotation-svg-title">A two-dimensional state and its sinusoidal output</title>
+            <desc id="rotation-svg-desc">The state moves clockwise around a unit circle. Its first coordinate, shown in blue, is plotted over successive steps on the right.</desc>
+            <defs><marker id="arrow" viewBox="0 0 10 10" refX="7" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#718096"/></marker></defs>
+            <text x="137" y="27" text-anchor="middle" class="svg-heading">State space</text>
+            <path d="M31 149H243M137 255V43" class="axis" marker-end="url(#arrow)"/>
+            <circle cx="137" cy="149" r="88" class="orbit"/>
+            <path d="M190 65A99 99 0 0 1 232 122" fill="none" stroke="#718096" marker-end="url(#arrow)"/>
+            <text x="248" y="153" class="svg-label">z₁</text><text x="147" y="53" class="svg-label">z₂</text>
+            <line id="state-radius" x1="137" y1="149" x2="225" y2="149" stroke="#1859a6" stroke-width="2.5"/>
+            <line id="state-projection" x1="225" y1="149" x2="225" y2="149" stroke="#c27828" stroke-width="2" stroke-dasharray="4 4"/>
+            <circle id="state-point" cx="225" cy="149" r="6" fill="#1859a6"/>
+            <text id="state-label" x="137" y="278" text-anchor="middle" class="svg-label">z₁ = 1.00, z₂ = 0.00</text>
+            <path d="M284 145H334" class="axis" marker-end="url(#arrow)"/>
+            <text x="309" y="124" text-anchor="middle" class="svg-label">read z₁</text>
+            </svg><svg class="wave-svg" viewBox="340 0 560 288" role="img" aria-label="The first state value plotted over 60 steps"><text x="615" y="27" text-anchor="middle" class="svg-heading">Output over time</text>
+            <path d="M362 61H868M362 149H868M362 237H868" class="grid-line"/>
+            <text x="354" y="65" text-anchor="end" class="svg-tick">1</text><text x="354" y="153" text-anchor="end" class="svg-tick">0</text><text x="354" y="241" text-anchor="end" class="svg-tick">−1</text>
+            <path d="M362 54V243H879" class="axis"/>
+            <path id="wave-guide" fill="none" stroke="#a9bfd7" stroke-width="2" stroke-dasharray="5 5"/>
+            <path id="wave-trace" fill="none" stroke="#1859a6" stroke-width="3"/>
+            <circle id="wave-point" cx="362" cy="61" r="5" fill="#1859a6"/>
+            <text x="362" y="265" class="svg-tick">0</text><text x="868" y="265" text-anchor="end" class="svg-tick">60 steps</text>
+          </svg>
+        </div>
+        <div class="demo-controls">
+          <div class="demo-buttons"><button id="play" type="button" aria-label="Play rotation">Play <span aria-hidden="true">▶</span></button><button id="step" type="button">Step</button><button id="reset" type="button">Reset</button></div>
+          <label for="angle">Rotation per step <input id="angle" type="range" min="0.1" max="0.8" step="0.01" value="0.25"><output id="angle-value" for="angle">0.25 rad</output></label>
+          <p id="step-value" class="step-value" aria-live="off">Step 0 / 60</p>
+        </div>
+        <noscript><p class="demo-note">Enable JavaScript to run the rotation example. The method and results below remain available without it.</p></noscript>
+      </div>
+      <div class="rotation-explanation narrow">
+        <div class="rotation-equation" role="math" aria-label="z at time t plus one equals the two by two matrix with rows cos omega, sin omega and minus sin omega, cos omega, times z at time t."><span>z(t + 1) =</span><span class="matrix"><span>cos ω</span><span>sin ω</span><span>−sin ω</span><span>cos ω</span></span><span>z(t)</span></div>
+        <p>For this block, the eigenvalues are cos ω ± i sin ω. Their angle sets the rotation per step. Scaling the block by a factor ρ makes its radius shrink when ρ &lt; 1, or grow when ρ &gt; 1.</p>
+        <p class="small muted">This is an exact, constructed example to explain the representation. It does not train a model in the browser.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="method" class="section wrap" aria-labelledby="method-title">
+    <div class="section-heading narrow"><p class="eyebrow">The method</p><h2 id="method-title">Fit first. Inspect the dynamics. Reduce.</h2><p>The starting network gives the observations a rich temporal representation. Spectral analysis then identifies a smaller set of components that can reproduce the series.</p></div>
+    <ol class="method-steps">
+      <li><span class="step-number">01</span><div><h3>Learn the output weights</h3><p>Feed the observed series into a random linear reservoir, a set of extra state values that respond to the observations. Collect its states, then solve a least-squares problem to predict the next observation. Together, the fixed reservoir and learned output weights form the full transition matrix <i>W</i>. This learning step requires no backpropagation through time.</p><p class="mini-equation">S(t + 1) ≈ W<sup>out</sup> [S(t); R(t)]</p><p class="small muted"><i>S</i> is the observed series; <i>R</i> holds the reservoir state values.</p></div></li>
+      <li><span class="step-number">02</span><div><h3>Represent the temporal components</h3><p>The spectrum of <i>W</i> gives eigenvalues describing decay, growth and oscillation. Jordan blocks also describe repeated eigenvalues and polynomial factors. A complex conjugate pair is represented together as a real two-state block.</p><p class="mini-equation">Ŝ(t) = A J<sup>t</sup> y</p><p class="small muted"><i>J</i> contains the blocks, <i>A</i> reads out the observations, and <i>y</i> is the initial state.</p><p class="small muted">The Jordan representation motivates the method. The implementation constructs blocks from clustered eigenvalues and refits <i>A</i> to the training trajectory; it does not need an explicit eigenvector basis.</p></div></li>
+      <li><span class="step-number">03</span><div><h3>Keep the components that matter</h3><p>Temporarily omit each whole block, refit the output map, and measure the training error. A large omission error marks an important component. Rank the blocks, then use binary search to find a short ranked prefix within the chosen error tolerance.</p><p class="mini-equation">z(t + 1) = J<sub>r</sub> z(t) &nbsp; · &nbsp; Ŝ(t) = A<sub>r</sub> z(t)</p><p class="small muted">The retained recurrence is sparse. Its connections grow linearly with its state dimension. The selection searches a fixed ranking, rather than every possible subset of blocks.</p></div></li>
+    </ol>
+    <details class="technical-details"><summary>See the reduction algorithm</summary><div class="details-body"><pre><code>W = fit_next_observation_weights(observations, reservoir)
+blocks = real_jordan_blocks(cluster(eigenvalues(W)))
+
+error(kept_blocks):
+    J = assemble(kept_blocks)
+    Y = rollout(J, fixed_nonzero_start, training_length)
+    A = least_squares(Y, observations)
+    return RMSE(observations, A @ Y)
+
+rank blocks by error(all_blocks except this_block), largest first
+m = binary_search_ranked_prefix(error(prefix) &lt;= tolerance)
+return refitted model for blocks[:m]</code></pre><p>The Python version additionally audits smaller prefixes because floating-point rank cut-offs can make the measured error non-monotonic. Full details are in the <a href="https://github.com/OliverObst/decorating/blob/main/python/docs/ALGORITHM.md">algorithm guide</a>.</p></div></details>
+    <div class="scope-note narrow"><h3>What does the theory guarantee?</h3><p>Under the stated rank and size assumptions, an LRNN can interpolate a finite sampled time series. That does not guarantee accurate predictions beyond those samples. The eigenvalues, numerical conditioning and structure of the signal matter for extrapolation.</p></div>
+  </section>
+
+  <section id="results" class="section tinted" aria-labelledby="results-title">
+    <div class="wrap"><div class="section-heading narrow"><p class="eyebrow">Evidence in the paper</p><h2 id="results-title">From oscillations to observed trajectories</h2><p>The experiments examine both compact representations of structured signals and less regular real-world series.</p></div>
+      <article class="result-row">
+        <div class="result-copy"><span class="result-label">Multiple superimposed oscillators</span><h3>Eight frequencies.<br>Sixteen state values.</h3><p>A signal made from eight sinusoids needs two state values per frequency. The paper reports 16-state LRNNs with error below 10<sup>−5</sup> on the fixed MSO signal.</p><p>With 150 training samples and at least 70 initial reservoir neurons, the paper reports minimal-size networks in at least 96% of 100 trials. Its random-frequency study also shows difficulties when frequencies are close together or very small.</p><a class="text-link" href="https://link.springer.com/article/10.1007/s00521-025-11655-y">Paper, Section 5.1 <span aria-hidden="true">↗</span></a></div>
+        <figure><img src="assets/mso-paper.png" width="2400" height="1800" loading="lazy" alt="Published MSO comparison: the LRNN follows the eight-frequency signal while the other forecast curves diverge."><figcaption>MSO forecast comparison. Original figure from the paper’s repository.</figcaption></figure>
+      </article>
+      <article class="result-row reverse">
+        <div class="result-copy"><span class="result-label">Robot soccer simulation</span><h3>Compress an observed game.</h3><p>The paper represents a RoboCup 2D game trajectory with an LRNN of 546 neurons, then reduces it to 354 state values while retaining a close approximation of the observed ball path.</p><p>This is trajectory reconstruction. The paper also learns from multiple games to examine where a goalkeeper tends to play.</p><a class="text-link" href="https://link.springer.com/article/10.1007/s00521-025-11655-y">Paper, Section 5.3 <span aria-hidden="true">↗</span></a></div>
+        <figure><img src="assets/soccer-paper.png" width="1500" height="1000" loading="lazy" alt="Ball trajectory across a RoboCup pitch: the original path, full LRNN reconstruction and reduced LRNN reconstruction are overlaid."><figcaption>Observed ball trajectory and full/reduced reconstructions. Original repository figure, rendered from PDF.</figcaption></figure>
+      </article>
+      <div class="other-results"><article><h3>Number puzzles</h3><p>Short numerical sequences yield compact recurrences that can be read as formulae. Prediction success depends on the sequence and the information supplied.</p></article><article><h3>Stock prices</h3><p>LRNNs have the lowest error on 19 of 39 DAX stocks in the paper’s comparison. Across methods, longer forecasts are often little better than carrying forward the last price.</p></article></div>
+      <p class="source-note">Results above summarise the <a href="https://link.springer.com/article/10.1007/s00521-025-11655-y">published paper</a>. The Python results below use separately documented configurations.</p>
+    </div>
+  </section>
+
+  <section id="code" class="section wrap" aria-labelledby="code-title">
+    <div class="section-heading narrow"><p class="eyebrow">Code and reproduction</p><h2 id="code-title">Run the method and inspect the fit</h2><p>The repository contains the original Octave routines and a self-contained Python library built with NumPy and SciPy. Both use the repository’s BSD 3-Clause licence.</p></div>
+    <div class="code-layout"><div><h3>A small starting point</h3><p>The sinusoid example starts with 41 state values, reduces to two, and predicts 100 further samples.</p><pre><code>git clone https://github.com/OliverObst/decorating.git
+cd decorating/python
+uv sync --extra dev --python 3.13
+uv run python examples/sinusoid.py</code></pre><p class="small">Python 3.11+ is supported. See the <a href="https://github.com/OliverObst/decorating/blob/main/python/README.md">installation guide</a> for <code>pip</code> instructions and the API.</p></div><aside class="code-resources"><a href="https://github.com/OliverObst/decorating/tree/main/python"><strong>Python library</strong><span>Spectral construction, reduction and forecasting ↗</span></a><a href="https://github.com/OliverObst/decorating/tree/main/lrnn"><strong>Octave implementation</strong><span>Original routines and benchmark scripts ↗</span></a><a href="https://github.com/OliverObst/decorating/blob/main/python/docs/ACCURACY.md"><strong>Accuracy and numerical choices</strong><span>Measured results, fitting options and failures ↗</span></a></aside></div>
+    <div class="reproduction"><p class="eyebrow">Python reproduction</p><h3>Fitting choices affect forecast accuracy</h3><p>The default spectrum-and-output-map fit and the optional training-only spectral refinement give different MSO forecast errors. Refinement adjusts the retained eigenvalues and refits the output map, without changing the selected block dimensions or using future observations.</p><figure class="forecast-figure"><img src="assets/mso-python.svg" width="1040" height="310" loading="lazy" alt="A recorded Python MSO forecast follows the observed signal across training, validation and test segments, using the optional spectral refinement."><figcaption>Validation-selected Python run, with spectral refinement. 150 training, 50 validation and 100 test samples; 70 initial reservoir units. Curve data come from the verified experiment archive.</figcaption></figure>
+      <details class="technical-details"><summary>Compare all 100-seed Python experiments</summary><div class="details-body"><div class="table-scroll"><table><caption>Fixed eight-frequency MSO. Seeds 0–99. Validation selects the reported model.</caption><thead><tr><th scope="col">Train / validation / test</th><th scope="col">Fitting</th><th scope="col">Test RMSE &lt; 10<sup>−5</sup></th><th scope="col">Selected test RMSE</th></tr></thead><tbody><tr><td>150 / 50 / 100</td><td>Spectrum + output map</td><td>0 / 100</td><td>0.1763</td></tr><tr><td>150 / 50 / 100</td><td>With spectral refinement</td><td>99 / 100</td><td>2.061 × 10<sup>−14</sup></td></tr><tr><td>200 / 50 / 50</td><td>Spectrum + output map</td><td>0 / 100</td><td>2.174 × 10<sup>−5</sup></td></tr><tr><td>200 / 50 / 50</td><td>With spectral refinement</td><td>100 / 100</td><td>2.726 × 10<sup>−14</sup></td></tr></tbody></table></div><p>The shorter configuration uses 70 reservoir units; the longer one uses 198. In the shorter refined condition, one forecast overflows. That failure remains in the denominator. These runs do not reproduce every experiment in the paper or establish every fitting operation used historically.</p><pre><code>uv run python experiments/mso.py --profile paper
+uv run python experiments/mso.py --profile paper --refine
+uv run python experiments/mso.py --profile legacy
+uv run python experiments/mso.py --profile legacy --refine</code></pre><p>See the <a href="https://github.com/OliverObst/decorating/blob/main/python/docs/ACCURACY.md">accuracy guide</a> and <a href="https://github.com/OliverObst/decorating/tree/main/python/experiments/verified">verified experiment records</a> for settings, per-seed results and the Python–Octave comparison.</p></div></details>
+    </div>
+  </section>
+
+  <section id="citation" class="section tinted" aria-labelledby="citation-title"><div class="wrap narrow"><p class="eyebrow">Reference</p><h2 id="citation-title">Cite the paper</h2><p>Frieder Stolzenburg, Sandra Litz, Olivia Michael and Oliver Obst.<br><em>Neural Computing and Applications</em> <strong>37</strong>, 27027–27055 (2025).<br><a href="https://doi.org/10.1007/s00521-025-11655-y">doi:10.1007/s00521-025-11655-y</a></p><div class="citation-box"><button id="copy-citation" type="button" hidden>Copy BibTeX</button><pre><code id="bibtex">@article{stolzenburg2025lrnn,
+  title   = {Efficient time-series approximation with linear recurrent
+             neural networks: architecture learning and predictive power},
+  author  = {Stolzenburg, Frieder and Litz, Sandra and
+             Michael, Olivia and Obst, Oliver},
+  journal = {Neural Computing and Applications},
+  volume  = {37},
+  pages   = {27027--27055},
+  year    = {2025},
+  doi     = {10.1007/s00521-025-11655-y}
+}</code></pre></div><p id="copy-status" class="small" role="status"></p></div></section>
+</main>
+<footer class="wrap"><p><strong>Decorating</strong> · Deep Conceptors for Temporal Data Mining</p><p class="small">Research supported by DAAD/BMBF (grant 57319564) and Universities Australia through the Australia–Germany Joint Research Cooperation Scheme.</p><p class="small">Site design inspired by <a href="https://qf3-rl.github.io/">QF3</a> and the research pages it credits: <a href="https://hongsukchoi.github.io/fpo-control/">FPO++</a>, <a href="https://pyroki-toolkit.github.io/">PyRoki</a>, <a href="https://www.lerf.io/">LERF</a>, <a href="https://brentyi.github.io/tilted/">TILTED</a> and <a href="https://egoallo.github.io/">EgoAllo</a>. This page uses original HTML, CSS and JavaScript.</p><p class="small"><a href="https://github.com/OliverObst/decorating/blob/main/LICENSE">BSD 3-Clause licence</a> · <a href="https://github.com/OliverObst/decorating/tree/main/docs">Website source</a></p></footer>
+</body>
+</html>
