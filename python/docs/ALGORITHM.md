@@ -7,9 +7,6 @@ representation and extrapolate its training signal? This implementation covers
 autonomous prediction and spectral reduction. The reference is the
 [published LRNN paper](https://link.springer.com/article/10.1007/s00521-025-11655-y)
 (*Neural Computing and Applications*, 2025), especially Sections 3, 4 and 5.1.
-The legacy reference is
-[`decorating/lrnn`](https://github.com/OliverObst/decorating/tree/2b55cd2e5e9c8f3b4b451e8df767ffc8537a57a5/lrnn)
-at commit `2b55cd2e5e9c8f3b4b451e8df767ffc8537a57a5`.
 
 ## Shapes and sample timing
 
