@@ -52,7 +52,7 @@ def reduction_figure():
     parts = ['<rect x="1" y="1" width="1078" height="302" rx="12" fill="#f5f7fb"/>']
     for centre, label, subtitle in [(185, "Fitted recurrence", "Many connected state values"),
                                    (540, "Spectral components", "Growth, decay and oscillation"),
-                                   (895, "Reduced recurrence", "Keep whole relevant blocks")]:
+                                   (895, "Reduced recurrence", "Retained whole blocks")]:
         parts.append(f'<text x="{centre}" y="42" text-anchor="middle" class="label">{label}</text>')
         parts.append(f'<text x="{centre}" y="65" text-anchor="middle" class="small">{subtitle}</text>')
     parts.append(matrix(101, 90, 8, 21))
@@ -60,14 +60,14 @@ def reduction_figure():
     parts.append(matrix(841, 121, 4, 27, block=True))
     parts.append('<path d="M314 169H405M669 169H777" fill="none" stroke="#92a4bd" stroke-width="2"/>')
     parts.append('<path d="M397 163L405 169L397 175M769 163L777 169L769 175" fill="none" stroke="#92a4bd" stroke-width="2"/>')
-    for centre, label in [(185, "x(t + 1) = W x(t)"), (540, "Represent and rank blocks"),
+    for centre, label in [(185, "x(t + 1) = W x(t)"), (540, "Ranked block representation"),
                           (895, "z(t + 1) = Jᵣ z(t)")]:
         parts.append(f'<text x="{centre}" y="281" text-anchor="middle" class="small">{label}</text>')
     (ASSETS / "reduction.svg").write_text(svg(1080, 304, "Spectral reduction of an LRNN (schematic)", "".join(parts)))
     mobile = ['<rect x="1" y="1" width="358" height="708" rx="12" fill="#f5f7fb"/>']
     labels = [("Fitted recurrence", "Many connected state values", "x(t + 1) = W x(t)"),
-              ("Spectral components", "Growth, decay and oscillation", "Represent and rank blocks"),
-              ("Reduced recurrence", "Keep whole relevant blocks", "z(t + 1) = Jᵣ z(t)")]
+              ("Spectral components", "Growth, decay and oscillation", "Ranked block representation"),
+              ("Reduced recurrence", "Retained whole blocks", "z(t + 1) = Jᵣ z(t)")]
     for i, (label, subtitle, equation) in enumerate(labels):
         top = i * 230
         mobile.append(f'<text x="180" y="{top+32}" text-anchor="middle" class="label">{label}</text>')

@@ -30,6 +30,10 @@ on a local server. `.nojekyll` prevents template processing.
 
 - `index.html`: overview, algorithm, published evidence, reproduction and citation.
 - `assets/site.css`: responsive styles and keyboard focus states.
+- `assets/reduction.js`: block selection, matrix displays, approximation and
+  residual plots, with training and future RMSE.
+- `assets/reduction-data.js`: all 16 subsets of a constructed four-block recurrence,
+  including training-only SVD refits and unchanged-coefficient comparisons.
 - `assets/site.js`: a constructed two-state rotation example and citation copying.
   The browser example explains the real block convention; it does not fit a model.
 - `assets/reduction.svg` and `assets/reduction-mobile.svg`: original schematics,
@@ -54,3 +58,35 @@ failed trial. The paper's affiliations, journal reference and DOI are used.
 
 The layout is inspired by QF3, FPO++, PyRoki, LERF, TILTED and EgoAllo, with
 links in the footer. No template code or assets were copied from those sites.
+
+## Interactive reduction example
+
+The demonstration starts from known block dynamics, rather than fitting a random
+reservoir. Three blocks sustain oscillations; one decays. A seeded orthogonal
+change of coordinates produces an equivalent dense transition matrix. Whole
+conjugate pairs are retained or omitted together. Empty selection gives the zero
+approximation.
+
+For each of the 16 subsets, the generator calls the public library's real-block
+construction, autonomous rollout and equilibrated SVD output-map fit. The fit
+uses samples 0–119 only. The later 120 samples measure continuation error. A
+second output keeps the original coefficients, allowing a comparison with
+refitting. All predictions and errors are precomputed; the browser selects and
+plots the requested subset without a numerical dependency.
+
+The omission scores are training RMSE after removing one block from the full
+model and refitting. The removal button uses this fixed ranking throughout;
+checkboxes and the block-matrix buttons allow arbitrary subsets. It does not
+perform binary search or claim an optimal subset.
+
+To regenerate and verify the data:
+
+```bash
+cd python
+uv run python ../docs/tools/build_reduction_demo.py
+```
+
+Verification checks dense/block trajectory equivalence, every subset's residual
+and interval RMSE, least-squares optimality, unchanged-coefficient comparisons,
+the full model and the zero-dimensional case. The constructed example is kept
+separate from the paper's measurements and the archived MSO reproduction.
