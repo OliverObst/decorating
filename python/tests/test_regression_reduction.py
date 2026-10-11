@@ -46,6 +46,24 @@ def test_hand_evaluated_legacy_omission_errors() -> None:
     assert_allclose(omission_scores([[1, 1, 1]], components), [np.sqrt(2 / 3), 0], atol=1e-15)
 
 
+def test_default_reduction_refits_instead_of_truncating_output_coefficients() -> None:
+    # A decaying component has nonzero mean over training: removing it makes the
+    # best retained constant differ from its coefficient in the full model.
+    components = (JordanComponent(1 + 0j, 1), JordanComponent(0.8 + 0j, 1))
+    observed = (2 + 3 * 0.8 ** np.arange(40))[None, :]
+    full = fit_components(observed, components)
+    truncated = full.output_map[:, :1] @ full.states[:1]
+    truncation_rmse = np.sqrt(np.mean((observed - truncated) ** 2))
+    refitted_rmse = np.std(observed)
+    assert refitted_rmse < truncation_rmse
+
+    reduced = reduce_components(observed, components, (refitted_rmse + truncation_rmse) / 2)
+    assert reduced.fit.components == (components[0],)
+    assert_allclose(reduced.fit.output_map @ reduced.fit.states, np.mean(observed), atol=1e-14)
+    assert_allclose(reduced.fit.training_rmse, refitted_rmse, atol=1e-14)
+    assert not np.allclose(reduced.fit.output_map, full.output_map[:, :1])
+
+
 def test_single_component_zero_dimensional_omission_and_final_prefix() -> None:
     component = (JordanComponent(1 + 0j, 1),)
     assert_allclose(omission_scores([[2, 2, 2]], component), [2])

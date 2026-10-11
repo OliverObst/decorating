@@ -52,12 +52,21 @@ print(reduced.dimension, rmse(signal[:, 200:], prediction))
 uses the smaller Jordan dynamics. Both return future samples only and leave
 the fitted state unchanged. Arrays have shape `(channels, time)`.
 
-The default reduction preserves the spectrum-and-refit procedure. Optional
-training-only optimisation of the retained spectral parameters is explicit:
+Reduction refits the output map by SVD on training observations for each candidate
+subset and the final retained model, following the original Octave implementation.
+This refitting is always part of `model.reduce(...)`, including its default call.
+The retained recurrence and eigenvalues stay fixed during the output-map fit.
+The website's **Truncation only (comparison)** option is a demonstration control;
+it is not the library's reduction procedure.
+
+Optional training-only optimisation of the retained spectral parameters is a
+separate operation:
 
 ```python
 refined = model.reduce(max_rmse=0.5, refine=True)
 ```
+
+The default `refine=False` disables eigenvalue optimisation, not output-map refitting.
 
 This option improves the measured fixed-frequency MSO forecasts substantially.
 Read [accuracy and reproduction](docs/ACCURACY.md) for the commands, results,

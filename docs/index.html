@@ -14,7 +14,7 @@
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/site.css?v=2">
   <script src="assets/reduction-data.js" defer></script>
-  <script src="assets/reduction.js" defer></script>
+  <script src="assets/reduction.js?v=3" defer></script>
   <script src="assets/site.js" defer></script>
 </head>
 <body>
@@ -56,7 +56,9 @@
           <label class="block-choice"><input type="checkbox" id="retain-block-2" checked><span><strong>Block 3 · weak</strong><span>ω = 0.77, ρ = 1</span><span id="block-score-2"></span></span></label>
           <label class="block-choice"><input type="checkbox" id="retain-block-3" checked><span><strong>Block 4 · decaying</strong><span>ω = 0.30, ρ = 0.94</span><span id="block-score-3"></span></span></label>
         </fieldset>
-        <div class="reduction-actions"><div><button type="button" id="remove-block">Remove lowest-ranked block</button><button type="button" id="restore-blocks">Restore all</button></div><label><input type="checkbox" id="refit-map" checked> Refit output map on training samples</label></div>
+        <div class="reduction-actions"><div><button type="button" id="remove-block">Remove lowest-ranked block</button><button type="button" id="restore-blocks">Restore all</button></div><label><input type="checkbox" id="refit-map" checked aria-describedby="reduction-procedure-note"> Refit output map (standard procedure)</label></div>
+        <p id="reduction-procedure-note" class="ranking-note">The original Octave implementation and the Python library refit the output map after removing blocks. Uncheck this option to see truncation only, a comparison that keeps the original output coefficients.</p>
+        <p id="reduction-mode" class="small" role="status" aria-live="polite">Refitting (standard procedure)</p>
         <p class="ranking-note">Omission RMSE is measured after removing that block alone and refitting. The removal button follows this fixed ranking. ω is radians per step; ρ sets decay. Cell shading shows weight magnitude.</p>
         <div class="reduction-statistics" role="status" aria-live="polite" aria-atomic="true"><p><span>Retained dimension</span><output id="reduction-size">8 / 8</output></p><p><span>Training RMSE · steps 0–119</span><output id="reduction-train"></output></p><p><span>Future RMSE · steps 120–239</span><output id="reduction-future"></output></p></div>
         <p class="plot-scroll-hint">Scroll the plots horizontally to compare training and later samples.</p>
@@ -64,7 +66,7 @@
         <p id="reduction-fit-description" class="fit-description"></p>
       </div>
       <div id="reduction-fallback"><picture><source media="(max-width: 520px)" srcset="assets/reduction-mobile.svg"><img src="assets/reduction.svg" width="1080" height="304" alt="A dense recurrence is represented as whole spectral blocks, some of which are omitted to reduce the network."></picture><p class="small">Enable JavaScript to select blocks and compare errors.</p></div>
-      <figcaption>Constructed eight-state example with known dynamics: three sustained oscillations and one decaying oscillation. The dense and block matrices describe the same dynamics in different coordinates. By default, each subset uses an output map fitted by SVD to the first 120 samples only. The later 120 samples measure continuation error. This example isolates block omission and refitting; it does not run reservoir training or automatic model selection. Refitting can redistribute omitted structure across retained blocks, so training and continuation errors are shown separately.</figcaption>
+      <figcaption>Constructed eight-state example with known dynamics: three sustained oscillations and one decaying oscillation. The dense and block matrices describe the same dynamics in different coordinates. By default, each subset uses an output map fitted by SVD to the first 120 samples only. The retained recurrence and eigenvalues stay fixed during this fit. The later 120 samples measure continuation error. This example isolates block omission and refitting; it does not run reservoir training or automatic model selection. Refitting can redistribute omitted structure across retained blocks, so training and continuation errors are shown separately.</figcaption>
     </figure>
   </section>
 

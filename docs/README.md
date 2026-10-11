@@ -70,9 +70,12 @@ approximation.
 For each of the 16 subsets, the generator calls the public library's real-block
 construction, autonomous rollout and equilibrated SVD output-map fit. The fit
 uses samples 0–119 only. The later 120 samples measure continuation error. A
-second output keeps the original coefficients, allowing a comparison with
-refitting. All predictions and errors are precomputed; the browser selects and
-plots the requested subset without a numerical dependency.
+second output keeps the original coefficients and is labelled **Truncation only
+(comparison)**. Refitting is enabled by default and follows the original Octave
+implementation and the Python library. The retained recurrence and eigenvalues
+do not change during output-map refitting. All predictions and errors are
+precomputed; the browser selects and plots the requested subset without a
+numerical dependency.
 
 The omission scores are training RMSE after removing one block from the full
 model and refitting. The removal button uses this fixed ranking throughout;

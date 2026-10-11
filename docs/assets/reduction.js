@@ -106,9 +106,12 @@
     get('remove-block').disabled = mask === 0;
     plot('reduction-signal', prediction);
     plot('reduction-residual', residual, true);
+    get('reduction-mode').textContent = refit.checked
+      ? 'Refitting (standard procedure)'
+      : 'Truncation only (comparison)';
     get('reduction-fit-description').textContent = mask === 0
       ? 'With no retained blocks, the approximation is zero. RMSE is the square root of the mean squared residual over each interval.'
-      : `${refit.checked ? 'The output map is refitted using steps 0–119 only.' : 'The original output coefficients are retained without refitting.'} Grey: original signal. Dashed blue: approximation. RMSE is the square root of the mean squared residual over each interval. The signal axis is fixed; the labelled residual axis adjusts to the selected error.`;
+      : `${refit.checked ? 'Standard procedure: the output map is refitted by SVD using steps 0–119 only.' : 'Truncation only (comparison): the original output coefficients are retained without refitting.'} Grey: original signal. Dashed blue: approximation. RMSE is the square root of the mean squared residual over each interval. The signal axis is fixed; the labelled residual axis adjusts to the selected error.`;
   }
 
   data.blocks.forEach((block,i)=>{

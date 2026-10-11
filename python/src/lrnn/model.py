@@ -135,7 +135,8 @@ class LRNN:
     ) -> ReducedLRNN:
         """Keep the smallest feasible prefix; optionally refine its autonomous training fit.
 
-        The default preserves the published spectrum-and-refit procedure. Set
+        Output-map refitting on training observations is always performed, including
+        when `refine=False`. The retained eigenvalues stay fixed during that fit. Set
         `refine=True` to optimise retained eigenvalues using training data only. Inspect
         `refinement` for the initial fit and convergence diagnostics; `reduction`
         always records the original omission ranking and prefix errors.
