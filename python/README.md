@@ -94,5 +94,5 @@ Python/Octave comparison and optional high-precision diagnostics.
 - `references/octave/`: eight pinned Octave routines and their licence.
 - [Algorithm notes](docs/ALGORITHM.md): linear algebra and numerical differences.
 
-The Python code is available under the [MIT licence](LICENSE).
-The bundled Octave routines retain their [BSD 3-Clause licence](references/octave/LICENSE).
+The code is available under the [BSD 3-Clause licence](LICENSE), as is the
+rest of the Decorating repository.

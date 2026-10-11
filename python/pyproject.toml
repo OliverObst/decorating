@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Autonomous linear recurrent neural networks with spectral dimension reduction."
 readme = "README.md"
 requires-python = ">=3.11"
-license = "MIT"
+license = "BSD-3-Clause"
 license-files = ["LICENSE", "references/octave/LICENSE"]
 authors = [{name = "Oliver Obst"}]
 dependencies = ["numpy>=1.26", "scipy>=1.11"]

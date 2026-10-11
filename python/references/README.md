@@ -8,8 +8,8 @@ architecture learning and predictive power](https://link.springer.com/article/10
 The eight routines under `octave/lrnn/` are unmodified copies from
 [`OliverObst/decorating`](https://github.com/OliverObst/decorating) at commit
 `2b55cd2e5e9c8f3b4b451e8df767ffc8537a57a5`. They match the parent repository's
-`lrnn/` routines at extraction. Their original BSD 3-Clause licence is retained
-in `octave/LICENSE`; the Python code has its own MIT licence.
+`lrnn/` routines at extraction. The repository uses the BSD 3-Clause licence;
+the reference routines' licence is retained in `octave/LICENSE`.
 
 The bundled snapshot makes the audit usable when `python/` is copied elsewhere.
 `experiments/numerical_audit.py` records the routine hashes and invokes them

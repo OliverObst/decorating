@@ -14,8 +14,7 @@ The self-contained [Python implementation](python/README.md) includes the
 autonomous LRNN library, spectral dimension reduction, tests, a runnable
 example and reproducible MSO/Python–Octave comparisons. Its
 [accuracy guide](python/docs/ACCURACY.md) explains the fitting settings and
-measured forecast accuracy. Python sources retain their MIT licence; the
-original Octave sources retain their BSD 3-Clause licence.
+measured forecast accuracy.
 
 ## Attributions
 
@@ -38,7 +37,6 @@ Mining (Decorating).
 
 ## Licenses
 
-The original Octave code in the Decorating project is released under
-[BSD-3-Clause License](https://opensource.org/license/bsd-3-clause/): https://opensource.org/license/bsd-3-clause/
-The self-contained Python implementation retains its [MIT licence](python/LICENSE).
+The Decorating project is released under the
+[BSD 3-Clause licence](LICENSE).
 
