@@ -1,0 +1,222 @@
+{
+  "config": {
+    "seed": 0,
+    "train_length": 150,
+    "forecast_length": 150,
+    "reservoir_size": 70,
+    "max_rmse": 0.5,
+    "mp_dps": 60,
+    "openblas_lp64": "/opt/homebrew/opt/openblas/lib/libopenblas.dylib",
+    "octave": "/tmp/lrnn-octave-runtime/octave/11.3.0_1/bin/octave-cli",
+    "octave_trials": 100,
+    "true_frequencies": "diagnostic scoring only; never supplied to fitting"
+  },
+  "versions": {
+    "python": "3.13.15",
+    "numpy": "2.5.3",
+    "scipy": "1.18.1",
+    "numpy_blas": {
+      "name": "accelerate",
+      "found": true,
+      "version": "unknown",
+      "detection method": "system",
+      "include directory": "unknown",
+      "lib directory": "unknown",
+      "openblas configuration": "unknown",
+      "pc file directory": "unknown"
+    },
+    "scipy_blas": {
+      "name": "Accelerate",
+      "found": true,
+      "version": "unknown",
+      "detection method": "extraframeworks",
+      "include directory": "unknown",
+      "lib directory": "unknown",
+      "openblas configuration": "unknown",
+      "pc file directory": "unknown",
+      "has ilp64": false,
+      "cython blas ilp64": false
+    },
+    "openblas": "OpenBLAS 0.3.33 DYNAMIC_ARCH NO_AFFINITY USE_OPENMP vortexm4 MAX_THREADS=56",
+    "mpmath": "1.4.1"
+  },
+  "source_sha256": {
+    "src/uplrnn/__init__.py": "1a732858bd85090b8fa444528f18d96141ff8bc45678fd1f3291c5ddbba50eb2",
+    "src/uplrnn/_validation.py": "e8ef916151e6e9423ad03594dc7c75ea8cc088d8c5e861f75a3e1ff870592481",
+    "src/uplrnn/benchmarks.py": "7bd877b87519283d1da281191e8c4ec05da5b1e37aae62d677742a8b9ca0b796",
+    "src/uplrnn/dynamics.py": "cb228df07e48b050252a6d0dec87fec31b9d3b0be3f0f38ae9ffed84f215c5c2",
+    "src/uplrnn/metrics.py": "56fa2831c91aee9f4275e1380035f4be69f6e62101379f0c081d18a0954ae076",
+    "src/uplrnn/model.py": "c776d6e9e114dad9deda7b82b7744c07ee81de50a5f61256be747522c4dd0e6f",
+    "src/uplrnn/reduction.py": "a91ad743734abd4c76b7e71017ed20396877c7d614257df04eea993db278010a",
+    "src/uplrnn/refinement.py": "32b36da3e06302a5424bbf14897287c4ddf9dbd8939f93b8b97a515d280df117",
+    "src/uplrnn/regression.py": "84e254b58f8e1b98a4a9d2a81ea258ae3a0f046b4bfb8565522fbac269e3e432",
+    "src/uplrnn/reservoir.py": "b0eb47367bc18941a9873c406ed7d456f0eab269533523b2b5aa0026450c4b97",
+    "src/uplrnn/spectrum.py": "3e62dc9601ac2725aff5af4ac377c6e6e6879a5f0e7d5fb5bca20b7591a25460",
+    "experiments/numerical_audit.py": "d6706e81b95ca49efe66c1055442d0fba1fc31fb9faed5c1abf4e99cfe444825",
+    "experiments/octave_audit.m": "1be21f139451f4e38834a0442c24426ed2d6b6aa3d9b361a3a385272e8144a62",
+    "references/octave/lrnn/block.m": "7bbe9e3cc918f371fee6f8fe30c5b35251ca51858c9c1c1f0c1649b137c583a1",
+    "references/octave/lrnn/cluster.m": "f774bc0d06fc2c8de97b4d222dae8c0269a6e8d3d27fe5c764ea3d9d0bf1bf89",
+    "references/octave/lrnn/compute.m": "61c3fe3b0c8305d9fc625a06aaa9eab32b94057352bf58b535d9939f1c378130",
+    "references/octave/lrnn/jormat.m": "8f650cb73d55db9036bb430a3ecfa25c99a1828793d0385214005f70f9acf079",
+    "references/octave/lrnn/predict.m": "68c8c67708cf86b10111ee1cfb79dd1cdb433834b5e5a5d00928c8e0e5541a5e",
+    "references/octave/lrnn/reservoir.m": "a79bdd75cc4a0fb010b29ad43c2e683505dc3901a742d2ba9f71b9ce98b303c0",
+    "references/octave/lrnn/rmse.m": "a6b902a5e3ec5f21218a6fdfc0e82c8888d35437ed54e7d6f10bf1eaefa4e4f8",
+    "references/octave/lrnn/start.m": "b6ab05791ae97e204c48641b60b590690b250a31a6ccf29c51097600bedc1e69"
+  },
+  "eigenvalue_methods": {
+    "numpy_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_balanced_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_real_schur": {
+      "max_true_mode_error": 0.005535859527970346,
+      "dimension": 16,
+      "training_rmse": 0.19483115575677462,
+      "future_rmse": 0.8648691285838837
+    },
+    "openblas_geevx_B": {
+      "min_reciprocal_eigenvalue_condition": 2.091152778349064e-12,
+      "max_true_mode_error": 0.005563170992058005,
+      "dimension": 16,
+      "training_rmse": 0.19501621328654492,
+      "future_rmse": 0.8638342679547695
+    },
+    "openblas_geevx_N": {
+      "min_reciprocal_eigenvalue_condition": 3.089478562556595e-12,
+      "max_true_mode_error": 0.005549246997596143,
+      "dimension": 16,
+      "training_rmse": 0.19478490721495398,
+      "future_rmse": 0.8634645998396613
+    },
+    "openblas_geevx_S": {
+      "min_reciprocal_eigenvalue_condition": 2.091152778349064e-12,
+      "max_true_mode_error": 0.005563170992058005,
+      "dimension": 16,
+      "training_rmse": 0.19501621328654492,
+      "future_rmse": 0.8638342679547695
+    },
+    "openblas_geevx_P": {
+      "min_reciprocal_eigenvalue_condition": 3.089478562556595e-12,
+      "max_true_mode_error": 0.005549246997596143,
+      "dimension": 16,
+      "training_rmse": 0.19478490721495398,
+      "future_rmse": 0.8634645998396613
+    },
+    "mpmath_fixed_matrix": {
+      "max_difference_from_numpy": 2.2540130497668218e-05,
+      "max_true_mode_error": 0.005556036672160569,
+      "dimension": 16,
+      "training_rmse": 0.19489719021589025,
+      "future_rmse": 0.8636047906104029
+    }
+  },
+  "least_squares_methods": {
+    "gelsd_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.69608922890567e-06,
+      "max_true_mode_error": 0.0055856210216383186,
+      "dimension": 16,
+      "training_rmse": 0.19498763582698764,
+      "future_rmse": 0.8618394518621231
+    },
+    "gelsd_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.695503091760023e-06,
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "gelss_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.696428074607936e-06,
+      "max_true_mode_error": 0.005591412157656959,
+      "dimension": 16,
+      "training_rmse": 0.1949103165438165,
+      "future_rmse": 0.860767410830838
+    },
+    "gelss_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.6956842721243e-06,
+      "max_true_mode_error": 0.005559856039753192,
+      "dimension": 16,
+      "training_rmse": 0.19496949126932617,
+      "future_rmse": 0.8635290097598141
+    },
+    "gelsy_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.695675006550653e-06,
+      "max_true_mode_error": 0.005574540415245561,
+      "dimension": 16,
+      "training_rmse": 0.19514081620878315,
+      "future_rmse": 0.8635390189965524
+    },
+    "gelsy_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.696256842404664e-06,
+      "max_true_mode_error": 0.0055666432150390105,
+      "dimension": 16,
+      "training_rmse": 0.19505546915958885,
+      "future_rmse": 0.8631514077250871
+    },
+    "gejsv_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.695729172655969e-06,
+      "max_true_mode_error": 0.005553407348141947,
+      "dimension": 16,
+      "training_rmse": 0.19493385723924497,
+      "future_rmse": 0.8638062880973277
+    },
+    "gejsv_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.695920545114901e-06,
+      "max_true_mode_error": 0.00557218909172892,
+      "dimension": 16,
+      "training_rmse": 0.195034521588437,
+      "future_rmse": 0.8629288417481177
+    },
+    "mpmath_qr": {
+      "one_step_rmse": 8.696001688690963e-06,
+      "max_true_mode_error": 0.005546366563825375,
+      "dimension": 16,
+      "training_rmse": 0.19486172330154936,
+      "future_rmse": 0.8639517550684225
+    }
+  },
+  "refinement": {
+    "dimension": 16,
+    "training_rmse": 7.0298415064710445e-15,
+    "future_rmse": 1.8065682542070145e-14
+  },
+  "octave": {
+    "version": "11.3.0",
+    "fixed_weights": {
+      "dimension": 16,
+      "training_rmse": 0.19508518651370285,
+      "future_rmse": 0.864902099283395,
+      "driven_state_max_difference": 2.842170943040401e-14
+    },
+    "native_trials": {
+      "trials": 100,
+      "compact_16_dimension_trials": 97,
+      "training_below_1e_5_trials": 0,
+      "future_below_1e_5_trials": 0,
+      "median_training_rmse": 0.22899678002595547,
+      "median_future_rmse": 1.1107652671004127
+    }
+  }
+}

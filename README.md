@@ -10,13 +10,20 @@ be found in `lrnn` implemented in Octave. For further details of LRNNs
 and their properties, the interested reader is referred to the 
 following paper.
 
+The self-contained [Python implementation](python/README.md) includes the
+autonomous LRNN library, spectral dimension reduction, tests, a runnable
+example and reproducible MSO/Python–Octave comparisons. Its
+[accuracy guide](python/docs/ACCURACY.md) explains the fitting settings and
+measured forecast accuracy. Python sources retain their MIT licence; the
+original Octave sources retain their BSD 3-Clause licence.
+
 ## Attributions
 
-The relevant paper for the software and case studies is at <http://arxiv.org/abs/1802.03308>:
-
-Frieder Stolzenburg, Sandra Litz, Olivia Michael und Oliver Obst. The power of
-linear recurrent neural networks. CoRR – Computing Research Repository
-abs/1802.03308, Cornell University Library, 2018. Latest revision 2023.
+Frieder Stolzenburg, Sandra Litz, Olivia Michael and Oliver Obst.
+[Efficient time-series approximation with linear recurrent neural networks:
+architecture learning and predictive power](https://link.springer.com/article/10.1007/s00521-025-11655-y).
+*Neural Computing and Applications* **37**, 27027–27055 (2025).
+DOI: `10.1007/s00521-025-11655-y`.
 
 
 ## Acknowledgements
@@ -31,6 +38,7 @@ Mining (Decorating).
 
 ## Licenses
 
-The code that we make available with the Decorating project is released under 
+The original Octave code in the Decorating project is released under
 [BSD-3-Clause License](https://opensource.org/license/bsd-3-clause/): https://opensource.org/license/bsd-3-clause/
+The self-contained Python implementation retains its [MIT licence](python/LICENSE).
 

@@ -1,0 +1,163 @@
+{
+  "config": {
+    "seed": 0,
+    "train_length": 150,
+    "forecast_length": 150,
+    "reservoir_size": 70,
+    "max_rmse": 0.5,
+    "mp_dps": 0,
+    "openblas_lp64": null,
+    "octave": null,
+    "octave_trials": 100,
+    "octave_timeout": 180,
+    "true_frequencies": "diagnostic scoring only; never supplied to fitting"
+  },
+  "versions": {
+    "python": "3.13.15",
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "numpy_blas": {
+      "name": "accelerate",
+      "found": true,
+      "version": "unknown",
+      "detection method": "system",
+      "include directory": "unknown",
+      "lib directory": "unknown",
+      "openblas configuration": "unknown",
+      "pc file directory": "unknown"
+    },
+    "scipy_blas": {
+      "name": "Accelerate",
+      "found": true,
+      "version": "unknown",
+      "detection method": "extraframeworks",
+      "include directory": "unknown",
+      "lib directory": "unknown",
+      "openblas configuration": "unknown",
+      "pc file directory": "unknown",
+      "has ilp64": false,
+      "cython blas ilp64": false
+    }
+  },
+  "source_sha256": {
+    "src/lrnn/__init__.py": "a91afb64013091cdd1c3b5cb5203f0f924e3dd58d0bd4a2fdb1fa074e2b1f9cb",
+    "src/lrnn/_validation.py": "e8ef916151e6e9423ad03594dc7c75ea8cc088d8c5e861f75a3e1ff870592481",
+    "src/lrnn/benchmarks.py": "7bd877b87519283d1da281191e8c4ec05da5b1e37aae62d677742a8b9ca0b796",
+    "src/lrnn/dynamics.py": "cb228df07e48b050252a6d0dec87fec31b9d3b0be3f0f38ae9ffed84f215c5c2",
+    "src/lrnn/metrics.py": "56fa2831c91aee9f4275e1380035f4be69f6e62101379f0c081d18a0954ae076",
+    "src/lrnn/model.py": "15f26aa6f779021b3d6dfc9827316d12d2684685f0348dce48959c08e003c831",
+    "src/lrnn/reduction.py": "a91ad743734abd4c76b7e71017ed20396877c7d614257df04eea993db278010a",
+    "src/lrnn/refinement.py": "32b36da3e06302a5424bbf14897287c4ddf9dbd8939f93b8b97a515d280df117",
+    "src/lrnn/regression.py": "84e254b58f8e1b98a4a9d2a81ea258ae3a0f046b4bfb8565522fbac269e3e432",
+    "src/lrnn/reservoir.py": "b0eb47367bc18941a9873c406ed7d456f0eab269533523b2b5aa0026450c4b97",
+    "src/lrnn/spectrum.py": "3e62dc9601ac2725aff5af4ac377c6e6e6879a5f0e7d5fb5bca20b7591a25460",
+    "experiments/numerical_audit.py": "a937f5a066ff9bfdba6e3d1897c9c9259f7bd9884169f055f78a3233881d6e7f",
+    "experiments/octave_audit.m": "1be21f139451f4e38834a0442c24426ed2d6b6aa3d9b361a3a385272e8144a62",
+    "references/octave/lrnn/block.m": "7bbe9e3cc918f371fee6f8fe30c5b35251ca51858c9c1c1f0c1649b137c583a1",
+    "references/octave/lrnn/cluster.m": "f774bc0d06fc2c8de97b4d222dae8c0269a6e8d3d27fe5c764ea3d9d0bf1bf89",
+    "references/octave/lrnn/compute.m": "61c3fe3b0c8305d9fc625a06aaa9eab32b94057352bf58b535d9939f1c378130",
+    "references/octave/lrnn/jormat.m": "8f650cb73d55db9036bb430a3ecfa25c99a1828793d0385214005f70f9acf079",
+    "references/octave/lrnn/predict.m": "68c8c67708cf86b10111ee1cfb79dd1cdb433834b5e5a5d00928c8e0e5541a5e",
+    "references/octave/lrnn/reservoir.m": "a79bdd75cc4a0fb010b29ad43c2e683505dc3901a742d2ba9f71b9ce98b303c0",
+    "references/octave/lrnn/rmse.m": "a6b902a5e3ec5f21218a6fdfc0e82c8888d35437ed54e7d6f10bf1eaefa4e4f8",
+    "references/octave/lrnn/start.m": "b6ab05791ae97e204c48641b60b590690b250a31a6ccf29c51097600bedc1e69"
+  },
+  "eigenvalue_methods": {
+    "numpy_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_balanced_geev": {
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "scipy_real_schur": {
+      "max_true_mode_error": 0.005535859527970346,
+      "dimension": 16,
+      "training_rmse": 0.19483115575677462,
+      "future_rmse": 0.8648691285838837
+    }
+  },
+  "least_squares_methods": {
+    "gelsd_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.69608922890567e-06,
+      "max_true_mode_error": 0.0055856210216383186,
+      "dimension": 16,
+      "training_rmse": 0.19498763582698764,
+      "future_rmse": 0.8618394518621231
+    },
+    "gelsd_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.695503091760023e-06,
+      "max_true_mode_error": 0.005570724309077784,
+      "dimension": 16,
+      "training_rmse": 0.19493389849415202,
+      "future_rmse": 0.8623901920096223
+    },
+    "gelss_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.696428074607936e-06,
+      "max_true_mode_error": 0.005591412157656959,
+      "dimension": 16,
+      "training_rmse": 0.1949103165438165,
+      "future_rmse": 0.860767410830838
+    },
+    "gelss_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.6956842721243e-06,
+      "max_true_mode_error": 0.005559856039753192,
+      "dimension": 16,
+      "training_rmse": 0.19496949126932617,
+      "future_rmse": 0.8635290097598141
+    },
+    "gelsy_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.695675006550653e-06,
+      "max_true_mode_error": 0.005574540415245561,
+      "dimension": 16,
+      "training_rmse": 0.19514081620878315,
+      "future_rmse": 0.8635390189965524
+    },
+    "gelsy_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.696256842404664e-06,
+      "max_true_mode_error": 0.0055666432150390105,
+      "dimension": 16,
+      "training_rmse": 0.19505546915958885,
+      "future_rmse": 0.8631514077250871
+    },
+    "gejsv_raw": {
+      "rank": 71,
+      "one_step_rmse": 8.695729172655969e-06,
+      "max_true_mode_error": 0.005553407348141947,
+      "dimension": 16,
+      "training_rmse": 0.19493385723924497,
+      "future_rmse": 0.8638062880973277
+    },
+    "gejsv_equilibrated": {
+      "rank": 71,
+      "one_step_rmse": 8.695920545114901e-06,
+      "max_true_mode_error": 0.00557218909172892,
+      "dimension": 16,
+      "training_rmse": 0.195034521588437,
+      "future_rmse": 0.8629288417481177
+    }
+  },
+  "refinement": {
+    "dimension": 16,
+    "training_rmse": 7.0298415064710445e-15,
+    "future_rmse": 1.8065682542070145e-14
+  },
+  "octave": null
+}

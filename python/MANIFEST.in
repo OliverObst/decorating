@@ -1,0 +1,7 @@
+include uv.lock
+recursive-include docs *.md
+recursive-include examples *.py
+recursive-include tests *.py
+recursive-include experiments *.py *.m *.md *.csv *.json *.png *.pdf *.npz *.mat
+recursive-include references *.md *.m LICENSE
+prune experiments/results
