@@ -4,8 +4,8 @@
 
 Can the published reservoir-and-spectrum procedure recover a compact autonomous
 representation and extrapolate its training signal? This implementation covers
-autonomous prediction and spectral reduction. The reference is the
-[published LRNN paper](https://link.springer.com/article/10.1007/s00521-025-11655-y)
+autonomous prediction and spectral reduction. The reference is our
+[LRNN paper](https://link.springer.com/article/10.1007/s00521-025-11655-y)
 (*Neural Computing and Applications*, 2025), especially Sections 3, 4 and 5.1.
 
 ## Shapes and sample timing
